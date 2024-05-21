@@ -1,0 +1,2 @@
+rootProject.name = 's22-labs'
+include 'lab1', 'lab2', 'lab3', 'lab5', 'lab6', 'lab7', 'lab8', 'lab9', 'lab10', 'lab11'

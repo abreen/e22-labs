@@ -1,0 +1,42 @@
+subprojects {
+    apply plugin: 'application'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(11)
+        }
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        testImplementation 'junit:junit:4.13.2'
+    }
+
+    sourceSets {
+        main {
+            java {
+                srcDirs = ['main']
+            }
+        }
+        test {
+            java {
+                srcDirs = ['test']
+            }
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    run {
+        standardInput = System.in
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+}
