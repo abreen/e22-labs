@@ -1,3 +1,8 @@
+**_Update this so that the state and behavior is determined first
+and TDD is used instead of writing a main() method_**
+
+- Call `CmdLine.run()` class in `main()`
+
 # To-do list app
 
 ## Building the `main()` method

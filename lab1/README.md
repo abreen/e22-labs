@@ -8,16 +8,22 @@ The app must offer these features:
 
 Some questions to ask:
 
-- What data do I need to take from the user?
 - What state does my application manage?
-- What are the possible actions that change the state?
-- How can I write code that's easy to be tested
-  programmatically by other code?
+- What are the possible ways the state can change?
 
 The test-driven development (TDD) methodology:
 
 Starting from stable code that is covered by tests,
-- add a failing test case
-- write only the code that makes that case pass
-- refactor as needed
-- repeat!
+
+1. add a **failing** test case
+2. write only the code that makes it pass again
+3. refactor as needed
+4. go to 1
+
+We can build all the features of `TodoApp` with confidence that
+our code is free of bugs, without writing any code that interacts
+with a user & wasting time interacting with it manually.
+
+See `CmdLine.java.md` for an example program offering a command-line
+interface to the to-do list. Use `gradle run-solution` to run this
+example.
