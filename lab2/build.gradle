@@ -5,3 +5,5 @@ plugins {
 application {
     mainClass = 'ComboSum'
 }
+
+apply from: rootProject.file('buildSrc/shared.gradle')

@@ -1,0 +1,5 @@
+plugins {
+    id 'application'
+}
+
+apply from: rootProject.file('shared.gradle')

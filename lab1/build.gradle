@@ -5,3 +5,5 @@ plugins {
 application {
     mainClass = 'TodoApp'
 }
+
+apply from: rootProject.file('buildSrc/shared.gradle')

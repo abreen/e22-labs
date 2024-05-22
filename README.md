@@ -31,7 +31,7 @@ slides covered in lecture with practical coding examples.
 | week 5 | July 22   | Lecture 8        | Binary search trees, balanced search trees          |
 | _Tue_  | July 23\* | Lab 8            | Mini DB app? Strategy pattern for linear vs. binary |
 | _Wed_  | July 24   | Lecture 9        | Heaps and priority queues                           |
-| _Thu_  | July 25   | Lab 9            | Keeping data in order? Out of order packets?        |
+| _Thu_  | July 25   | Lab 9            | kth largest number, merging k sorted lists          |
 | week 6 | July 29   | Lecture 10       | Hash tables, graphs (1/2)                           |
 | _Tue_  | July 30\* | Lab 10           | Something with tables?                              |
 | _Wed_  | July 31   | Lecture 11       | Graphs (2/2)                                        |
