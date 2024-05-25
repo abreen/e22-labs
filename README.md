@@ -49,20 +49,34 @@ writing code. In the first 10 minutes, we'll review the topics from the last lec
 Then we'll discuss the code for the lab exercise and hack on it until the hour is over.
 You can consult me, your fellow students, and the solution freely during the hour.
 
-### How to use
+### Installing prerequisites
 
 First, install Gradle. Using [SDKMAN](https://sdkman.io/) is recommended, which
 involves these steps:
 
 0. If you use Windows, install the [Windows Subsystem for Linux][wsl]
-1. Install SDKMAN using the instructions on their site (or just do `curl -s "https://get.sdkman.io" | bash`)
-2. Install Gradle using the `sdk` command: `sdk install gradle 8.7`
-3. Verify the installation by doing `gradle -v` (you should see a version number)
-4. Get this source code (download it from GitHub, or do `git clone https://github.com/abreen/s22-labs.git`)
-5. If you use VS Code, install the [Gradle extension][gradle-extension]
+1. Install SDKMAN using the instructions on their site (or just do
+   `curl -s "https://get.sdkman.io" | bash`)
+2. Install Gradle using the `sdk` command `sdk install gradle 8.7`
 
 You can also use SDKMAN to download and switch between different versions of Java for
-local development.
+local development (e.g., `sdk install java 11.0.23-amzn` will install Amazon's
+distribution of Java 11).
+
+If you use VS Code, install the [extension for Gradle][gradle-extension]. We also recommend
+changing the VS Code setting "Testing: Open Testing" (`testing.openTesting`)
+to `"openExplorerOnTestStart"` and moving the Test Explorer to your secondary Side Bar.
+This configuration allows you to browse files on the left, edit code in the center,
+and see the results of tests on the right.
+
+### Getting the code
+
+The code is [hosted on GitHub](https://github.com/abreen/s22-labs), but you don't need
+to use Git. Download the source code in a ZIP file here:
+https://github.com/abreen/s22-labs/archive/refs/heads/main.zip
+
+Extract the files from the ZIP archive and open the newly created folder in your editor
+or IDE.
 
 ### Build, test, and run
 
@@ -76,27 +90,27 @@ these "run" tasks to compile and run the code for the appropriate lab:
 
 Or if your current directory is `lab3/` (for example), you can do `gradle run`.
 
-Other than `run`, there are other tasks available:
+Try these other Gradle commands:
 
-- To run our solution, do `gradle :labX:run-solution`.
-- To compile the code but not run it, use `gradle build` or `gradle :labX:build`.
-- To run the tests, use `gradle test` or `gradle :labX:test`.
+- To run our solution, do `gradle :labX:run-solution`
+- To compile the code but not run it, do `gradle :labX:build`
+- To run the tests, use `gradle :labX:test`
 
 #### Testing
 
-As mentioned earlier, you can run tests using `gradle test`
-or `gradle :labX:test`.
+As mentioned earlier, you can run tests using `gradle test` (from inside a
+subdirectory) or `gradle :labX:test` (from the parent directory). You can
+also run tests directly from VS Code by clicking the gutter icons:
 
-We use the industry-standard
-[JUnit 5][junit] framework which assumes that test
-code is located in a separate `test/` directory. Test code
-should begin with these two `import` statements:
+![]()
 
-UPDATE FOR JUNIT 4 INSTEAD OF 5
+We use the industry-standard [JUnit][junit] framework (version 4)
+which assumes that test code is located in a separate `test/` directory.
+Test code should begin with these two `import` statements:
 
 ```java
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Test;
+import org.junit.Assert;
 ```
 
 Here is a brief summary of the imported members (your editor
@@ -104,20 +118,20 @@ or IDE can provide inline documentation):
 
 - The `@Test` annotation: put this before test case (a method
   that calls your code and makes assertions)
-- `assertNull(value)` will fail the test if the supplied value is
-  not `null` (also see `assertNotNull()`)
-- `assertTrue(booleanValue)` will fail the test if the supplied
-  value is not `true`
-- `assertFalse(booleanValue)` will fail the test if the supplied
-  value is not `false`
-- `assertEquals(expected, actual)` asks JUnit to compare the
-  given values and if `actual` doesn't equal `expected`, the test
-  fails (also see `assertNotEquals()`); note that the expected
+- `Assert.assertNull(value)` will fail the test if the supplied
+  value is not `null` (also see `assertNotNull()`)
+- `Assert.assertTrue(booleanValue)` will fail the test if the
+  supplied value is not `true`
+- `Assert.assertFalse(booleanValue)` will fail the test if the
+  supplied value is not `false`
+- `Assert.assertEquals(expected, actual)` asks JUnit to compare
+  the given values and if `actual` doesn't equal `expected`, the
+  test fails (also see `assertNotEquals()`); note that the expected
   value should be passed **first**
-- `assertThrows()` takes an `Executable` (a block of code) and
-  fails the test if the code doesn't throw a specific exception
-- `assertArrayEquals()` is like `assertEquals()`, but compares
-  invidivual array elements
+- `Assert.assertThrows()` takes an `Executable` (a block of code)
+  and fails the test if the code doesn't throw a specific exception
+- `Assert.assertArrayEquals()` is like `assertEquals()`, but
+  compares invidivual array elements
 
 ### Solutions
 
