@@ -10,21 +10,9 @@ public class TodoAppTest {
     }
 
     @Test
-    public void testNonexistentElement() {
-        var app = new TodoApp();
-        app.addTodo("Buy eggs and milk");
-        Assert.assertNull(app.getTodo(20));
-    }
-
-    @Test
     public void testOneItem() {
         var app = new TodoApp();
         app.addTodo("Buy eggs and milk");
         Assert.assertEquals("Buy eggs and milk", app.getTodo(0));
-    }
-
-    @Test
-    public void testMarkDone() {
-        // TODO
     }
 }

@@ -2,8 +2,6 @@ plugins {
     id 'application'
 }
 
-application {
-    mainClass = 'TodoApp'
-}
+mainClassName = 'TodoApp'
 
 apply from: rootProject.file('buildSrc/shared.gradle')

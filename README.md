@@ -17,7 +17,7 @@ slides covered in lecture with practical coding examples.
 | _Wed_  | June 26   | Lecture 2        | Recursion and backtracking                          |
 | _Thu_  | June 27   | Lab 2            | Debuggers, combination sum                          |
 | week 2 | July 1    | Lecture 3        | Sorting and algorithm analysis (1/2)                |
-| _Tue_  | July 2\*  | Lab 3            | Music playlists?                                    |
+| _Tue_  | July 2\*  | Lab 3            | Analyzing loops, counting sort                      |
 | _Wed_  | July 3    | Lecture 4        | Sorting and analysis (2/2), linked lists (1/2)      |
 | _Thu_  | July 4    | Lab 4 (recorded) | video: `partition()` trace, merge sort trace        |
 | week 3 | July 8    | Lecture 5        | Linked lists (2/2); lists, stacks & queues (1/2)    |
@@ -35,7 +35,7 @@ slides covered in lecture with practical coding examples.
 | week 6 | July 29   | Lecture 10       | Hash tables, graphs (1/2)                           |
 | _Tue_  | July 30\* | Lab 10           | Something with tables?                              |
 | _Wed_  | July 31   | Lecture 11       | Graphs (2/2)                                        |
-| _Thu_  | Aug 1     | Lab 11           | Maze solver?                                        |
+| _Thu_  | Aug 1     | Lab 11           | Maze solver using shortest path?                    |
 | week 7 | Aug 5     | _Review session_ | Practice final exam                                 |
 | _Tue_  | Aug 6     |                  |                                                     |
 | _Wed_  | Aug 7     | _Final exam_     |                                                     |
@@ -66,8 +66,10 @@ distribution of Java 11).
 If you use VS Code, install the [extension for Gradle][gradle-extension]. We also recommend
 changing the VS Code setting "Testing: Open Testing" (`testing.openTesting`)
 to `"openExplorerOnTestStart"` and moving the Test Explorer to your secondary Side Bar.
-This configuration allows you to browse files on the left, edit code in the center,
-and see the results of tests on the right.
+This layout allows you to browse files on the left, edit code in the center,
+and see the results of tests on the right:
+
+![Browse files on the left, edit code in the center, test results on the right](layout.png)
 
 ### Getting the code
 
@@ -102,10 +104,10 @@ As mentioned earlier, you can run tests using `gradle test` (from inside a
 subdirectory) or `gradle :labX:test` (from the parent directory). You can
 also run tests directly from VS Code by clicking the gutter icons:
 
-![]()
+![The test gutter icons showing test results](gutter-icons.png)
 
-We use the industry-standard [JUnit][junit] framework (version 4)
-which assumes that test code is located in a separate `test/` directory.
+We use the industry-standard [JUnit][junit] framework which assumes that
+test code is located in a separate `test/` directory.
 Test code should begin with these two `import` statements:
 
 ```java
@@ -137,11 +139,12 @@ or IDE can provide inline documentation):
 
 First, note that each directory contains one or more `.java.md` files which
 contain our solution across multiple Java code blocks, explained step-by-step.
+You can view these solutions in your editor, or on GitHub.
 
-As mentioned earlier, you can run this solution using `gradle run-solution`.
+As mentioned earlier, you can run a solution using `gradle run-solution`.
 
 An example of [literate programming][literate], the actual Java code is
-built directly from these `.md` files.[^1]
+built directly from these `.md` files.
 
 ### Why Gradle?
 
@@ -153,15 +156,8 @@ benefits specifically for lab exercises:
 - It allows us to easily use open source libraries
 - Microsoft built a nice [VS Code extension][gradle-extension] for it
 - We use [toolchains][toolchains] to specify the Java language version
-
-[^1]:
-    To get a `.java` file from a `.java.md` file, the code blocks in
-    the document are concatenated together, and everything else (e.g.,
-    any paragraphs of explanatory text) is removed.
-    (If more than one code block has the same
-    [info string][info-string], only the last version is used. This
-    allows us to iteratively build on an idea in the text, but only
-    keep the final version.)
+- The code that builds our solution from a `.java.md` file is written
+  as a Gradle plugin
 
 [wsl]: https://learn.microsoft.com/en-us/windows/wsl/install
 [gradle-extension]: https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-gradle

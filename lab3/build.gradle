@@ -2,8 +2,6 @@ plugins {
     id 'application'
 }
 
-application {
-    mainClass = 'MusicApp'
-}
+mainClassName = 'CountingSort'
 
 apply from: rootProject.file('buildSrc/shared.gradle')

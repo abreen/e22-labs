@@ -2,8 +2,6 @@ plugins {
     id 'application'
 }
 
-application {
-    mainClass = 'ComboSum'
-}
+mainClassName = 'ComboSum'
 
 apply from: rootProject.file('buildSrc/shared.gradle')
