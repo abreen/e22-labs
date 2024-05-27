@@ -21,9 +21,5 @@ Starting from stable code that is covered by tests,
 4. go to 1
 
 We can build all the features of `TodoApp` with confidence that
-our code is free of bugs, without writing any code that interacts
-with a user & wasting time interacting with it manually.
-
-See `CmdLine.java.md` for an example program offering a command-line
-interface to the to-do list. Use `gradle run-solution` to run this
-example.
+our code is free of bugs, without needing a `main()` method and
+without tedious manual testing.

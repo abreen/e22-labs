@@ -1,6 +1,5 @@
-The `buildSrc/` directory contains the custom plugin that processes `.java.md`
-files into `.java` files. It also contains the shared logic imported from
-each lab's `build.gradle` file.
+The `buildSrc/` directory contains the shared logic imported from each
+subdirectory's `build.gradle` file.
 
 [This directory is treated specially by Gradle][buildSrc], it's processed
 before the actual building begins.
