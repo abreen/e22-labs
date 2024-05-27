@@ -13,6 +13,6 @@ public class TodoAppTest {
     public void testOneItem() {
         var app = new TodoApp();
         app.addTodo("Buy eggs and milk");
-        Assert.assertEquals("Buy eggs and cheese", app.getTodo(0));
+        Assert.assertEquals("Buy eggs and milk", app.getTodo(0));
     }
 }

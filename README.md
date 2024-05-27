@@ -67,9 +67,7 @@ If you use VS Code, install the [extension for Gradle][gradle-extension]. We als
 changing the VS Code setting "Testing: Open Testing" (`testing.openTesting`)
 to `"openExplorerOnTestStart"` and moving the Test Explorer to your secondary Side Bar.
 This layout allows you to browse files on the left, edit code in the center,
-and see the results of tests on the right:
-
-![Browse files on the left, edit code in the center, test results on the right](layout.png)
+and see the results of tests on the right.
 
 ### Getting the code
 
@@ -83,25 +81,24 @@ or IDE.
 ### Build, test, and run
 
 Using the `gradle` command (or the Gradle extension in your editor), use any of
-these "run" tasks to compile and run the code for the appropriate lab:
+these "run" tasks to compile and run the code for the appropriate exercise:
 
     gradle :lab1:run
+    gradle :lab1-solution:run
     gradle :lab2:run
+    gradle :lab2-solution:run
     gradle :lab3:run
     ...
 
 Or if your current directory is `lab3/` (for example), you can do `gradle run`.
 
-Try these other Gradle commands:
-
-- To run our solution, do `gradle :labX:run-solution`
-- To compile the code but not run it, do `gradle :labX:build`
-- To run the tests, use `gradle :labX:test`
+- To compile the code but not run it, do `gradle :labX:build`.
+- To run the tests, use `gradle :labX:test`.
 
 #### Testing
 
-As mentioned earlier, you can run tests using `gradle test` (from inside a
-subdirectory) or `gradle :labX:test` (from the parent directory). You can
+You can run tests using `gradle test` (from inside a subdirectory)
+or `gradle :labX:test` (from the parent directory). You can
 also run tests directly from VS Code by clicking the gutter icons:
 
 ![The test gutter icons showing test results](gutter-icons.png)
@@ -135,29 +132,17 @@ or IDE can provide inline documentation):
 - `Assert.assertArrayEquals()` is like `assertEquals()`, but
   compares invidivual array elements
 
-### Solutions
-
-First, note that each directory contains one or more `.java.md` files which
-contain our solution across multiple Java code blocks, explained step-by-step.
-You can view these solutions in your editor, or on GitHub.
-
-As mentioned earlier, you can run a solution using `gradle run-solution`.
-
-An example of [literate programming][literate], the actual Java code is
-built directly from these `.md` files.
-
 ### Why Gradle?
 
-Knowing Gradle isn't required for this course, and it's not an official topic.
-We don't use Gradle with the problem sets. However, it offers the following
-benefits specifically for lab exercises:
+Knowing Gradle and JUnit isn't required for this course, and they are not
+official topics. However these tools are widely used by professional Java
+programmers and they offer some nice benefits:
 
 - We can run the code for any lab exercise with one command
-- It allows us to easily use open source libraries
-- Microsoft built a nice [VS Code extension][gradle-extension] for it
-- We use [toolchains][toolchains] to specify the Java language version
-- The code that builds our solution from a `.java.md` file is written
-  as a Gradle plugin
+- If one exercise isn't compiling that won't affect other exercises
+- Gradle automatically provides the `gradle test` command
+- Microsoft built a nice [VS Code extension][gradle-extension] that allows
+  you to run, test, and debug Gradle projects from the UI
 
 [wsl]: https://learn.microsoft.com/en-us/windows/wsl/install
 [gradle-extension]: https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-gradle
