@@ -63,9 +63,8 @@ You can also use SDKMAN to download and switch between different versions of Jav
 local development (e.g., `sdk install java 11.0.23-amzn` will install Amazon's
 distribution of Java 11).
 
-If you use VS Code, install the [extension for Gradle][gradle-extension]. We also recommend
-changing the VS Code setting "Testing: Open Testing" (`testing.openTesting`)
-to `"openExplorerOnTestStart"` and moving the Test Explorer to your secondary Side Bar.
+If you use VS Code, install the [extension for Gradle][gradle-extension].
+We also recommend moving the Test Explorer to your secondary Side Bar.
 This layout allows you to browse files on the left, edit code in the center,
 and see the results of tests on the right.
 

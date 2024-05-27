@@ -1,0 +1,13 @@
+{
+  "testing.openTesting": "openExplorerOnTestStart",
+  "files.exclude": {
+    "settings.gradle": true,
+    "buildSrc/": true,
+    ".vscode/": true,
+    "**/bin/": true,
+    "**/build/": true,
+    "**/.gradle": true,
+    "**/build.gradle": true,
+    "**/._*": true
+  }
+}
