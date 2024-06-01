@@ -1,7 +1,9 @@
 // this code is included from each subdirectory's build.gradle
 
 // assume the class with the main() method is src/main/java/App.java
-mainClassName = 'App'
+application {
+    mainClass = 'App'
+}
 
 repositories {
     mavenCentral()
@@ -13,7 +15,7 @@ dependencies {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(11)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 

@@ -12,10 +12,15 @@ public class TodoCli {
     }
 
     public void interactWithUser() {
+        System.out.println("Welcome! Here's the todo list:");
+        app.printList();
+
         Scanner s = new Scanner(in);
+
+        System.out.print("enter a command: ");
         while (s.hasNextLine()) {
             String command = s.next();
-            String args = s.nextLine();
+            String args = s.nextLine().trim();
 
             if (command.equals("add")) {
                 app.addTodo(args);
@@ -28,11 +33,11 @@ public class TodoCli {
             } else if (command.equals("quit")) {
                 break;
             } else {
-                System.err.println(
-                        "unknown command: " + command);
+                System.err.println("unknown command: " + command);
             }
 
             app.printList();
+            System.out.print("enter a command: ");
         }
 
         System.out.println("Goodbye!");
