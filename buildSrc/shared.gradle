@@ -16,3 +16,8 @@ java {
         languageVersion = JavaLanguageVersion.of(11)
     }
 }
+
+task deleteClassFiles(type: Delete) {
+  delete 'bin'
+}
+clean.dependsOn(deleteClassFiles)
