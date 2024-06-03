@@ -56,26 +56,27 @@ one or more of your peers, or you can hack alone and let me know if you get stuc
 
 \* Indicates a problem set due date
 
-## Setting up a local dev environment
+## Setting up
 
-### Installing prerequisites
+I organized the lab exercises into [Gradle][gradle] projects. Gradle
+is an industry-standard build and testing tool for Java.
 
-First, install Gradle. Using [SDKMAN](https://sdkman.io/) is recommended, which
-involves these steps:
+You **don't** need Gradle to compile and run the code in the `src/main/java/`
+folders. To run the tests in `src/test/java/`, you need Gradle.
 
-0. If you use Windows, install the [Windows Subsystem for Linux][wsl]
-1. Install SDKMAN using the instructions on their site (or just do
-   `curl -s "https://get.sdkman.io" | bash`)
-2. Install Gradle using the `sdk` command `sdk install gradle 8.7`
+### Gradle
 
-You can also use SDKMAN to download and switch between different versions of Java for
-local development (e.g., `sdk install java 21.0.3-amzn` will install Amazon's
-distribution of Java 21).
+See Gradle's documentation: https://docs.gradle.org/current/userguide/installation.html
+
+- On macOS, you can use [SDKMAN][sdkman] or Homebrew
+- On Windows, manually install Gradle and update the `Path` system environment variable
+
+### VS Code extension
 
 If you use VS Code, install the [extension for Gradle][gradle-extension].
 We also recommend moving the Test Explorer to your secondary Side Bar.
 This layout allows you to browse files on the left, edit code in the center,
-and see the results of tests on the right:
+and see the results of tests on the right.
 
 ### Getting the code
 
@@ -103,7 +104,7 @@ Or if your current directory is `lab3/` (for example), you can do `gradle run`.
 - To compile the code but not run it, do `gradle :labX:build`.
 - To run the tests, use `gradle :labX:test`.
 
-#### Testing
+## Testing
 
 You can run tests using `gradle test` (from inside a subdirectory)
 or `gradle :labX:test` (from the parent directory). You can
@@ -140,18 +141,8 @@ or IDE can provide inline documentation):
 - `Assert.assertArrayEquals()` is like `assertEquals()`, but
   compares invidivual array elements
 
-### Why Gradle?
-
-Knowing Gradle and JUnit isn't required for this course, and they are not
-official topics. However these tools are widely used by professional Java
-programmers and they offer some nice benefits:
-
-- We can run the code for any lab exercise with one command
-- If one exercise isn't compiling that won't affect other exercises
-- Gradle automatically provides the `gradle test` command
-- Microsoft built a nice [VS Code extension][gradle-extension] that allows
-  you to run, test, and debug Gradle projects from the UI
-
+[gradle]: https://gradle.org/s
+[sdkman]: https://sdkman.io/
 [wsl]: https://learn.microsoft.com/en-us/windows/wsl/install
 [gradle-extension]: https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-gradle
 [toolchains]: https://docs.gradle.org/current/samples/sample_jvm_multi_project_with_toolchains.html
