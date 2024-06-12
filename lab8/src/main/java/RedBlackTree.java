@@ -70,16 +70,18 @@ public class RedBlackTree {
         Node rightNode = node.right;
 
         node.right = rightNode.left;
-        if (rightNode.left != null)
+        if (rightNode.left != null) {
             rightNode.left.parent = node;
+        }
         rightNode.parent = node.parent;
 
-        if (node.parent == null)
+        if (node.parent == null) {
             root = rightNode;
-        else if (node == node.parent.left)
+        } else if (node == node.parent.left) {
             node.parent.left = rightNode;
-        else
+        } else {
             node.parent.right = rightNode;
+        }
 
         rightNode.left = node;
         node.parent = rightNode;
@@ -102,23 +104,27 @@ public class RedBlackTree {
     private void rotateRight(Node node) {
         Node leftNode = node.left;
         node.left = leftNode.right;
-        if (leftNode.right != null)
+        if (leftNode.right != null) {
             leftNode.right.parent = node;
+        }
         leftNode.parent = node.parent;
 
-        if (node.parent == null)
+        if (node.parent == null) {
             root = leftNode;
-        else if (node == node.parent.left)
+        } else if (node == node.parent.left) {
             node.parent.left = leftNode;
-        else
+        } else {
             node.parent.right = leftNode;
+        }
 
         leftNode.right = node;
         node.parent = leftNode;
     }
 
     private void doRotations(Node node) {
-        Node parent = null, grandParent = null;
+        Node parent = null;
+        Node grandParent = null;
+
         while (node != root && node.color == RED && node.parent.color == RED) {
             parent = node.parent;
             grandParent = node.parent.parent;
@@ -159,6 +165,8 @@ public class RedBlackTree {
                 }
             }
         }
+
+        // the root must always be black (a rotation could have changed it)
         root.color = BLACK;
     }
 
