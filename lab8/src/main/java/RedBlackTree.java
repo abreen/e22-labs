@@ -186,7 +186,7 @@ public class RedBlackTree {
         if (n.left == null && n.right == null) {
             return 0;
         }
-        return Math.max(height(n.left), height(n.right) + 1);
+        return Math.max(height(n.left), height(n.right)) + 1;
     }
 
     public Object lookup(int key) {
