@@ -16,6 +16,10 @@ public class TodoApp {
         done[index] = true;
     }
 
+    public boolean getDone(int index) {
+        return done[index];
+    }
+
     public boolean addTodo(String todo) {
         // find the first empty slot
         for (int i = 0; i < todos.length; i++) {
@@ -55,7 +59,14 @@ public class TodoApp {
         }
     }
 
-    public String[] getTodosArray() {
-        return todos;
+    public String[] getNotDoneTodos() {
+        String[] doneTodos = new String[todos.length];
+        int i = 0;
+        for (int j = 0; j < todos.length; j++) {
+            if (!done[j]) {
+                doneTodos[i++] = todos[j];
+            }
+        }
+        return doneTodos;
     }
 }

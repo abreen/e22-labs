@@ -4,6 +4,6 @@
     "buildSrc/": true,
     "**/bin/": true,
     "**/build/": true,
-    "**/.*": true
+    // "**/.*": true
   }
 }

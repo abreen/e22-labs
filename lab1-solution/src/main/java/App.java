@@ -12,6 +12,6 @@ public class App {
         var cli = new TodoCli(app, System.in);
         cli.interactWithUser();
 
-        storage.saveToFile(FILE_NAME, app.getTodosArray());
+        storage.saveToFile(FILE_NAME, app.getNotDoneTodos());
     }
 }

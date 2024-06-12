@@ -22,6 +22,13 @@ You can consult me, your fellow students, and the solution freely during the hou
 You can follow me as I build a solution, or you can go into a breakout room with
 one or more of your peers, or you can hack alone and let me know if you get stuck.
 
+At the start of lab, I'll post an invite URL for a [VS Code Live Share][live-share]
+session. You can connect to the session in a web browser and follow along with each
+step of development.
+
+If you want to edit your own copy of the code independent of what I'm doing, see
+the **Setting up a local dev environment** section below.
+
 ## Schedule
 
 | week   | date      | lecture/lab      | topics                                              |
@@ -29,25 +36,25 @@ one or more of your peers, or you can hack alone and let me know if you get stuc
 | week 1 | June 24   | Lecture 1        | Intro, ADTs and object-oriented programming         |
 | _Tue_  | June 25   | Lab 1            | To-do list, test-driven development                 |
 | _Wed_  | June 26   | Lecture 2        | Recursion and backtracking                          |
-| _Thu_  | June 27   | Lab 2            | Debuggers, combination sum                          |
+| _Thu_  | June 27   | Lab 2            | Debugging `NQueens.java`, combination sum           |
 | week 2 | July 1    | Lecture 3        | Sorting and algorithm analysis (1/2)                |
-| _Tue_  | July 2\*  | Lab 3            | Analyzing loops, counting sort                      |
+| _Tue_  | July 2\*  | Lab 3            | Analyzing loops, timing sorting algorithms          |
 | _Wed_  | July 3    | Lecture 4        | Sorting and analysis (2/2), linked lists (1/2)      |
-| _Thu_  | July 4    | Lab 4 (recorded) | video: `partition()` trace, merge sort trace        |
+| _Thu_  | July 4    | Lab 4 (recorded) | video: `partition()` trace, inferring big O         |
 | week 3 | July 8    | Lecture 5        | Linked lists (2/2); lists, stacks & queues (1/2)    |
-| _Tue_  | July 9\*  | Lab 5            | Command pattern, undo & redo                        |
+| _Tue_  | July 9\*  | Lab 5            | StringNode, using a stack to implement undo & redo  |
 | _Wed_  | July 10   | Lecture 6        | Lists, stacks and queues (2/2)                      |
 | _Thu_  | July 11   | _Review session_ | Practice midterm exam                               |
 | week 4 | July 15   | _Midterm exam_   |                                                     |
-| _Tue_  | July 16   | Lab 6            | Something with queues?                              |
+| _Tue_  | July 16   | Lab 6            | `isBalanced()`, something with queues?              |
 | _Wed_  | July 17   | Lecture 7        | Binary trees, Huffman encoding                      |
 | _Thu_  | July 18   | Lab 7            | `ExprTree` class, something else?                   |
 | week 5 | July 22   | Lecture 8        | Binary search trees, balanced search trees          |
-| _Tue_  | July 23\* | Lab 8            | Mini DB app? Strategy pattern for linear vs. binary |
+| _Tue_  | July 23\* | Lab 8            | Red-black trees, |
 | _Wed_  | July 24   | Lecture 9        | Heaps and priority queues                           |
 | _Thu_  | July 25   | Lab 9            | kth largest number, merging k sorted lists          |
 | week 6 | July 29   | Lecture 10       | Hash tables, graphs (1/2)                           |
-| _Tue_  | July 30\* | Lab 10           | Something with tables?                              |
+| _Tue_  | July 30\* | Lab 10           | Longest unique substring, web server log processor  |
 | _Wed_  | July 31   | Lecture 11       | Graphs (2/2)                                        |
 | _Thu_  | Aug 1     | Lab 11           | Maze solver using shortest path?                    |
 | week 7 | Aug 5     | _Review session_ | Practice final exam                                 |
@@ -149,3 +156,4 @@ or IDE can provide inline documentation):
 [literate]: https://en.wikipedia.org/wiki/Literate_programming
 [info-string]: https://spec.commonmark.org/0.31.2/#info-string
 [junit]: https://junit.org/junit5/
+[live-share]: https://code.visualstudio.com/learn/collaboration/live-share
