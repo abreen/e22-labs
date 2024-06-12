@@ -20,6 +20,7 @@ public class RedBlackTree {
 
     private class Node {
         public int key;
+        public Object data;
         public boolean color = RED;
         public Node left;
         public Node right;
@@ -28,9 +29,10 @@ public class RedBlackTree {
 
     private Node root;
 
-    public void insert(int key) {
+    public void insert(int key, Object data) {
         Node n = new Node();
         n.key = key;
+        n.data = data;
 
         root = insert(root, n);
 
@@ -56,7 +58,7 @@ public class RedBlackTree {
      *         / \                / \
      *        L   R              N   RR
      *           / \            / \
-     *          RL  RR         L  RL
+     *          RL  RR         L   RL
      * 
      * The right node R moves up to the top.
      * The root N becomes the left child of R.
@@ -177,5 +179,21 @@ public class RedBlackTree {
             return 0;
         }
         return Math.max(height(n.left), height(n.right) + 1);
+    }
+
+    public Object lookup(int key) {
+        return lookup(key, root);
+    }
+
+    private Object lookup(int key, Node root) {
+        if (root == null) {
+            return null;
+        } else if (key == root.key) {
+            return root.data;
+        } else if (key < root.key) {
+            return lookup(key, root.left);
+        } else {
+            return lookup(key, root.right);
+        }
     }
 }
