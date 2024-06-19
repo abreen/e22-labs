@@ -60,6 +60,7 @@ The topics are subject to change.
 
 </details>
 
+
 ## Installing Java and Gradle
 
 To run the code in this repository, you need Java Development Kit 21 and Gradle 8.7.
@@ -72,6 +73,7 @@ The code for each lab has its own [Gradle][gradle] project. Gradle is an
 industry-standard build and dependencies tool for Java. It allows you to easily
 download and use open source third-party libraries, like [JUnit][junit].
 
+
 ### VS Code extension
 
 If you use VS Code, install the [extension for Gradle][gradle-extension].
@@ -79,14 +81,16 @@ We also recommend moving the Test Explorer to your secondary Side Bar.
 This layout allows you to browse files on the left, edit code in the center,
 and see the results of tests on the right.
 
+
 ### Getting the code
 
-The code is [hosted on GitHub](https://github.com/abreen/s22-labs), but you don't need
-to use Git. Download the source code in a ZIP file here:
-https://github.com/abreen/s22-labs/archive/refs/heads/main.zip
+The code is [hosted on GitHub](https://github.com/abreen/s22-labs).
+If you use the [VS Code Extension for GitHub][github-extension], you can
+easily download the code by opening a new window and clicking "Clone
+Repository". Then type the repository name: `abreen/s22-labs`
 
-Extract the files from the ZIP archive and open the newly created folder in your editor
-or IDE.
+On the command line, `git clone https://github.com/abreen/s22-labs.git` will work.
+
 
 ### Build, test, and run
 
@@ -109,6 +113,7 @@ appropriate exercise:
 - To compile the code but not run it, do `./gradlew :labX:build`.
 - To run the tests, use `./gradlew :labX:test`.
 
+
 ## Testing
 
 You can run tests using the "test" task by doing `./gradlew :labX:test`.
@@ -116,6 +121,7 @@ You can run tests using the "test" task by doing `./gradlew :labX:test`.
 You can also run tests directly from VS Code by clicking the gutter icons:
 
 ![The test gutter icons showing test results](gutter-icons.png)
+
 
 ### JUnit
 
