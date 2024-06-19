@@ -1,9 +1,9 @@
 {
   "testing.openTesting": "openExplorerOnTestStart",
   "files.exclude": {
-    "buildSrc/": true,
+    // "buildSrc/": true,
     "**/bin/": true,
     "**/build/": true,
-    // "**/.*": true
+    "**/.*": true
   }
 }

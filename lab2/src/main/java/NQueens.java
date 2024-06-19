@@ -1,5 +1,3 @@
-import java.util.*;
-
 /**
  * NQueens - blueprint class for an object that solves the n-queens puzzle
  * using recursive backtracking. Includes a main() method for using the solver.

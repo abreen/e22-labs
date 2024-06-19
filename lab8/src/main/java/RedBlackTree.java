@@ -1,19 +1,35 @@
 /**
- * A balanced binary tree
+ * A red-black tree
  * 
- * A red-black tree is an alternative to 2-3 trees where nodes are colored
- * either black or red. The trick is to guarantee that each path from a node
- * to any of its descendant leaves has the same number of black nodes.
- * To maintain this property and the balance of the tree as a whole,
- * one or more "rotations" may occur after an insertion.
+ * An easy-to-implement balanced binary tree, similar in structure to
+ * 2-3 trees or B-trees of order 4.
  * 
- * In a left rotation, the right child of a node becomes the new root,
- * and the original root becomes the left child of the new root.
+ * Nodes are colored either black or red. The black nodes normal nodes.
+ * The red nodes are used to simulate the structure of a 3-node
+ * by attaching as a child to a black node:
+ *  
+ *        b                  b                      b
+ *      /   \              /   \                  /   \  
+ *     b     b            b     r                r     b
+ *                            /   \            /   \
+ *                           b     b          b     b
+ *     (2-node)           (3-node)          (another 3-node)       ...
  * 
- * In a right rotation, the left child of a node becomes the new root,
- * and the original root becomes the right child of the new root.
+ * Newly inserted nodes are red, but if the insertion results in two adjacent
+ * red nodes, a "rotation" occurs, which changes the structure of the tree to
+ * maintain balance:
+ * 
+ *        10b                              10b
+ *       /   \                            /   \
+ *      5b    15b                        5b    20b
+ *              \                             /   \
+ *               20r                        15r    25r
+ *                 \
+ *                  25r (new node)
+ * 
+ *    (before rotation)                (after rotation)
  */
-public class RedBlackTree {
+public class RedBlackTree implements Tree {
 
     private final boolean RED = true;
     private final boolean BLACK = false;
@@ -21,35 +37,44 @@ public class RedBlackTree {
     private class Node {
         public int key;
         public Object data;
-        public boolean color = RED;
+        public boolean color;
         public Node left;
         public Node right;
-        public Node parent; // also see LinkedTree (PS 4, Problem 7)
+
+        public Node(int key, Object data, boolean color) {
+            this.key = key;
+            this.data = data;
+            this.color = color;
+        }
     }
 
     private Node root;
 
-    public void insert(int key, Object data) {
-        Node n = new Node();
-        n.key = key;
-        n.data = data;
-
-        root = insert(root, n);
-
-        doRotations(n);
+    public void insert(int key, Object val) {
+        root = insert(root, key, val);
+        root.color = BLACK;
     }
 
-    private Node insert(Node root, Node n) {
-        if (root == null)
-            return n;
-        if (n.key < root.key) {
-            root.left = insert(root.left, n);
-            root.left.parent = root;
-        } else if (n.key > root.key) {
-            root.right = insert(root.right, n);
-            root.right.parent = root;
+    private Node insert(Node n, int key, Object data) {
+        if (n == null) {
+            return new Node(key, data, RED);
         }
-        return root;
+
+        if (key < n.key)
+            n.left = insert(n.left, key, data);
+        else if (key > n.key)
+            n.right = insert(n.right, key, data);
+        else
+            n.data = data;
+
+        if (isRed(n.right) && !isRed(n.left))
+            n = rotateLeft(n);
+        if (isRed(n.left) && isRed(n.left.left))
+            n = rotateRight(n);
+        if (isRed(n.left) && isRed(n.right))
+            swapColors(n);
+
+        return n;
     }
 
     /**
@@ -66,25 +91,13 @@ public class RedBlackTree {
      *     the right child of the post-rotation left node N.
      * L and RR do not change their relative position.
      */
-    private void rotateLeft(Node node) {
-        Node rightNode = node.right;
-
-        node.right = rightNode.left;
-        if (rightNode.left != null) {
-            rightNode.left.parent = node;
-        }
-        rightNode.parent = node.parent;
-
-        if (node.parent == null) {
-            root = rightNode;
-        } else if (node == node.parent.left) {
-            node.parent.left = rightNode;
-        } else {
-            node.parent.right = rightNode;
-        }
-
-        rightNode.left = node;
-        node.parent = rightNode;
+    private Node rotateLeft(Node n) {
+        Node x = n.right;
+        n.right = x.left;
+        x.left = n;
+        x.color = n.color;
+        n.color = RED;
+        return x;
     }
 
     /**
@@ -101,79 +114,19 @@ public class RedBlackTree {
      *     the left child of the post-rotation right node N.
      * LL and R do not change their relative position.
      */
-    private void rotateRight(Node node) {
-        Node leftNode = node.left;
-        node.left = leftNode.right;
-        if (leftNode.right != null) {
-            leftNode.right.parent = node;
-        }
-        leftNode.parent = node.parent;
-
-        if (node.parent == null) {
-            root = leftNode;
-        } else if (node == node.parent.left) {
-            node.parent.left = leftNode;
-        } else {
-            node.parent.right = leftNode;
-        }
-
-        leftNode.right = node;
-        node.parent = leftNode;
+    private Node rotateRight(Node n) {
+        Node x = n.left;
+        n.left = x.right;
+        x.right = n;
+        x.color = n.color;
+        n.color = RED;
+        return x;
     }
 
-    private void doRotations(Node node) {
-        Node parent = null;
-        Node grandParent = null;
-
-        while (node != root && node.color == RED && node.parent.color == RED) {
-            parent = node.parent;
-            grandParent = node.parent.parent;
-
-            if (parent == grandParent.left) {
-                Node uncle = grandParent.right;
-                if (uncle != null && uncle.color == RED) {
-                    grandParent.color = RED;
-                    parent.color = BLACK;
-                    uncle.color = BLACK;
-                    node = grandParent;
-                } else {
-                    if (node == parent.right) {
-                        rotateLeft(parent);
-                        node = parent;
-                        parent = node.parent;
-                    }
-                    rotateRight(grandParent);
-                    swapColors(parent, grandParent);
-                    node = parent;
-                }
-            } else {
-                Node uncle = grandParent.left;
-                if (uncle != null && uncle.color == RED) {
-                    grandParent.color = RED;
-                    parent.color = BLACK;
-                    uncle.color = BLACK;
-                    node = grandParent;
-                } else {
-                    if (node == parent.left) {
-                        rotateRight(parent);
-                        node = parent;
-                        parent = node.parent;
-                    }
-                    rotateLeft(grandParent);
-                    swapColors(parent, grandParent);
-                    node = parent;
-                }
-            }
-        }
-
-        // the root must always be black (a rotation could have changed it)
-        root.color = BLACK;
-    }
-
-    private void swapColors(Node a, Node b) {
-        boolean temp = a.color;
-        a.color = b.color;
-        b.color = temp;
+    private void swapColors(Node n) {
+        n.color = !n.color;
+        n.left.color = !n.left.color;
+        n.right.color = !n.right.color;
     }
 
     public int height() {
@@ -189,19 +142,25 @@ public class RedBlackTree {
         return Math.max(height(n.left), height(n.right)) + 1;
     }
 
-    public Object lookup(int key) {
-        return lookup(key, root);
+    public Object search(int key) {
+        return search(key, root);
     }
 
-    private Object lookup(int key, Node root) {
+    private Object search(int key, Node root) {
         if (root == null) {
             return null;
         } else if (key == root.key) {
             return root.data;
         } else if (key < root.key) {
-            return lookup(key, root.left);
+            return search(key, root.left);
         } else {
-            return lookup(key, root.right);
+            return search(key, root.right);
         }
+    }
+
+    private boolean isRed(Node x) {
+        if (x == null)
+            return false;
+        return x.color == RED;
     }
 }
