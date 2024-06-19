@@ -190,3 +190,4 @@ such cleanup.
 [junit]: https://junit.org/junit4/
 [coding-pack]: https://code.visualstudio.com/docs/languages/java#_install-visual-studio-code-for-java
 [gradle-wrapper]: https://docs.gradle.org/current/userguide/gradle_wrapper_basics.html
+[github-extension]: https://code.visualstudio.com/docs/sourcecontrol/github
