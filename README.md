@@ -1,7 +1,4 @@
-# S-22 Lab Exercises
-
-CSCI S-22 at Harvard Summer School is an intensive 7-week course covering
-fundamental data structures and classic algorithms using Java.
+# Lab Exercises for E-22/S-22
 
 In these lab exercises, we will put the concepts from lecture into action.
 See the `README.md` files in each subdirectory.
@@ -38,6 +35,8 @@ The topics are subject to change.
 <details>
 
 <summary>Lab schedule</summary>
+
+### Labs
 
 The topics are subject to change.
 
