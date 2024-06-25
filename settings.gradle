@@ -1,13 +1,3 @@
 rootProject.name = 's22-labs'
 
 include 'lab1', 'lab1-solution'
-include 'lab2', 'lab2-solution'
-include 'lab3', 'lab3-solution'
-include 'lab4', 'lab4-solution'
-include 'lab5', 'lab5-solution'
-include 'lab6', 'lab6-solution'
-include 'lab7', 'lab7-solution'
-include 'lab8', 'lab8-solution'
-include 'lab9', 'lab9-solution'
-include 'lab10', 'lab10-solution'
-include 'lab11', 'lab11-solution'
