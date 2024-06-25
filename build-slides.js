@@ -1,111 +1,144 @@
-const { marpCli } = require("@marp-team/marp-cli");
+const { marpCli, waitForObservation } = require("@marp-team/marp-cli");
 const coherentpdf = require("coherentpdf");
-const { existsSync: fileExists } = require("fs");
-const fs = require("fs/promises");
+const {
+  existsSync: fileExists,
+  mkdirSync: makeDirectory,
+  writeFileSync: writeFile,
+} = require("fs");
 
-fs.mkdir("./slides", { recursive: true })
-  .then(
-    Promise.all(
-      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-        .filter((n) => fileExists(`./lab${n}/slides.md`))
-        .map((n) => Promise.all([n, convertToHtml(n), convertToPdf(n)]))
-    ).then((ns) => {
-      const links = ns.map(([n, ...rest]) => {
-        const htmlAnchor = `<a href="/e22-labs/lab${n}.html">Lab ${n}</a>`;
-        const pdfAnchor = `<a href="/e22-labs/lab${n}.pdf">pdf</a>`;
-        const pdf2UpAnchor = `<a href="/e22-labs/lab${n}-2up.pdf">2-up</a>`;
+const URL_PREFIX = "/e22-labs/";
 
-        return `${htmlAnchor} (${pdfAnchor}, ${pdf2UpAnchor})`;
-      });
+const labsWithSlides = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].filter((n) =>
+  fileExists(`slides/lab${n}.md`)
+);
 
-      const body = `<ul>${links.map((link) => `<li>${link}</li>`)}</ul>`;
+function makeLinks(nums) {
+  return nums.map((n) => {
+    const htmlAnchor = `<a href="${URL_PREFIX}/lab${n}.html">Lab ${n}</a>`;
+    const pdfAnchor = `<a href="${URL_PREFIX}/lab${n}.pdf">PDF (one slide per page)</a>`;
+    const pdf2UpAnchor = `<a href="${URL_PREFIX}/lab${n}-2up.pdf">PDF (two slides per page)</a>`;
 
-      const html = makePage(body);
-      return fs.writeFile("docs/index.html", html);
-    })
-  )
-  .catch((error) => {
-    console.error("error", error);
+    return `${htmlAnchor}<br />${pdfAnchor}<br />${pdf2UpAnchor}`;
   });
+}
 
-function convertToHtml(n) {
-  const fileName = `./lab${n}/slides.md`;
+const links = makeLinks(labsWithSlides);
+const body = `<ul>${links.map((link) => `<li>${link}</li>`)}</ul>`;
+
+writeFile("_site/index.html", makeIndexPage(body));
+
+function runMarp(additionalArgs) {
   const argv = [
-    "--html",
-    "true",
-    "--output",
-    `docs/lab${n}.html`,
+    isWatchMode() ? "--watch" : null,
     "--theme",
     "gerard",
     "--theme-set",
     "gerard.css",
-    "--",
-    fileName,
-  ];
-
-  return marpCli(argv).then((exitStatus) => {
-    if (exitStatus > 0) {
-      return Promise.reject(n);
-    } else {
-      return Promise.resolve(n);
-    }
-  });
-}
-
-function convertToPdf(n) {
-  const fileName = `./lab${n}/slides.md`;
-  const pdfFileName = `docs/lab${n}.pdf`;
-  const argv = [
-    "--html",
-    "true",
-    "--pdf",
-    "--pdf-notes",
-    "--pdf-outlines",
+    "--input-dir",
+    "slides/",
     "--output",
-    pdfFileName,
-    "--theme",
-    "gerard",
-    "--theme-set",
-    "gerard.css",
-    "--",
-    fileName,
-  ];
+    "_site/",
+  ]
+    .filter((x) => x != null)
+    .concat(additionalArgs);
 
-  return marpCli(argv)
-    .then((exitStatus) => {
-      if (exitStatus > 0) {
-        return Promise.reject(pdfFileName);
-      } else {
-        return Promise.resolve([n, pdfFileName]);
-      }
-    })
-    .then(([n, pdfFileName]) => {
-      const pdf = coherentpdf.fromFile(pdfFileName, "");
-      coherentpdf.impose(
-        pdf,
-        1.0,
-        2.0,
-        false,
-        false,
-        false,
-        false,
-        false,
-        150.0,
-        150.0,
-        2.0
-      );
-      coherentpdf.scaleToFitPaper(
-        pdf,
-        coherentpdf.all(pdf),
-        coherentpdf.usletterportrait,
-        1.0
-      );
-      coherentpdf.toFile(pdf, `docs/lab${n}-2up.pdf`, false, false);
-      coherentpdf.deletePdf(pdf);
-    });
+  console.log(argv);
+
+  marpCli(argv)
+    .then((exitCode) => console.log(`Done with exit code ${exitCode}`))
+    .catch(console.error);
 }
 
-function makePage(body) {
+runMarp(["--pdf"]);
+runMarp(["--pdf"]);
+
+waitForObservation().then(({ stop }) => {
+  console.log("Observed");
+
+  // Stop observations to resolve marpCli()'s Promise
+  stop();
+});
+
+//function convertToHtml(n) {
+//  const fileName = `./lab${n}/slides.md`;
+//  const argv = [
+//    isWatchMode() ? "--watch" : null,
+//    "--html",
+//    "true",
+//    "--output",
+//    `_site/lab${n}.html`,
+//    "--theme",
+//    "gerard",
+//    "--theme-set",
+//    "gerard.css",
+//    "--",
+//    fileName,
+//  ].filter((x) => x != null);
+//
+//  return marpCli(argv).then((exitStatus) => {
+//    if (exitStatus > 0) {
+//      return Promise.reject(n);
+//    } else {
+//      return Promise.resolve(n);
+//    }
+//  });
+//}
+//
+//function convertToPdf(n) {
+//  const fileName = `./lab${n}/slides.md`;
+//  const pdfFileName = `_site/lab${n}.pdf`;
+//  const argv = [
+//    isWatchMode() ? "--watch" : null,
+//    "--html",
+//    "true",
+//    "--pdf",
+//    "--pdf-notes",
+//    "--pdf-outlines",
+//    "--output",
+//    pdfFileName,
+//    "--theme",
+//    "gerard",
+//    "--theme-set",
+//    "gerard.css",
+//    "--",
+//    fileName,
+//  ].filter((x) => x != null);
+//
+//  return marpCli(argv)
+//    .then((exitStatus) => {
+//      if (exitStatus > 0) {
+//        return Promise.reject(pdfFileName);
+//      } else {
+//        return Promise.resolve([n, pdfFileName]);
+//      }
+//    })
+//    .then(([n, pdfFileName]) => {
+//      const pdf = coherentpdf.fromFile(pdfFileName, "");
+//      coherentpdf.impose(
+//        pdf,
+//        1.0,
+//        2.0,
+//        false,
+//        false,
+//        false,
+//        false,
+//        false,
+//        150.0,
+//        150.0,
+//        2.0
+//      );
+//      coherentpdf.scaleToFitPaper(
+//        pdf,
+//        coherentpdf.all(pdf),
+//        coherentpdf.usletterportrait,
+//        1.0
+//      );
+//      coherentpdf.toFile(pdf, `_site/lab${n}-2up.pdf`, false, false);
+//      coherentpdf.deletePdf(pdf);
+//    });
+//}
+
+function makeIndexPage(body) {
   return `<!doctype html>
 <html>
   <head>
@@ -136,4 +169,8 @@ function makePage(body) {
   </body>
 </html>
 `;
+}
+
+function isWatchMode() {
+  return process.argv.length > 2 && ["-w", "--watch"].includes(process.argv[2]);
 }
