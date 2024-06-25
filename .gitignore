@@ -30,4 +30,4 @@ gradle-app.setting
 *.swp
 
 todos.txt
-
+_site/*
