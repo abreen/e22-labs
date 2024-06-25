@@ -27,11 +27,11 @@ public class ArrayBag {
 
     public ArrayBag(ArrayBag other) {
         if (other == null) {
-            throw new IllegalArgumentException("other bag cannot be null");
+            throw new IllegalArgumentException("other cannot be null");
         }
 
-        int maxSize = other.numItems * 5;
-        this.items = new Object[maxSize];
+        int newSize = other.numItems * 2;
+        this.items = new Object[newSize];
         this.numItems = 0;
 
         for (int i = 0; i < other.numItems; i++) {
@@ -51,26 +51,24 @@ public class ArrayBag {
         }
     }
 
-    public boolean remove(Object item) {
+    public boolean contains(Object item) {
         for (int i = 0; i < this.numItems; i++) {
             if (this.items[i].equals(item)) {
-                // Shift the remaining items left by one.
-                for (int j = i; j < this.numItems - 1; j++) {
-                    this.items[j] = this.items[j + 1];
-                }
-                this.items[this.numItems - 1] = null;
-
-                this.numItems--;
                 return true;
             }
         }
 
-        return false; // item not found
+        return false;
     }
 
-    public boolean contains(Object item) {
+    public boolean remove(Object item) {
         for (int i = 0; i < this.numItems; i++) {
             if (this.items[i].equals(item)) {
+                for (int j = i; j < this.numItems - 1; j++) {
+                    items[j] = items[j + 1];
+                }
+                items[numItems - 1] = null;
+                this.numItems--;
                 return true;
             }
         }
