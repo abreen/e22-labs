@@ -5,6 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * A storage mechanism for the to-do list app
+ *
+ * This class offers methods for loading & saving strings to a plain text file.
+ */
 public class TodoStorage {
 
     private static final int MAX_NUM_STRINGS_FROM_FILE = 25;

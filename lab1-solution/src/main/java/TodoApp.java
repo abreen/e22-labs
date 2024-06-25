@@ -1,55 +1,82 @@
+/**
+ * A class containing core logic for a to-do list app
+ *
+ * This class requires an array of strings (the initial to-do list).
+ */
 public class TodoApp {
 
-    private String[] todos;
-    private boolean[] done;
+    /** Things still left to do */
+    private ArrayBag notDone;
+
+    /** Things that are done */
+    private ArrayBag done;
 
     public TodoApp(String[] initialTodos) {
-        todos = initialTodos;
-        done = new boolean[initialTodos.length];
-    }
+        if (initialTodos == null) {
+            // instead of throwing an exception, just use an empty array
+            initialTodos = new String[0];
+        }
 
-    public String getTodo(int index) {
-        return todos[index];
-    }
-
-    public void markDone(int index) {
-        done[index] = true;
-    }
-
-    public boolean getDone(int index) {
-        return done[index];
-    }
-
-    public boolean addTodo(String todo) {
-        // find the first empty slot
-        for (int i = 0; i < todos.length; i++) {
-            if (todos[i] == null) {
-                todos[i] = todo;
-                return true;
+        notDone = new ArrayBag(initialTodos.length);
+        for (String item : initialTodos) {
+            if (item != null) {
+                notDone.add(item);
             }
         }
 
-        // the array must be full
-        return false;
+        done = new ArrayBag();
     }
 
-    public void deleteTodo(int index) {
-        todos[index] = null;
-        done[index] = false;
+    public String[] getTodos() {
+        return (String[]) notDone.toArray();
+    }
+
+    public void markDone(String item) {
+        if (notDone.contains(item)) {
+            notDone.remove(item);
+            done.add(item);
+        }
+    }
+
+    public boolean isDone(String item) {
+        return done.contains(item);
+    }
+
+    public boolean addTodo(String item) {
+        return notDone.add(item);
+    }
+
+    public void deleteTodo(String item) {
+        if (notDone.contains(item)) {
+            notDone.remove(item);
+        } else if (done.contains(item)) {
+            done.remove(item);
+        }
     }
 
     public void printList() {
+        Object[] notDoneArray = notDone.toArray();
+        Object[] doneArray = done.toArray();
+
         int numPrinted = 0;
 
-        for (int i = 0; i < todos.length; i++) {
-            if (todos[i] != null) {
-                System.out.print(i + ". " + todos[i]);
-                if (done[i]) {
-                    System.out.print(" - done");
+        if (notDoneArray.length > 0) {
+            System.out.println("to do:");
+            for (int i = 0; i < notDoneArray.length; i++) {
+                if (notDoneArray[i] != null) {
+                    System.out.println(i + ". " + notDoneArray[i]);
+                    numPrinted++;
                 }
-                System.out.println();
+            }
+        }
 
-                numPrinted++;
+        if (doneArray.length > 0) {
+            System.out.println("done:");
+            for (int i = 0; i < doneArray.length; i++) {
+                if (doneArray[i] != null) {
+                    System.out.println(i + ". " + doneArray[i]);
+                    numPrinted++;
+                }
             }
         }
 
@@ -60,13 +87,23 @@ public class TodoApp {
     }
 
     public String[] getNotDoneTodos() {
-        String[] doneTodos = new String[todos.length];
-        int i = 0;
-        for (int j = 0; j < todos.length; j++) {
-            if (!done[j]) {
-                doneTodos[i++] = todos[j];
+        Object[] notDoneArray = notDone.toArray();
+        String[] strings = new String[notDoneArray.length];
+        int numStrings = 0;
+
+        for (Object item : notDoneArray) {
+            if (item instanceof String) {
+                strings[numStrings++] = (String) item;
             }
         }
-        return doneTodos;
+
+        // shouldn't be possible since we only put strings into the ArrayBag
+        if (numStrings < notDoneArray.length) {
+            String[] temp = new String[numStrings];
+            System.arraycopy(strings, 0, temp, 0, numStrings);
+            strings = temp;
+        }
+
+        return strings;
     }
 }

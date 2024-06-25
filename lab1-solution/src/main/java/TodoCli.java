@@ -1,6 +1,9 @@
 import java.util.Scanner;
 import java.io.InputStream;
 
+/**
+ * A command-line interface for the to-do list app
+ */
 public class TodoCli {
 
     private TodoApp app;
@@ -25,11 +28,9 @@ public class TodoCli {
             if (command.equals("add")) {
                 app.addTodo(args);
             } else if (command.equals("done")) {
-                int index = Integer.parseInt(args);
-                app.markDone(index);
+                app.markDone(args);
             } else if (command.equals("delete")) {
-                int index = Integer.parseInt(args);
-                app.deleteTodo(index);
+                app.deleteTodo(args);
             } else if (command.equals("quit")) {
                 break;
             } else {

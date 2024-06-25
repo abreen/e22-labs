@@ -12,19 +12,11 @@ public class ArrayBag {
 
     public static final int DEFAULT_MAX_SIZE = 50;
 
-    /**
-     * Constructor with no parameters - creates a new, empty ArrayBag with 
-     * the default maximum size.
-     */
     public ArrayBag() {
         this.items = new Object[DEFAULT_MAX_SIZE];
         this.numItems = 0;
     }
 
-    /** 
-     * A constructor that creates a new, empty ArrayBag with the specified
-     * maximum size.
-     */
     public ArrayBag(int maxSize) {
         if (maxSize <= 0) {
             throw new IllegalArgumentException("maxSize must be > 0");
@@ -33,10 +25,6 @@ public class ArrayBag {
         this.numItems = 0;
     }
 
-    /**
-     * A constructor that creates a new ArrayBag with the same items as the
-     * specified ArrayBag.
-     */
     public ArrayBag(ArrayBag other) {
         if (other == null) {
             throw new IllegalArgumentException("other bag cannot be null");
@@ -51,11 +39,6 @@ public class ArrayBag {
         }
     }
 
-    /** 
-     * add - adds the specified item to this ArrayBag. Returns true if there 
-     * is room to add it, and false otherwise.
-     * Throws an IllegalArgumentException if the item is null.
-     */
     public boolean add(Object item) {
         if (item == null) {
             throw new IllegalArgumentException("item must be non-null");
@@ -68,11 +51,6 @@ public class ArrayBag {
         }
     }
 
-    /** 
-     * remove - removes one occurrence of the specified item (if any)
-     * from this ArrayBag.  Returns true on success and false if the
-     * specified item (i.e., an object equal to item) is not in this ArrayBag.
-     */
     public boolean remove(Object item) {
         for (int i = 0; i < this.numItems; i++) {
             if (this.items[i].equals(item)) {
@@ -90,10 +68,6 @@ public class ArrayBag {
         return false; // item not found
     }
 
-    /**
-     * contains - returns true if the specified item is in the Bag, and
-     * false otherwise.
-     */
     public boolean contains(Object item) {
         for (int i = 0; i < this.numItems; i++) {
             if (this.items[i].equals(item)) {
@@ -104,10 +78,6 @@ public class ArrayBag {
         return false;
     }
 
-    /**
-     * containsAll - does this ArrayBag contain all of the items in
-     * otherBag?  Returns false if otherBag is null or empty. 
-     */
     public boolean containsAll(ArrayBag otherBag) {
         if (otherBag == null || otherBag.numItems == 0) {
             return false;
@@ -122,9 +92,6 @@ public class ArrayBag {
         return true;
     }
 
-    /**
-     * grab - returns a reference to a randomly chosen item in this ArrayBag.
-     */
     public Object grab() {
         if (this.numItems == 0) {
             throw new IllegalStateException("the bag is empty");
@@ -134,9 +101,6 @@ public class ArrayBag {
         return this.items[whichOne];
     }
 
-    /**
-     * toArray - return an array containing the current contents of the bag
-     */
     public Object[] toArray() {
         Object[] copy = new Object[this.numItems];
 

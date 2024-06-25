@@ -26,17 +26,7 @@ public class ArrayBag {
     }
 
     public ArrayBag(ArrayBag other) {
-        if (other == null) {
-            throw new IllegalArgumentException("other bag cannot be null");
-        }
-
-        int maxSize = other.numItems * 5;
-        this.items = new Object[maxSize];
-        this.numItems = 0;
-
-        for (int i = 0; i < other.numItems; i++) {
-            this.add(other.items[i]);
-        }
+        throw new UnsupportedOperationException();
     }
 
     public boolean add(Object item) {
@@ -51,23 +41,6 @@ public class ArrayBag {
         }
     }
 
-    public boolean remove(Object item) {
-        for (int i = 0; i < this.numItems; i++) {
-            if (this.items[i].equals(item)) {
-                // Shift the remaining items left by one.
-                for (int j = i; j < this.numItems - 1; j++) {
-                    this.items[j] = this.items[j + 1];
-                }
-                this.items[this.numItems - 1] = null;
-
-                this.numItems--;
-                return true;
-            }
-        }
-
-        return false; // item not found
-    }
-
     public boolean contains(Object item) {
         for (int i = 0; i < this.numItems; i++) {
             if (this.items[i].equals(item)) {
@@ -76,6 +49,10 @@ public class ArrayBag {
         }
 
         return false;
+    }
+
+    public boolean remove(Object item) {
+        throw new UnsupportedOperationException();
     }
 
     public boolean containsAll(ArrayBag otherBag) {

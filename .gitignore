@@ -1,3 +1,7 @@
+.npm
+node_modules/
+npm-debug.log*
+
 .gradle
 **/build/
 !src/**/build/
@@ -26,3 +30,4 @@ gradle-app.setting
 *.swp
 
 todos.txt
+

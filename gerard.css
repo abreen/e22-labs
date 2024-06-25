@@ -1,0 +1,62 @@
+/* @theme gerard */
+
+@import "default";
+
+section {
+  font-family: Arial, Helvetica, sans-serif;
+  justify-content: flex-start;
+  padding: 40px;
+
+  /* give the slides a 4:3 aspect ratio */
+  width: 960px;
+  height: 720px;
+}
+
+h1 {
+  color: #75140c;
+  font-size: 28pt;
+  font-weight: normal;
+  text-align: center;
+}
+
+ul {
+  padding-left: 1rem;
+}
+
+li {
+  padding-left: 1rem;
+}
+
+ul ul {
+  list-style-type: disc;
+}
+
+pre,
+tt,
+code {
+  font-family: "Lucida Console", Monaco, "Courier New", monospace;
+}
+
+pre {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+code,
+tt,
+section h1 tt,
+section h1 code,
+section h2 tt,
+section h2 code,
+section h3 tt,
+section h3 code,
+section h4 tt,
+section h4 code,
+section h5 tt,
+section h5 code,
+section h6 tt,
+section h6 code {
+  background: none;
+  padding: 0;
+}
