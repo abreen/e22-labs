@@ -24,6 +24,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
+
       - run: |
           npm install
           npm run build
+      - uses: actions/upload-pages-artifact@v3.0.1
