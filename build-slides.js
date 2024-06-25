@@ -11,9 +11,9 @@ fs.mkdir("./slides", { recursive: true })
         .map((n) => Promise.all([n, convertToHtml(n), convertToPdf(n)]))
     ).then((ns) => {
       const links = ns.map(([n, ...rest]) => {
-        const htmlAnchor = `<a href="/lab${n}.html">Lab ${n}</a>`;
-        const pdfAnchor = `<a href="/lab${n}.pdf">pdf</a>`;
-        const pdf2UpAnchor = `<a href="/lab${n}-2up.pdf">2-up</a>`;
+        const htmlAnchor = `<a href="/e22-labs/lab${n}.html">Lab ${n}</a>`;
+        const pdfAnchor = `<a href="/e22-labs/lab${n}.pdf">pdf</a>`;
+        const pdf2UpAnchor = `<a href="/e22-labs/lab${n}-2up.pdf">2-up</a>`;
 
         return `${htmlAnchor} (${pdfAnchor}, ${pdf2UpAnchor})`;
       });
