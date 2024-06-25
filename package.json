@@ -13,5 +13,8 @@
         "typographer": true
       }
     }
+  },
+  "scripts": {
+    "build": "node build-slides.js"
   }
 }
