@@ -21,7 +21,7 @@ fs.mkdir("./slides", { recursive: true })
       const body = `<ul>${links.map((link) => `<li>${link}</li>`)}</ul>`;
 
       const html = makePage(body);
-      return fs.writeFile("slides/index.html", html);
+      return fs.writeFile("docs/index.html", html);
     })
   )
   .catch((error) => {
@@ -34,7 +34,7 @@ function convertToHtml(n) {
     "--html",
     "true",
     "--output",
-    `slides/lab${n}.html`,
+    `docs/lab${n}.html`,
     "--theme",
     "gerard",
     "--theme-set",
@@ -54,7 +54,7 @@ function convertToHtml(n) {
 
 function convertToPdf(n) {
   const fileName = `./lab${n}/slides.md`;
-  const pdfFileName = `slides/lab${n}.pdf`;
+  const pdfFileName = `docs/lab${n}.pdf`;
   const argv = [
     "--html",
     "true",
@@ -100,7 +100,7 @@ function convertToPdf(n) {
         coherentpdf.usletterportrait,
         1.0
       );
-      coherentpdf.toFile(pdf, `slides/lab${n}-2up.pdf`, false, false);
+      coherentpdf.toFile(pdf, `docs/lab${n}-2up.pdf`, false, false);
       coherentpdf.deletePdf(pdf);
     });
 }
