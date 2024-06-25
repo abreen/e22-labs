@@ -1,6 +1,6 @@
 /**
  * A binary tree
- * 
+ *
  * A simplified version of LinkedTree that stores a single Object as data.
  */
 public class BinaryTree implements Tree {
@@ -74,11 +74,14 @@ public class BinaryTree implements Tree {
     }
 
     private int height(Node n) {
-        if (n == null)
+        if (n == null) {
             return -1;
+        }
+
         if (n.left == null && n.right == null) {
             return 0;
         }
+
         return Math.max(height(n.left), height(n.right)) + 1;
     }
 }

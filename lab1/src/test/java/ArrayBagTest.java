@@ -2,6 +2,7 @@ import org.junit.Test;
 import org.junit.Assert;
 
 public class ArrayBagTest {
+
     @Test
     public void testAddAndGrab() {
         var bag = new ArrayBag();

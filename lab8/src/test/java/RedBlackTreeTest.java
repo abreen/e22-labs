@@ -32,7 +32,7 @@ public class RedBlackTreeTest {
 
     /**
      * Verifies that the balanced tree's height is less than
-     * or equal to 2 * log2(n + 1) for simple trees where
+     * or equal to 2 * log_2(n + 1) for simple trees where
      * n is less than 25,000.
      */
     @Test

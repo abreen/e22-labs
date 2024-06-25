@@ -1,6 +1,6 @@
 /**
  * A simple collection class
- * 
+ *
  * A bag is a collection with no guaranteed ordering, no restriction on
  * duplicate values, and no restriction on the types of values.
  */

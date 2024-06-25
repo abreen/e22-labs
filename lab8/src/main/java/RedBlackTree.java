@@ -1,24 +1,24 @@
 /**
  * A red-black tree
- * 
- * An easy-to-implement balanced binary tree, similar in structure to
- * 2-3 trees or B-trees of order 4.
- * 
- * Nodes are colored either black or red. The black nodes normal nodes.
+ *
+ * Similar in structure to 2-3 trees or B-trees of order 4, this balanced tree
+ * implementation was invented by Robert Sedgewick in 2008.
+ *
+ * Nodes are colored either black or red. The black nodes are normal nodes.
  * The red nodes are used to simulate the structure of a 3-node
- * by attaching as a child to a black node:
- *  
- *        b                  b                      b
- *      /   \              /   \                  /   \  
- *     b     b            b     r                r     b
- *                            /   \            /   \
- *                           b     b          b     b
- *     (2-node)           (3-node)          (another 3-node)       ...
- * 
- * Newly inserted nodes are red, but if the insertion results in two adjacent
- * red nodes, a "rotation" occurs, which changes the structure of the tree to
- * maintain balance:
- * 
+ * by attaching as a left child to a black node:
+ *
+ *                b                         b
+ *              /   \                     /   \
+ *             b     b                   r     b
+ *                                     /   \
+ *                                    b     b
+ *             (2-node)                 (3-node)
+ *
+ * Newly inserted nodes are red, but if that results in a red node with a red
+ * child, a "rotation" occurs, which changes the structure of the tree to
+ * ensure that no red node has a red child, which maintains balance:
+ *
  *        10b                              10b
  *       /   \                            /   \
  *      5b    15b                        5b    20b
@@ -26,7 +26,7 @@
  *               20r                        15r    25r
  *                 \
  *                  25r (new node)
- * 
+ *
  *    (before rotation)                (after rotation)
  */
 public class RedBlackTree implements Tree {
@@ -60,19 +60,29 @@ public class RedBlackTree implements Tree {
             return new Node(key, data, RED);
         }
 
-        if (key < n.key)
+        // insert the the new node/data (same code as non-balanced trees)
+        if (key < n.key) {
             n.left = insert(n.left, key, data);
-        else if (key > n.key)
+        } else if (key > n.key) {
             n.right = insert(n.right, key, data);
-        else
+        } else {
             n.data = data;
+        }
 
-        if (isRed(n.right) && !isRed(n.left))
+        // if n has only one red child, it must be on the left ("left-leaning")
+        if (isRed(n.right) && !isRed(n.left)) {
             n = rotateLeft(n);
-        if (isRed(n.left) && isRed(n.left.left))
+        }
+
+        // two red nodes in a row: n.left and n.left.left
+        if (isRed(n.left) && isRed(n.left.left)) {
             n = rotateRight(n);
-        if (isRed(n.left) && isRed(n.right))
+        }
+
+        // now, both of n's children could be red; if so, swap the colors
+        if (isRed(n.left) && isRed(n.right)) {
             swapColors(n);
+        }
 
         return n;
     }
@@ -84,7 +94,7 @@ public class RedBlackTree implements Tree {
      *        L   R              N   RR
      *           / \            / \
      *          RL  RR         L   RL
-     * 
+     *
      * The right node R moves up to the top.
      * The root N becomes the left child of R.
      * The left child RL of the formerly right node R becomes
@@ -107,7 +117,7 @@ public class RedBlackTree implements Tree {
      *        L   R              LL  N
      *       / \                    / \
      *      LL  LR                 LR  R
-     * 
+     *
      * The left node L moves up to the top.
      * The root N becomes the right child of L.
      * The right child LR of the formerly left node L becomes
@@ -123,22 +133,30 @@ public class RedBlackTree implements Tree {
         return x;
     }
 
+    /** Toggle the colors of a node and its children */
     private void swapColors(Node n) {
         n.color = !n.color;
         n.left.color = !n.left.color;
         n.right.color = !n.right.color;
     }
 
+    /**
+     * For a red-black tree with n nodes, the height is at most 2 * log_2(n + 1).
+     * This method traverses the tree to find the longest path.
+     */
     public int height() {
         return height(root);
     }
 
     private int height(Node n) {
-        if (n == null)
+        if (n == null) {
             return -1;
+        }
+
         if (n.left == null && n.right == null) {
             return 0;
         }
+
         return Math.max(height(n.left), height(n.right)) + 1;
     }
 
@@ -159,8 +177,9 @@ public class RedBlackTree implements Tree {
     }
 
     private boolean isRed(Node x) {
-        if (x == null)
+        if (x == null) {
             return false;
+        }
         return x.color == RED;
     }
 }
