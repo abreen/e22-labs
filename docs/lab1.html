@@ -94,14 +94,14 @@ if it’s at index 0.</li>
 <p>Now write an implementation of <code>remove()</code>.</p>
 <p>Avoid leaving <code>null</code>s in the middle of the array. To remove an item, shift all
 the items to the left by one position. Suppose we start with this array:</p>
-<pre><code><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>+------+----+-----+-------+------+------+-----+
-| &quot;hi&quot; | 32 | '@' | false | null | null | ... |
-+------+----+-----+-------+------+------+-----+
+<pre><code><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>┌──────┬────┬─────┬───────┬──────┬──────┬─────┐
+│ &quot;hi&quot; │ 32 │ '@' │ false │ null │ null │ ... │
+└──────┴────┴─────┴───────┴──────┴──────┴─────┘
 </span></span></foreignObject></svg></code></pre>
-<p>After removing 32, the bag’s array should look like this:</p>
-<pre><code><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>+------+-----+-------+------+------+-----+
-| &quot;hi&quot; | '@' | false | null | null | ... |
-+------+-----+-------+------+------+-----+
+<p>After removing 32, the array should look like this:</p>
+<pre><code><svg data-marp-fitting="svg" data-marp-fitting-code><foreignObject><span data-marp-fitting-svg-content><span data-marp-fitting-svg-content-wrap>┌──────┬─────┬───────┬──────┬──────┬─────┐
+│ &quot;hi&quot; │ '@' │ false │ null │ null │ ... │
+└──────┴─────┴───────┴──────┴──────┴─────┘
 </span></span></foreignObject></svg></code></pre>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 960 720"><foreignObject width="960" height="720"><section id="6" data-theme="gerard" style="--theme:gerard;">

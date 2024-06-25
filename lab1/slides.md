@@ -91,17 +91,17 @@ Avoid leaving `null`s in the middle of the array. To remove an item, shift all
 the items to the left by one position. Suppose we start with this array:
 
 ```
-+------+----+-----+-------+------+------+-----+
-| "hi" | 32 | '@' | false | null | null | ... |
-+------+----+-----+-------+------+------+-----+
+┌──────┬────┬─────┬───────┬──────┬──────┬─────┐
+│ "hi" │ 32 │ '@' │ false │ null │ null │ ... │
+└──────┴────┴─────┴───────┴──────┴──────┴─────┘
 ```
 
-After removing 32, the bag's array should look like this:
+After removing 32, the array should look like this:
 
 ```
-+------+-----+-------+------+------+-----+
-| "hi" | '@' | false | null | null | ... |
-+------+-----+-------+------+------+-----+
+┌──────┬─────┬───────┬──────┬──────┬─────┐
+│ "hi" │ '@' │ false │ null │ null │ ... │
+└──────┴─────┴───────┴──────┴──────┴─────┘
 ```
 
 ---
