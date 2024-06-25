@@ -1,21 +1,24 @@
 public class TodoApp {
 
-    private String[] todos = new String[100];
+    private ArrayBag todos;
 
-    public String getTodo(int index) {
-        return todos[index];
+    public TodoApp() {
+        todos = new ArrayBag();
     }
 
-    public boolean addTodo(String todo) {
-        // find the first empty slot
-        for (int i = 0; i < todos.length; i++) {
-            if (todos[i] == null) {
-                todos[i] = todo;
-                return true;
-            }
-        }
+    public boolean addTodo(String item) {
+        return todos.add(item);
+    }
 
-        // the array must be full
-        return false;
+    public boolean deleteTodo(String item) {
+        return todos.remove(item);
+    }
+
+    public void markDone(String item) {
+        throw new UnsupportedOperationException();
+    }
+
+    public boolean isDone(String item) {
+        return !todos.contains(item);
     }
 }

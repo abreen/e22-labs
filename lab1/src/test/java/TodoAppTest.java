@@ -4,15 +4,29 @@ import org.junit.Assert;
 public class TodoAppTest {
 
     @Test
-    public void testEmptyList() {
+    public void testNoTodos() {
         var app = new TodoApp();
-        Assert.assertNull(app.getTodo(0));
+        Assert.assertFalse(app.deleteTodo("nonexistent"));
     }
 
     @Test
-    public void testOneItem() {
+    public void testOneTodo() {
         var app = new TodoApp();
-        app.addTodo("Buy eggs and milk");
-        Assert.assertEquals("Buy eggs and cheese", app.getTodo(0));
+        app.addTodo("first");
+
+        Assert.assertTrue(app.deleteTodo("first"));
+        Assert.assertFalse(app.deleteTodo("first"));
+    }
+
+    @Test
+    public void testMarkDone() {
+        var app = new TodoApp();
+        app.addTodo("buy eggs and milk");
+
+        Assert.assertFalse(app.isDone("buy eggs and milk"));
+
+        app.markDone("buy eggs and milk");
+
+        Assert.assertTrue(app.isDone("buy eggs and milk"));
     }
 }
