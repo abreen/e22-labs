@@ -4,7 +4,8 @@
     // "buildSrc/": true,
     "**/bin/": true,
     "**/build/": true,
-    "**/.*": true
+    "**/.*": true,
+    "node_modules": true
   },
   "java.configuration.updateBuildConfiguration": "automatic"
 }
