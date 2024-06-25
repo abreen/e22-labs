@@ -5,12 +5,19 @@ title: Lab 1
 
 # The `ArrayBag` class
 
-Examine the fields and constructors of the `ArrayBag` class.
+Last time in lecture we introduced the `ArrayBag` class. Recall:
 
-- `items` is of type `Object[]` which allows us to store references to any type
-  of object
-- the default constructor creates an underlying array of size 50
-- the `ArrayBag(int maxSize)` constructor takes a value
+- it's a *collection* (it's intended to store lots of objects)
+* there is no guaranteed *ordering* (items come out randomly)
+* duplicates are allowed
+* objects can be of any type
+
+We'll review the fields and constructors of the class.
+
+* `Object[]` allows us to store references to any type
+  of object (since `Object` is the ancestor of all classes)
+* the default constructor creates an underlying array of size 50
+* the `ArrayBag(int maxSize)` constructor takes a value
   specifying the size
 
 ---
@@ -112,7 +119,9 @@ Starting from correct, compiling code:
 
 1. Add a failing test case that represents a desired feature
 2. Write the code that makes the test case pass
-3. Refactor as needed (if you introduce a bug by accident, the test case will start failing)
+3. Refactor as needed
+   1. If you introduce a bug by accident, undo until your
+      test cases pass again
 4. Go to step 1 for another feature
 
 Use this technique to help you implement `remove()`.
@@ -177,10 +186,17 @@ of the `new` keyword, which calls a constructor.
 Write a constructor for the `ArrayBag` class that accepts another `ArrayBag` and
 copies its references into a new bag's array.
 
-- To allow for more items to be added, make the new array twice the size
+* To allow for more items to be added, make the new array twice the size
   of the other bag's array
+* Use test-driven development
+  - Think of concrete cases before writing the implementation
+  * Put the concrete cases & your expectations into code
+  * Try to think of the smallest possible thing to test; for example,
+    start with a test that checks the array length is correct before
+    taking the next step of copying references
 
 ---
+<!-- class: bonus -->
 
 # Bonus: to-do list app
 

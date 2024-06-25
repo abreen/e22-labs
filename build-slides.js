@@ -135,6 +135,5 @@ function makePage(body) {
     ${body}
   </body>
 </html>
-<!-- generated ${new Date().toLocaleString()} -->
 `;
 }

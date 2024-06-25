@@ -31,6 +31,14 @@ ul ul {
   list-style-type: disc;
 }
 
+ol ol {
+  list-style-type: lower-alpha;
+}
+
+ol ul {
+  list-style-type: lower-alpha;
+}
+
 pre,
 tt,
 code {
@@ -59,4 +67,13 @@ section h6 tt,
 section h6 code {
   background: none;
   padding: 0;
+}
+
+section.bonus h1,
+section.bonus h2,
+section.bonus h3,
+section.bonus h4,
+section.bonus h5,
+section.bonus h6 {
+  color: royalblue;
 }
