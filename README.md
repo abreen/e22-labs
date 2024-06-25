@@ -45,10 +45,10 @@ The topics are subject to change.
 | T   | June 25   | Lab 1            | `ArrayBag`, test-driven development                     | To-do list app           |
 | R   | June 27   | Lab 2            | `removeCapitals()`, `fib()`, debuggers                  | Combination sum          |
 | T   | July 2\*  | Lab 3            | Matrix multiplication, quadratic sorts                  | Sorting visualizer       |
-| R   | July 4    | Lab 4 (recorded) | big O from data, linearithmic sorts, radix sort         |
+| R   | July 4    | Lab 4 (recorded) | Big O from data, linearithmic sorts, radix sort         |
 | T   | July 9\*  | Lab 5            | `StringNode`: recursion vs. iteration                   |
-| R   | July 11   | _Review session_ |                                                         |
-| T   | July 16   | Lab 6            | searching lists, generics, `isBalanced()`               |
+| R   | July 11   | _Review session_ |                                                         | Supplemental problems    |
+| T   | July 16   | Lab 6            | Searching lists, generics, `isBalanced()`               |
 | R   | July 18   | Lab 7            | Binary trees, `PreorderIterator`                        | `ExprTree`               |
 | T   | July 23\* | Lab 8            | Search trees, balance, 2-3 trees, B-trees               | Red-black trees          |
 | R   | July 25   | Lab 9            | Heaps, heapsort, hash tables                            | kth largest number       |
