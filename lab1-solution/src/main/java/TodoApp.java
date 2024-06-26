@@ -6,26 +6,21 @@
 public class TodoApp {
 
     /** Things still left to do */
-    private ArrayBag notDone;
+    private ArrayBag notDone = new ArrayBag();
 
     /** Things that are done */
-    private ArrayBag done;
+    private ArrayBag done = new ArrayBag();
 
     public TodoApp(String[] initialTodos) {
-        if (initialTodos == null || initialTodos.length == 0) {
-            // use the default ArrayBag size
-            notDone = new ArrayBag();
-        } else {
-            notDone = new ArrayBag(initialTodos.length);
+        if (initialTodos == null) {
+            return;
         }
-        done = new ArrayBag();
 
         for (String item : initialTodos) {
             if (item != null) {
                 notDone.add(item);
             }
         }
-
     }
 
     public boolean exists(String item) {
