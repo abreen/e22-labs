@@ -12,23 +12,28 @@ public class TodoApp {
     private ArrayBag done;
 
     public TodoApp(String[] initialTodos) {
-        if (initialTodos == null) {
-            // instead of throwing an exception, just use an empty array
-            initialTodos = new String[0];
+        if (initialTodos == null || initialTodos.length == 0) {
+            // use the default ArrayBag size
+            notDone = new ArrayBag();
+        } else {
+            notDone = new ArrayBag(initialTodos.length);
         }
+        done = new ArrayBag();
 
-        notDone = new ArrayBag(initialTodos.length);
         for (String item : initialTodos) {
             if (item != null) {
                 notDone.add(item);
             }
         }
 
-        done = new ArrayBag();
     }
 
     public String[] getTodos() {
         return (String[]) notDone.toArray();
+    }
+
+    public boolean exists(String item) {
+        return notDone.contains(item) || done.contains(item);
     }
 
     public void markDone(String item) {
@@ -46,12 +51,14 @@ public class TodoApp {
         return notDone.add(item);
     }
 
-    public void deleteTodo(String item) {
+    public boolean deleteTodo(String item) {
         if (notDone.contains(item)) {
-            notDone.remove(item);
+            return notDone.remove(item);
         } else if (done.contains(item)) {
-            done.remove(item);
+            return done.remove(item);
         }
+
+        return false;
     }
 
     public void printList() {
