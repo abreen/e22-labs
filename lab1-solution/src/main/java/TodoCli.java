@@ -15,12 +15,13 @@ public class TodoCli {
     }
 
     public void interactWithUser() {
-        System.out.println("Welcome! Here's the todo list:");
+        System.out.println("Welcome! Here's the to-do list:");
         app.printList();
+        System.out.println("Available commands: add, done, delete, quit");
 
         Scanner s = new Scanner(in);
 
-        System.out.print("enter a command: ");
+        System.out.print("command: ");
         while (s.hasNextLine()) {
             String command = s.next();
             String args = s.nextLine().trim();
@@ -38,7 +39,7 @@ public class TodoCli {
             }
 
             app.printList();
-            System.out.print("enter a command: ");
+            System.out.print("command: ");
         }
 
         System.out.println("Goodbye!");

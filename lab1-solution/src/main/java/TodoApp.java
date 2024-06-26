@@ -28,10 +28,6 @@ public class TodoApp {
 
     }
 
-    public String[] getTodos() {
-        return (String[]) notDone.toArray();
-    }
-
     public boolean exists(String item) {
         return notDone.contains(item) || done.contains(item);
     }
@@ -71,7 +67,7 @@ public class TodoApp {
             System.out.println("to do:");
             for (int i = 0; i < notDoneArray.length; i++) {
                 if (notDoneArray[i] != null) {
-                    System.out.println(i + ". " + notDoneArray[i]);
+                    System.out.println("  - " + notDoneArray[i]);
                     numPrinted++;
                 }
             }
@@ -81,7 +77,7 @@ public class TodoApp {
             System.out.println("done:");
             for (int i = 0; i < doneArray.length; i++) {
                 if (doneArray[i] != null) {
-                    System.out.println(i + ". " + doneArray[i]);
+                    System.out.println("  - " + doneArray[i]);
                     numPrinted++;
                 }
             }
