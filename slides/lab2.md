@@ -180,6 +180,7 @@ of a word space.
 - Each word space has a fixed length, and it only accepts words whose length is
   **equal** to the word space's length
 - Candidate words are drawn from a *dictionary*
+- A word from the dictionary cannot be used more than once
 
 ---
 <!-- class: bonus -->
