@@ -2,9 +2,9 @@ name: build-and-deploy-slides
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -12,6 +12,8 @@ on:
 jobs:
   build:
     runs-on: macos-latest
+    env:
+      URL_PREFIX: /e22-labs/
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

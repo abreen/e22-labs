@@ -1,111 +1,96 @@
-const { marpCli } = require("@marp-team/marp-cli");
+const { marpCli, waitForObservation } = require("@marp-team/marp-cli");
 const coherentpdf = require("coherentpdf");
-const { existsSync: fileExists } = require("fs");
-const fs = require("fs/promises");
+const {
+  existsSync: fileExists,
+  mkdirSync: makeDirectory,
+  writeFileSync: writeFile,
+} = require("fs");
 
-fs.mkdir("./slides", { recursive: true })
-  .then(
-    Promise.all(
-      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-        .filter((n) => fileExists(`./lab${n}/slides.md`))
-        .map((n) => Promise.all([n, convertToHtml(n), convertToPdf(n)]))
-    ).then((ns) => {
-      const links = ns.map(([n, ...rest]) => {
-        const htmlAnchor = `<a href="/e22-labs/lab${n}.html">Lab ${n}</a>`;
-        const pdfAnchor = `<a href="/e22-labs/lab${n}.pdf">pdf</a>`;
-        const pdf2UpAnchor = `<a href="/e22-labs/lab${n}-2up.pdf">2-up</a>`;
+const INPUT_DIR = process.env.INPUT_DIR || "slides";
+const OUTPUT_DIR = process.env.OUTPUT_DIR || "_site";
+const URL_PREFIX = process.env.URL_PREFIX || "";
 
-        return `${htmlAnchor} (${pdfAnchor}, ${pdf2UpAnchor})`;
-      });
+makeDirectory(OUTPUT_DIR, { recursive: true });
 
-      const body = `<ul>${links.map((link) => `<li>${link}</li>`)}</ul>`;
+const labsWithSlides = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].filter((n) =>
+  fileExists(`${INPUT_DIR}/lab${n}.md`)
+);
 
-      const html = makePage(body);
-      return fs.writeFile("_site/index.html", html);
-    })
-  )
-  .catch((error) => {
-    console.error("error", error);
-  });
+makeIndexPage(labsWithSlides);
 
-function convertToHtml(n) {
-  const fileName = `./lab${n}/slides.md`;
-  const argv = [
-    "--html",
-    "true",
-    "--output",
-    `_site/lab${n}.html`,
-    "--theme",
-    "gerard",
-    "--theme-set",
-    "gerard.css",
-    "--",
-    fileName,
-  ];
-
-  return marpCli(argv).then((exitStatus) => {
-    if (exitStatus > 0) {
-      return Promise.reject(n);
-    } else {
-      return Promise.resolve(n);
-    }
+const args = process.argv.slice(2);
+if (args.includes("-w") || args.includes("--watch")) {
+  // save resources and run quicker by not generating PDFs
+  runMarp(args);
+} else {
+  runMarp(args);
+  runMarp(args, "--pdf").then(() => {
+    labsWithSlides
+      .map((n) => `${OUTPUT_DIR}/lab${n}`)
+      .forEach(generateTwoUpPdf);
   });
 }
 
-function convertToPdf(n) {
-  const fileName = `./lab${n}/slides.md`;
-  const pdfFileName = `_site/lab${n}.pdf`;
-  const argv = [
-    "--html",
-    "true",
-    "--pdf",
-    "--pdf-notes",
-    "--pdf-outlines",
-    "--output",
-    pdfFileName,
-    "--theme",
-    "gerard",
-    "--theme-set",
-    "gerard.css",
-    "--",
-    fileName,
-  ];
+function makeIndexPage(nums) {
+  const links = nums.map((n) => {
+    const htmlAnchor = `<a href="${URL_PREFIX}lab${n}.html">Lab ${n}</a>`;
+    const pdfAnchor = `<a href="${URL_PREFIX}lab${n}.pdf">PDF (one slide per page)</a>`;
+    const pdf2UpAnchor = `<a href="${URL_PREFIX}lab${n}-2up.pdf">PDF (two slides per page)</a>`;
 
-  return marpCli(argv)
-    .then((exitStatus) => {
-      if (exitStatus > 0) {
-        return Promise.reject(pdfFileName);
-      } else {
-        return Promise.resolve([n, pdfFileName]);
-      }
-    })
-    .then(([n, pdfFileName]) => {
-      const pdf = coherentpdf.fromFile(pdfFileName, "");
-      coherentpdf.impose(
-        pdf,
-        1.0,
-        2.0,
-        false,
-        false,
-        false,
-        false,
-        false,
-        150.0,
-        150.0,
-        2.0
-      );
-      coherentpdf.scaleToFitPaper(
-        pdf,
-        coherentpdf.all(pdf),
-        coherentpdf.usletterportrait,
-        1.0
-      );
-      coherentpdf.toFile(pdf, `_site/lab${n}-2up.pdf`, false, false);
-      coherentpdf.deletePdf(pdf);
-    });
+    return `${htmlAnchor}<br />${pdfAnchor}<br />${pdf2UpAnchor}`;
+  });
+
+  const body = `<ul>${links.map((link) => `<li>${link}</li>`)}</ul>`;
+
+  writeFile("_site/index.html", renderIndexPage(body));
 }
 
-function makePage(body) {
+function runMarp(args = [], ...additionalArgs) {
+  const argv = args
+    .concat([
+      "--html",
+      "--theme",
+      "gerard",
+      "--theme-set",
+      "gerard.css",
+      "--input-dir",
+      "slides/",
+      "--output",
+      "_site/",
+    ])
+    .concat(additionalArgs);
+
+  return marpCli(argv).then((exitCode) =>
+    exitCode != 0 ? Promise.reject() : Promise.resolve()
+  );
+}
+
+function generateTwoUpPdf(pdfFileName) {
+  const pdf = coherentpdf.fromFile(pdfFileName + ".pdf", "");
+  coherentpdf.impose(
+    pdf,
+    1.0,
+    2.0,
+    false,
+    false,
+    false,
+    false,
+    false,
+    150.0,
+    150.0,
+    2.0
+  );
+  coherentpdf.scaleToFitPaper(
+    pdf,
+    coherentpdf.all(pdf),
+    coherentpdf.usletterportrait,
+    1.0
+  );
+  coherentpdf.toFile(pdf, pdfFileName + "-2up.pdf", false, false);
+  coherentpdf.deletePdf(pdf);
+}
+
+function renderIndexPage(body) {
   return `<!doctype html>
 <html>
   <head>
