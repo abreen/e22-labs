@@ -15,6 +15,7 @@
     }
   },
   "scripts": {
-    "build": "node build-slides.js"
+    "build": "node build-slides.js",
+    "watch": "node build-slides.js --watch"
   }
 }
