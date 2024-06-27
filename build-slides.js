@@ -8,7 +8,7 @@ const {
 
 const INPUT_DIR = process.env.INPUT_DIR || "slides";
 const OUTPUT_DIR = process.env.OUTPUT_DIR || "_site";
-const URL_PREFIX = process.env.URL_PREFIX || "/e22-labs/";
+const URL_PREFIX = process.env.URL_PREFIX || "/";
 
 makeDirectory(OUTPUT_DIR, { recursive: true });
 
