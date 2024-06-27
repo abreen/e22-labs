@@ -8,6 +8,7 @@ public class StringRecursionTest {
 
     @Test
     public void testRemoveCapitals() {
+        assertEquals("def123 xy", StringRecursion.removeCapitals("ABCdef123 xyWZ"));
         assertEquals("ooar", StringRecursion.removeCapitals("FooBar"));
         assertEquals("zzz", StringRecursion.removeCapitals("AAAzzzAAA"));
         assertEquals("s", StringRecursion.removeCapitals("Ms"));
