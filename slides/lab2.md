@@ -189,19 +189,20 @@ of a word space.
 
 The combination sum problem states:
 
-> Given a list of distinct integers and a target integer,
-> return a list of combinations of integers that can be summed
-> to the target.
+> Given a list of distinct integers and an integer `goal`, print all combinations of
+> integers from the list that sum to `goal`.
 
-For example, if the input integers are {3, 2, 1} and the target is 5, then
-the returned list should look like this:
+For example, if the input integers are `{3, 2, 1}` and the target is 5:
 
 ```java
-[
-    [3, 2],             // 3 + 2     = 5
-    [3, 1, 1],          // 3 + 1 + 1 = 5
-    [2, 2, 1]           // 2 + 2 + 1 = 5
-]
+3 + 2 = 5
+3 + 1 + 1 = 5
+2 + 3 = 5
+2 + 2 + 1 = 5
+2 + 1 + 2 = 5
+1 + 3 + 1 = 5
+1 + 2 + 2 = 5
+1 + 1 + 3 = 5
 ```
 
 The order of the combinations does not matter. Use recursive backtracking to
