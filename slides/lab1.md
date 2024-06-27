@@ -3,6 +3,23 @@ marp: true
 title: Lab 1
 ---
 
+# Section meetings/labs
+
+Section meetings (also known as labs) take place on Tuesdays and Thursdays over
+Zoom:
+
+- 12--1 pm ET (Alex, recorded)
+- 8--9 pm ET (Eli)
+
+Attendance is optional.
+
+To follow along with Alex's labs, you can [clone this GitHub repository][repo]
+(`abreen/s22-labs`). However, this isn't required---you can download the
+`.java` code directly from the course website and modify it. See [the Lectures
+page][lectures] of the site for all the code.
+
+---
+
 # The `ArrayBag` class
 
 Last time in lecture we introduced the `ArrayBag` class. Recall:
@@ -98,17 +115,19 @@ Avoid leaving `null`s in the middle of the array. To remove an item, shift all
 the items to the left by one position. Suppose we start with this array:
 
 ```
-┌──────┬────┬─────┬───────┬──────┬──────┬─────┐
-│ "hi" │ 32 │ '@' │ false │ null │ null │ ... │
-└──────┴────┴─────┴───────┴──────┴──────┴─────┘
+    0       1       2       3       4       5     ...
+┌───────┬───────┬───────┬───────┬───────┬───────┬─────┐
+│ "hi"  │ 32    │ '@'   │ false │ null  │ null  │ ... │
+└───────┴───────┴───────┴───────┴───────┴───────┴─────┘
 ```
 
 After removing 32, the array should look like this:
 
 ```
-┌──────┬─────┬───────┬──────┬──────┬─────┐
-│ "hi" │ '@' │ false │ null │ null │ ... │
-└──────┴─────┴───────┴──────┴──────┴─────┘
+    0       1       2       3       4       5     ...
+┌───────┬───────┬───────┬───────┬───────┬───────┬─────┐
+│ "hi"  │ '@'   │ false │ null  │ null  │ null  │ ... │
+└───────┴───────┴───────┴───────┴───────┴───────┴─────┘
 ```
 
 ---
@@ -214,4 +233,6 @@ test-driven development (TDD) to build each feature without needing to write
 code in `main()` that interacts with a user.
 
 
+[repo]: https://github.com/abreen/e22-labs
+[lectures]: https://cscie22.sites.fas.harvard.edu/lectures/index.html
 [arraybag-diagram-1]: https://pythontutor.com/render.html#code=public%20class%20ArrayBag%20%7B%0A%20%20public%20static%20void%20main%28String%5B%5D%20args%29%20%7B%0A%20%20%20%20ArrayBag%20b1%20%3D%20new%20ArrayBag%28%29%3B%0A%20%20%20%20b1.add%28%22hello%22%29%3B%0A%0A%20%20%20%20ArrayBag%20b2%20%3D%20b1%3B%0A%20%20%20%20b2.add%28%22world%22%29%3B%0A%20%20%7D%0A%0A%20%20private%20Object%5B%5D%20items%3B%0A%20%20private%20int%20numItems%3B%0A%0A%20%20public%20ArrayBag%28%29%20%7B%0A%20%20%20%20items%20%3D%20new%20Object%5B10%5D%3B%0A%20%20%7D%0A%0A%20%20public%20boolean%20add%28Object%20item%29%20%7B%0A%20%20%20%20%20%20if%20%28item%20%3D%3D%20null%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20throw%20new%20IllegalArgumentException%28%29%3B%0A%20%20%20%20%20%20%7D%20else%20if%20%28this.numItems%20%3D%3D%20this.items.length%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20return%20false%3B%0A%20%20%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20%20%20this.items%5Bthis.numItems%5D%20%3D%20item%3B%0A%20%20%20%20%20%20%20%20%20%20this.numItems%2B%2B%3B%0A%20%20%20%20%20%20%20%20%20%20return%20true%3B%0A%20%20%20%20%20%20%7D%0A%20%20%7D%0A%7D&cumulative=false&curInstr=0&heapPrimitives=nevernest&mode=display&origin=opt-frontend.js&py=java&rawInputLstJSON=%5B%5D&textReferences=false

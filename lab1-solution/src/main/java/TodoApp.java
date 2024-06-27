@@ -6,29 +6,25 @@
 public class TodoApp {
 
     /** Things still left to do */
-    private ArrayBag notDone;
+    private ArrayBag notDone = new ArrayBag();
 
     /** Things that are done */
-    private ArrayBag done;
+    private ArrayBag done = new ArrayBag();
 
     public TodoApp(String[] initialTodos) {
         if (initialTodos == null) {
-            // instead of throwing an exception, just use an empty array
-            initialTodos = new String[0];
+            return;
         }
 
-        notDone = new ArrayBag(initialTodos.length);
         for (String item : initialTodos) {
             if (item != null) {
                 notDone.add(item);
             }
         }
-
-        done = new ArrayBag();
     }
 
-    public String[] getTodos() {
-        return (String[]) notDone.toArray();
+    public boolean exists(String item) {
+        return notDone.contains(item) || done.contains(item);
     }
 
     public void markDone(String item) {
@@ -46,12 +42,14 @@ public class TodoApp {
         return notDone.add(item);
     }
 
-    public void deleteTodo(String item) {
+    public boolean deleteTodo(String item) {
         if (notDone.contains(item)) {
-            notDone.remove(item);
+            return notDone.remove(item);
         } else if (done.contains(item)) {
-            done.remove(item);
+            return done.remove(item);
         }
+
+        return false;
     }
 
     public void printList() {
@@ -64,7 +62,7 @@ public class TodoApp {
             System.out.println("to do:");
             for (int i = 0; i < notDoneArray.length; i++) {
                 if (notDoneArray[i] != null) {
-                    System.out.println(i + ". " + notDoneArray[i]);
+                    System.out.println("  - " + notDoneArray[i]);
                     numPrinted++;
                 }
             }
@@ -74,7 +72,7 @@ public class TodoApp {
             System.out.println("done:");
             for (int i = 0; i < doneArray.length; i++) {
                 if (doneArray[i] != null) {
-                    System.out.println(i + ". " + doneArray[i]);
+                    System.out.println("  - " + doneArray[i]);
                     numPrinted++;
                 }
             }

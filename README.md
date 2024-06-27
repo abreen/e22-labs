@@ -11,22 +11,22 @@ See the `README.md` files in each subdirectory.
 
 The topics are subject to change.
 
-| week   | date      | lecture/lab      | topics                                              |
-| ------ | --------- | ---------------- | --------------------------------------------------- |
-| week 1 | June 24   | Lecture 1        | Intro, ADTs and object-oriented programming         |
-|        | June 26   | Lecture 2        | Recursion and backtracking                          |
-| week 2 | July 1    | Lecture 3        | Sorting and algorithm analysis (1/2)                |
-|        | July 3    | Lecture 4        | Sorting and analysis (2/2), linked lists (1/2)      |
-| week 3 | July 8    | Lecture 5        | Linked lists (2/2); lists, stacks & queues (1/2)    |
-|        | July 10   | Lecture 6        | Lists, stacks and queues (2/2)                      |
-| week 4 | July 15   | _Midterm exam_   |                                                     |
-|        | July 17   | Lecture 7        | Binary trees, Huffman encoding                      |
-| week 5 | July 22   | Lecture 8        | Binary search trees, balanced search trees          |
-|        | July 24   | Lecture 9        | Heaps and priority queues                           |
-| week 6 | July 29   | Lecture 10       | Hash tables, graphs (1/2)                           |
-|        | July 31   | Lecture 11       | Graphs (2/2)                                        |
-| week 7 | Aug 5\*   | _Review session_ | Practice final exam                                 |
-|        | Aug 7     | _Final exam_     |                                                     |
+| week   | date    | lecture/lab      | topics                                           |
+| ------ | ------- | ---------------- | ------------------------------------------------ |
+| week 1 | June 24 | Lecture 1        | Intro, ADTs and object-oriented programming      |
+|        | June 26 | Lecture 2        | Recursion and backtracking                       |
+| week 2 | July 1  | Lecture 3        | Sorting and algorithm analysis (1/2)             |
+|        | July 3  | Lecture 4        | Sorting and analysis (2/2), linked lists (1/2)   |
+| week 3 | July 8  | Lecture 5        | Linked lists (2/2); lists, stacks & queues (1/2) |
+|        | July 10 | Lecture 6        | Lists, stacks and queues (2/2)                   |
+| week 4 | July 15 | _Midterm exam_   |                                                  |
+|        | July 17 | Lecture 7        | Binary trees, Huffman encoding                   |
+| week 5 | July 22 | Lecture 8        | Binary search trees, balanced search trees       |
+|        | July 24 | Lecture 9        | Heaps and priority queues                        |
+| week 6 | July 29 | Lecture 10       | Hash tables, graphs (1/2)                        |
+|        | July 31 | Lecture 11       | Graphs (2/2)                                     |
+| week 7 | Aug 5\* | _Review session_ | Practice final exam                              |
+|        | Aug 7   | _Final exam_     |                                                  |
 
 \* Indicates a problem set due date
 
@@ -40,20 +40,20 @@ The topics are subject to change.
 
 The topics are subject to change.
 
-| day | date      | lecture/lab      | topics                                              |
-| --- | --------- | ---------------- | --------------------------------------------------- |
-| T   | June 25   | Lab 1            | To-do list, test-driven development                 |
-| R   | June 27   | Lab 2            | Debugging `NQueens.java`, combination sum           |
-| T   | July 2\*  | Lab 3            | Measuring runtime performance using AOP             |
-| R   | July 4    | Lab 4 (recorded) | video: `partition()` trace, inferring big O         |
-| T   | July 9\*  | Lab 5            | Extra generics, stacks, undo & redo?                |
-| R   | July 11   | _Review session_ |                                                     |
-| T   | July 16   | Lab 6            | Detecting balanced delimiters, queues?              |
-| R   | July 18   | Lab 7            | `ExprTree` class, Huffman demo?                     |
-| T   | July 23\* | Lab 8            | Balanced trees vs. nonbalanced, mini DB?            |
-| R   | July 25   | Lab 9            | kth largest number, merging k sorted lists?         |
-| T   | July 30\* | Lab 10           | Longest unique substring, log processor?            |
-| R   | Aug 1     | Lab 11           | Implementing shortest path?                         |
+| day | date      | lecture/lab      | topics                                                  | bonus                    |
+| --- | --------- | ---------------- | ------------------------------------------------------- | ------------------------ |
+| T   | June 25   | Lab 1            | `ArrayBag`, test-driven development                     | To-do list app           |
+| R   | June 27   | Lab 2            | `removeCapitals()`, `fib()`, debuggers                  | Combination sum          |
+| T   | July 2\*  | Lab 3            | Matrix multiplication, quadratic sorts                  | Sorting visualizer       |
+| R   | July 4    | Lab 4 (recorded) | Big O from data, linearithmic sorts, radix sort         |
+| T   | July 9\*  | Lab 5            | `StringNode`: recursion vs. iteration                   |
+| R   | July 11   | _Review session_ |                                                         | Supplemental problems    |
+| T   | July 16   | Lab 6            | Searching lists, generics, `isBalanced()`               |
+| R   | July 18   | Lab 7            | Binary trees, `PreorderIterator`                        | `ExprTree`               |
+| T   | July 23\* | Lab 8            | Search trees, balance, 2-3 trees, B-trees               | Red-black trees          |
+| R   | July 25   | Lab 9            | Heaps, heapsort, hash tables                            | kth largest number       |
+| T   | July 30\* | Lab 10           | Double hashing, DFS & BFS (on graphs)                   | Longest unique substring |
+| R   | Aug 1     | Lab 11           | Minimum spanning trees, shortest path, topological sort | Maze solver              |
 
 \* Indicates a problem set due date
 
