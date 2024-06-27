@@ -33,9 +33,9 @@ if (args.includes("-w") || args.includes("--watch")) {
 
 function makeIndexPage(nums) {
   const links = nums.map((n) => {
-    const htmlAnchor = `<a href="${URL_PREFIX}/lab${n}.html">Lab ${n}</a>`;
-    const pdfAnchor = `<a href="${URL_PREFIX}/lab${n}.pdf">PDF (one slide per page)</a>`;
-    const pdf2UpAnchor = `<a href="${URL_PREFIX}/lab${n}-2up.pdf">PDF (two slides per page)</a>`;
+    const htmlAnchor = `<a href="${URL_PREFIX}lab${n}.html">Lab ${n}</a>`;
+    const pdfAnchor = `<a href="${URL_PREFIX}lab${n}.pdf">PDF (one slide per page)</a>`;
+    const pdf2UpAnchor = `<a href="${URL_PREFIX}lab${n}-2up.pdf">PDF (two slides per page)</a>`;
 
     return `${htmlAnchor}<br />${pdfAnchor}<br />${pdf2UpAnchor}`;
   });
