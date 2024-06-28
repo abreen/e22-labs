@@ -5,9 +5,9 @@ public class CrosswordTest {
 
     @Test
     public void testFindSolutions() {
-        String[] dictionary = { "AFT", "LASER", "ALE", "LEE", "EEL", "LINE",
-                "HEEL", "SAILS", "HIKE", "SHEET", "HOSES",
-                "STEER", "KEEL", "TIE", "KNOT" };
+        String[] dictionary = { "AFT", "ALE", "EEL", "HEEL", "HIKE", "HOSES",
+                "KEEL", "LASER", "LEE", "LINE", "SAILS",
+                "SHEET", "STEER", "TIE" };
 
         var cw = new Crossword(6, 5, dictionary,
                 "1 > 0 0 5",

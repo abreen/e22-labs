@@ -41,6 +41,33 @@ public class Crossword {
         return getChar(spaces[spaceIndex], 1) == '>';
     }
 
+    private String spaceToString(int spaceIndex) {
+        return getInt(spaces[spaceIndex], 0) + " " +
+                (spaceIsAcross(spaceIndex) ? "across" : "down");
+    }
+
+    private boolean spaceIsFull(int spaceIndex) {
+        int row = startingRow(spaceIndex);
+        int col = startingColumn(spaceIndex);
+        int len = spaceSize(spaceIndex);
+
+        int count = 0;
+
+        for (int i = 0; i < len; i++) {
+            if (state[row][col] != null) {
+                count++;
+            }
+
+            if (spaceIsAcross(spaceIndex)) {
+                col += 1;
+            } else {
+                row += 1;
+            }
+        }
+
+        return count == len;
+    }
+
     private int spaceSize(int spaceIndex) {
         return getInt(spaces[spaceIndex], 4);
     }
@@ -180,7 +207,16 @@ public class Crossword {
 
     public void findSolutions(int spaceIndex) {
         if (spaceIndex >= spaces.length) {
+            System.out.println("found a solution:");
             displayCrossword();
+            return;
+        }
+
+        if (spaceIsFull(spaceIndex)) {
+            System.out.println("skipping " + spaceToString(spaceIndex)
+                    + ", it's full");
+
+            findSolutions(spaceIndex + 1);
             return;
         }
 
@@ -190,13 +226,33 @@ public class Crossword {
             }
 
             if (isValid(wordIndex, spaceIndex)) {
+                System.out.println("applying " + dictionary[wordIndex]
+                        + " at " + spaceToString(spaceIndex));
                 applyValue(wordIndex, spaceIndex);
-                System.out.println("applying " + dictionary[wordIndex]);
                 displayCrossword(wordIndex);
                 findSolutions(spaceIndex + 1);
                 removeValue(wordIndex, spaceIndex);
-                System.out.println("removing " + dictionary[wordIndex]);
             }
         }
+
+        System.out.println("no more valid words for " + spaceToString(spaceIndex));
+    }
+
+    public static void main(String[] args) {
+        String[] dictionary = { "AFT", "ALE", "EEL", "HEEL", "HIKE", "HOSES",
+                "KEEL", "LASER", "LEE", "LINE", "SAILS",
+                "SHEET", "STEER", "TIE" };
+
+        var cw = new Crossword(6, 5, dictionary,
+                "1 > 0 0 5",
+                "2 v 0 2 5",
+                "3 v 0 4 5",
+                "4 > 2 1 4",
+                "5 v 2 3 4",
+                "6 v 3 0 3",
+                "7 > 3 2 3",
+                "8 > 4 0 5");
+
+        cw.findSolutions(0);
     }
 }
