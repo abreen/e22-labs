@@ -40,7 +40,7 @@ function makeIndexPage(nums) {
     return `${htmlAnchor}<br />${pdfAnchor}<br />${pdf2UpAnchor}`;
   });
 
-  const body = `<ul>${links.map((link) => `<li>${link}</li>`)}</ul>`;
+  const body = `<ul>${links.map((link) => `<li>${link}</li>`).join("\n")}</ul>`;
 
   writeFile("_site/index.html", renderIndexPage(body));
 }
