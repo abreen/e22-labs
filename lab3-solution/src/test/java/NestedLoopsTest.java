@@ -5,6 +5,8 @@ import org.junit.Before;
 
 public class NestedLoopsTest {
 
+    private static int N = 10;
+
     @Before
     public void setup() {
         NestedLoops.counter = 0;
@@ -12,36 +14,45 @@ public class NestedLoopsTest {
 
     @Test
     public void testSingleLoop() {
-        NestedLoops.forI(10);
+        NestedLoops.forI(N);
 
-        assertEquals(10, NestedLoops.counter);
+        // n = O(n)
+        assertEquals(N, NestedLoops.counter);
     }
 
     @Test
     public void testNestedLoops() {
-        NestedLoops.forIforJ(10);
+        NestedLoops.forIforJ(N);
 
-        assertEquals(100, NestedLoops.counter);
+        // n * n = O(n * n) = O(n^2)
+        assertEquals(N * N, NestedLoops.counter);
     }
 
     @Test
     public void testNestedLoops2() {
-        NestedLoops.forIforJforK(10);
+        NestedLoops.forIforJforK(N);
 
-        assertEquals(1000, NestedLoops.counter);
+        // n * n * n = O(n^3)
+        assertEquals(N * N * N, NestedLoops.counter);
     }
 
     @Test
     public void testMystery1() {
-        NestedLoops.mystery1(10);
+        NestedLoops.mystery1(N);
 
-        assertEquals(30, NestedLoops.counter);
+        // 3 * n = O(3n)
+        assertEquals(3 * N, NestedLoops.counter);
     }
 
     @Test
     public void testMystery2() {
-        NestedLoops.mystery2(10);
+        NestedLoops.mystery2(N);
 
-        assertEquals(45, NestedLoops.counter);
+        // 0 + 1 + 2 + 3 + ... + n - 1
+        // n * (n - 1) / 2
+        // n^2/2 - n/2
+        // O(n^2)
+        int expected = N * (N - 1) / 2;
+        assertEquals(expected, NestedLoops.counter);
     }
 }
