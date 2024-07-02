@@ -29,7 +29,7 @@ public class Matrix {
 
         this.values = values;
         numRows = values.length;
-        numCols = values[0].length;
+        numCols = firstRowLength;
     }
 
     /** Create a matrix from a list of values */
