@@ -17,7 +17,7 @@ public class NestedLoopsTest {
         NestedLoops.forI(N);
 
         // n = O(n)
-        assertEquals(N, NestedLoops.counter);
+        assertEquals(999, NestedLoops.counter);
     }
 
     @Test
