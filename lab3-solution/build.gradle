@@ -6,5 +6,5 @@ apply from: rootProject.file('buildSrc/shared.gradle')
 
 dependencies {
     testImplementation 'junit:junit:4.13'
-    implementation project(':lab2-solution')
+    implementation project(':shared')
 }

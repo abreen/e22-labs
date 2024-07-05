@@ -4,6 +4,7 @@ plugins {
 
 apply from: rootProject.file('buildSrc/shared.gradle')
 
-compileJava {
-    options.compilerArgs << '-g'
+dependencies {
+    testImplementation 'junit:junit:4.13'
+    implementation project(':shared')
 }
