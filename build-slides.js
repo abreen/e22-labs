@@ -16,10 +16,6 @@ const labsWithSlides = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].filter((n) =>
   fileExists(`${INPUT_DIR}/lab${n}.md`)
 );
 
-// TODO get trace files
-// TODO convert trace files to Markdown slides (Marpit input)
-// TODO save Markdown to slides/ directory
-
 makeIndexPage(labsWithSlides);
 
 const args = process.argv.slice(2);
@@ -36,8 +32,6 @@ if (args.includes("-w") || args.includes("--watch")) {
 }
 
 function makeIndexPage(nums) {
-  // TODO add links to generated slides from trace files
-
   const links = nums.map((n) => {
     const htmlAnchor = `<a href="${URL_PREFIX}lab${n}.html">Lab ${n}</a>`;
     const pdfAnchor = `<a href="${URL_PREFIX}lab${n}.pdf">PDF (one slide per page)</a>`;
