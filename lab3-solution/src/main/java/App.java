@@ -21,12 +21,7 @@ public class App {
 
         for (Class<?> type : classes) {
             try {
-                String className = type.getSimpleName();
-                String outputFile = className + ".trace.json";
-
-                new TutorTrace(type, input).traceToFile(outputFile);
-
-                System.out.println("saved trace to " + outputFile);
+                new TutorTrace(type, input).traceToFile();
 
             } catch (TutorTrace.ProgramCrashed e) {
                 System.out.println("program crashed (exited non-zero)");

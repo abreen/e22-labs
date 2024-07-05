@@ -23,19 +23,20 @@ public class TutorTrace {
         this.args = args;
     }
 
-    public void traceToFile(String fileName) throws DebuggingFailure, ProgramCrashed {
+    public void traceToFile() throws DebuggingFailure, ProgramCrashed {
+        traceToFile(targetClass.getName() + ".trace");
+    }
+
+    public void traceToFile(String fileNamePrefix) throws DebuggingFailure, ProgramCrashed {
         Path tempFile = null;
         BufferedWriter jsonFileWriter = null;
         VirtualMachine vm = null;
         Thread outputWatcher = null;
         StringBuilder programOutput = new StringBuilder();
-        boolean firstStep = true;
 
         try {
-            tempFile = Files.createTempFile(fileName, "");
-
+            tempFile = Files.createTempFile(fileNamePrefix, ".ndjson");
             jsonFileWriter = Files.newBufferedWriter(tempFile, CREATE);
-            jsonFileWriter.append("[");
 
             vm = connectAndLaunchVirtualMachine(args, targetClass.getName());
 
@@ -62,13 +63,7 @@ public class TutorTrace {
                             Step step = new Step(frames, currentOutput);
 
                             String repr = Json.repr(step);
-                            if (firstStep) {
-                                jsonFileWriter.append(repr);
-                                firstStep = false;
-                            } else {
-                                jsonFileWriter.append("," + System.lineSeparator());
-                                jsonFileWriter.append(repr);
-                            }
+                            jsonFileWriter.append(repr + System.lineSeparator());
                         }
                     }
 
@@ -78,19 +73,13 @@ public class TutorTrace {
             }
 
         } catch (VMDisconnectedException ignored) {
-            try {
-                jsonFileWriter.append("]" + System.lineSeparator());
-                jsonFileWriter.close();
-            } catch (IOException e) {
-                throw new DebuggingFailure(e);
-            }
-
-            try (var fileOut = new FileOutputStream(fileName + ".zip");
+            try (var fileOut = new FileOutputStream(fileNamePrefix + ".ndjson.zip");
                     var bufferedOut = new BufferedOutputStream(fileOut);
                     var zipOut = new ZipOutputStream(bufferedOut);
                     var writer = new OutputStreamWriter(zipOut);
                     var reader = Files.newBufferedReader(tempFile)) {
-                zipOut.putNextEntry(new ZipEntry(fileName));
+                jsonFileWriter.close();
+                zipOut.putNextEntry(new ZipEntry(fileNamePrefix + ".ndjson"));
                 reader.transferTo(writer);
                 writer.flush();
                 zipOut.closeEntry();
