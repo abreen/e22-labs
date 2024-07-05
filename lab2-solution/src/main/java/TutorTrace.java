@@ -1,4 +1,5 @@
 import java.io.*;
+import java.nio.*;
 import java.util.*;
 import java.lang.reflect.Array;
 import com.sun.jdi.*;
@@ -9,31 +10,34 @@ import static com.sun.jdi.request.StepRequest.STEP_LINE;
 import static com.sun.jdi.request.StepRequest.STEP_INTO;
 
 public class TutorTrace {
+    private static final int OUTPUT_BUFFER_SIZE = (int) Math.pow(2, 11);
+
     /** The class whose main() method we will trace */
     private Class<?> targetClass;
 
-    public TutorTrace(Class<?> target) {
+    /** The command-line arguments to the program */
+    private String[] args;
+
+    public TutorTrace(Class<?> target, String... args) {
         targetClass = target;
+        this.args = args;
     }
 
-    private BufferedReader getReaderForStdout(VirtualMachine vm) {
-        var inputStream = vm.process().getInputStream();
-        var inputStreamReader = new InputStreamReader(inputStream);
-        return new BufferedReader(inputStreamReader);
-    }
-
-    public List<Step> trace(String... args) throws DebuggingFailure, ProgramCrashed {
+    public void traceToFile(String fileName) throws DebuggingFailure, ProgramCrashed {
         VirtualMachine vm = null;
         Thread outputWatcher = null;
-        List<Step> steps = new LinkedList<>();
+        FileWriter writer = null;
+        StringBuilder programOutput = new StringBuilder();
+        boolean firstStep = true;
 
         try {
+            writer = new FileWriter(fileName);
+            writer.append("[");
+
             vm = connectAndLaunchVirtualMachine(args, targetClass.getName());
 
-            BufferedReader stdout = getReaderForStdout(vm);
-            StringBuilder buffer = new StringBuilder();
-
-            outputWatcher = startOutputWatcher(stdout, buffer);
+            var outputReader = getProgramOutputReader(vm);
+            outputWatcher = startOutputWatcher(outputReader, programOutput);
 
             enableClassPrepareRequest(vm, targetClass.getName());
 
@@ -47,12 +51,19 @@ public class TutorTrace {
                         startStepping(vm, e.thread());
 
                     } else if (event instanceof StepEvent e) {
-                        String className = e.location().declaringType().name();
-
-                        if (className.equals(targetClass.getName())) {
+                        if (shouldRecordStep(e)) {
                             List<StackFrame> stackFrames = e.thread().frames();
-                            String currentOutput = buffer.toString();
-                            steps.addLast(new Step(toFrameRecords(stackFrames), currentOutput));
+                            String currentOutput = programOutput.toString();
+
+                            String step = Json.repr(new Step(toFrameRecords(stackFrames), currentOutput));
+
+                            if (firstStep) {
+                                writer.append(step);
+                                firstStep = false;
+                            } else {
+                                writer.append("," + System.lineSeparator());
+                                writer.append(step);
+                            }
                         }
                     }
 
@@ -62,6 +73,14 @@ public class TutorTrace {
             }
 
         } catch (VMDisconnectedException ignored) {
+            try {
+                System.out.print(programOutput.toString());
+                printInputStream(vm.process().getErrorStream());
+                writer.append("]" + System.lineSeparator());
+            } catch (IOException e) {
+                throw new DebuggingFailure(e);
+            }
+
         } catch (IOException | InterruptedException | IllegalConnectorArgumentsException | VMStartException
                 | IncompatibleThreadStateException | AbsentInformationException e) {
             throw new DebuggingFailure(e);
@@ -78,10 +97,33 @@ public class TutorTrace {
                 throw new ProgramCrashed();
             }
         } catch (InterruptedException ignored) {
-            return null;
         }
 
-        return steps;
+        try {
+            writer.close();
+        } catch (IOException ignored) {
+        }
+    }
+
+    private boolean shouldRecordStep(StepEvent event) {
+        String className = event.location().declaringType().name();
+        return className.equals(targetClass.getName()) && !event.location().method().isConstructor();
+    }
+
+    private static void printInputStream(InputStream input) throws IOException {
+        var reader = new InputStreamReader(input);
+        var buffer = CharBuffer.allocate(OUTPUT_BUFFER_SIZE);
+        reader.read(buffer);
+
+        var writer = new OutputStreamWriter(System.out);
+        writer.write(buffer.array());
+        writer.flush();
+    }
+
+    private BufferedReader getProgramOutputReader(VirtualMachine vm) {
+        var inputStream = vm.process().getInputStream();
+        var inputStreamReader = new InputStreamReader(inputStream);
+        return new BufferedReader(inputStreamReader);
     }
 
     /** Launch another JVM, inheriting the classpath, and tell it to run the specified class */
@@ -149,12 +191,7 @@ public class TutorTrace {
     public record Frame(String className, String methodName, int lineNumber, Variable[] visible) {
     }
 
-    /** A variable with a name and a string representation */
-    public record Variable(String name, String repr) {
-
-        public Variable(String name, Object value) {
-            this(name, Json.repr(value));
-        }
+    public record Variable(String name, Object value) {
     }
 
     /** An exception thrown when something went wrong trying to debug the target program */
@@ -188,27 +225,24 @@ public class TutorTrace {
     }
 
     private Variable[] toVariableRecords(StackFrame frame, boolean isMain) throws AbsentInformationException {
-        List<LocalVariable> locals = frame.visibleVariables();
-        Variable[] variables = new Variable[locals.size()];
-        int i = 0;
+        List<LocalVariable> jdiLocals = frame.visibleVariables();
+        List<Variable> variables = new ArrayList<>(jdiLocals.size());
 
-        for (LocalVariable local : locals) {
+        for (LocalVariable local : jdiLocals) {
             if (isMain && local.isArgument()) {
                 continue;
             }
 
             String variableName = local.name();
-            Object variableValue = valueToObject(frame.getValue(local));
+            Object variableValue = jdiValueToJavaObject(frame.getValue(local));
 
-            variables[i++] = new Variable(variableName, variableValue);
+            variables.add(new Variable(variableName, variableValue));
         }
 
-        Variable[] temp = new Variable[i];
-        System.arraycopy(variables, 0, temp, 0, i);
-        return temp;
+        return variables.toArray(Variable[]::new);
     }
 
-    private Object valueToObject(Value value) {
+    private Object jdiValueToJavaObject(Value value) {
         if (value == null) {
             return null;
         }
@@ -253,8 +287,7 @@ public class TutorTrace {
                     } else if (componentType instanceof CharValue) {
                         arrayType = char.class;
                     }
-                } catch (ClassNotLoadedException e) {
-                    System.out.println("class not loaded");
+                } catch (ClassNotLoadedException ignored) {
                 }
             }
 
@@ -265,17 +298,23 @@ public class TutorTrace {
             List<Value> values = x.getValues();
             Object arr = Array.newInstance(arrayType, values.size());
             for (int i = 0; i < values.size(); i++) {
-                Array.set(arr, i, valueToObject(values.get(i)));
+                Array.set(arr, i, jdiValueToJavaObject(values.get(i)));
             }
             return arr;
 
         } else if (value instanceof ObjectReference x) {
-            List<Field> fields = x.referenceType().fields();
-            Map<Field, Value> map = x.getValues(fields);
-            for (Map.Entry<Field, Value> entry : map.entrySet()) {
-                // TODO
-                //
+            String className = x.referenceType().name();
+            Map<Field, Value> jdiFields = x.getValues(x.referenceType().fields());
+            Map<String, Object> fields = new HashMap<>(jdiFields.size());
+
+            for (Map.Entry<Field, Value> entry : jdiFields.entrySet()) {
+                String fieldName = entry.getKey().name();
+                Object fieldValue = jdiValueToJavaObject(entry.getValue());
+
+                fields.put(fieldName, fieldValue);
             }
+
+            return new Json.Fake(className, fields);
         }
 
         return null;

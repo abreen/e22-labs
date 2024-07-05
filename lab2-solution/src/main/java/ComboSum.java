@@ -5,6 +5,17 @@
  * integers that sum to the goal.
  */
 public class ComboSum {
+    public static void main(String[] args) {
+        int goal = Integer.parseInt(args[0]);
+
+        int[] nums = new int[args.length - 1];
+        for (int i = 1; i < args.length; i++) {
+            nums[i - 1] = Integer.parseInt(args[i]);
+        }
+
+        var combo = new ComboSum(goal, nums);
+        combo.findSolutions();
+    }
 
     private int goal;
     private int[] nums;

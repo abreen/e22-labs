@@ -1,7 +1,4 @@
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.*;
+import java.util.List;
 
 /**
  * An application that generates traces of sorting algorithms
@@ -24,24 +21,18 @@ public class App {
 
         for (Class<?> type : classes) {
             try {
-                var trace = new TutorTrace(type).trace(input);
-                var traceString = Json.repr(trace);
-                saveTraceToFile(type, traceString);
+                String className = type.getSimpleName();
+                String outputFile = className + ".trace.json";
+
+                new TutorTrace(type, input).traceToFile(outputFile);
+
+                System.out.println("saved trace to " + outputFile);
 
             } catch (TutorTrace.ProgramCrashed e) {
                 System.out.println("program crashed (exited non-zero)");
             } catch (TutorTrace.DebuggingFailure e) {
                 System.err.println("failed to debug program: " + e.getCause().getMessage());
-            } catch (IOException e) {
-                System.err.println("failed to save trace file: " + e.getMessage());
             }
         }
-    }
-
-    private static void saveTraceToFile(Class<?> type, String content) throws IOException {
-        String className = type.getSimpleName();
-        Path outputFile = Path.of(className + ".trace.json");
-        Files.writeString(outputFile, content);
-        System.out.println("saved trace to " + outputFile);
     }
 }
