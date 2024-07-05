@@ -83,8 +83,8 @@ public class JsonTest {
         {
             Person[] arr = { new Person("Jane", "Doe"), new Person("John", "Smith") };
 
-            String jane = "{\":java:class\": \"Person\", \"firstName\": \"Jane\", \"lastName\": \"Doe\", \"sibling\": null}";
-            String john = "{\":java:class\": \"Person\", \"firstName\": \"John\", \"lastName\": \"Smith\", \"sibling\": null}";
+            String jane = "{\":class\": \"Person\", \"firstName\": \"Jane\", \"lastName\": \"Doe\", \"sibling\": null}";
+            String john = "{\":class\": \"Person\", \"firstName\": \"John\", \"lastName\": \"Smith\", \"sibling\": null}";
 
             String expected = "[" + jane + ", " + john + "]";
             assertEquals(expected, Json.repr(arr));
@@ -95,14 +95,14 @@ public class JsonTest {
     public void testObjects() {
         {
             var person = new Person("Jane", "Doe");
-            String expected = "{\":java:class\": \"Person\", \"firstName\": \"Jane\", \"lastName\": \"Doe\", \"sibling\": null}";
+            String expected = "{\":class\": \"Person\", \"firstName\": \"Jane\", \"lastName\": \"Doe\", \"sibling\": null}";
             assertEquals(expected, Json.repr(person));
         }
 
         {
             // private fields should be ignored by repr()
             var dog = new Dog("Lassie", 4);
-            String expected = "{\":java:class\": \"Dog\", \"name\": \"Lassie\"}";
+            String expected = "{\":class\": \"Dog\", \"name\": \"Lassie\"}";
             assertEquals(expected, Json.repr(dog));
         }
     }
@@ -114,8 +114,8 @@ public class JsonTest {
             var john = new Person("John", "Doe", jane);
             jane.sibling = john;
 
-            String johnStr = "{\":java:class\": \"Person\", \"firstName\": \"John\", \"lastName\": \"Doe\", \"sibling\": \"Person(Jane)\"}";
-            String janeStr = "{\":java:class\": \"Person\", \"firstName\": \"Jane\", \"lastName\": \"Doe\", \"sibling\": "
+            String johnStr = "{\":class\": \"Person\", \"firstName\": \"John\", \"lastName\": \"Doe\", \"sibling\": \"Person(Jane)\"}";
+            String janeStr = "{\":class\": \"Person\", \"firstName\": \"Jane\", \"lastName\": \"Doe\", \"sibling\": "
                     + johnStr + "}";
 
             assertEquals(janeStr, Json.repr(jane));
@@ -125,7 +125,7 @@ public class JsonTest {
     @Test
     public void testRecord() {
         var p = new Point(1, 2);
-        var expected = "{\":java:record\": \"Point\", \"x\": 1, \"y\": 2}";
+        var expected = "{\"x\": 1, \"y\": 2}";
         assertEquals(expected, Json.repr(p));
     }
 
@@ -141,7 +141,7 @@ public class JsonTest {
         var two = new Node(2, List.of(one));
         oneChildren.add(two);
 
-        var expected = "{\":java:class\": \"Node\", \"data\": 1, \"children\": [{\":java:class\": \"Node\", \"data\": 2, \"children\": [\"Node(1)\"]}]}";
+        var expected = "{\":class\": \"Node\", \"data\": 1, \"children\": [{\":class\": \"Node\", \"data\": 2, \"children\": [\"Node(1)\"]}]}";
         assertEquals(expected, Json.repr(one));
     }
 }

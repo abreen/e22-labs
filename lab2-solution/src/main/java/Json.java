@@ -13,10 +13,7 @@ import java.text.DecimalFormat;
 public class Json {
 
     /** Allows you to create a fake object of any class (so it appears in JSON as something else) */
-    public record Fake(String kind, String className, Map<String, Object> fields, String fakeToString) {
-        public Fake(String className, Map<String, Object> fields) {
-            this("class", className, fields, className + "" + fields);
-        }
+    public record Fake(String className, Map<String, Object> fields, String fakeToString) {
     }
 
     public static String repr(Object value) {
@@ -145,9 +142,7 @@ public class Json {
             // mark this value as seen (avoids infinite recursion)
             seen.add(value);
 
-            String kind = "class";
             String className = c.getName();
-
             Map<String, String> fields;
 
             if (value instanceof Fake fake) {
@@ -167,6 +162,12 @@ public class Json {
                                     }
                                 }));
             } else {
+                /*
+                 * The Object is not a Fake, and it's not a special-case value that was
+                 * handled above (e.g., arrays, String, List, Map).
+                 * Use the Reflection API to find all non-private fields and
+                 * make recursive calls to repr().
+                 */
                 fields = Arrays.stream(c.getDeclaredFields())
                         .filter(f -> !Modifier.isPrivate(f.getModifiers()))
                         .collect(Collectors.toMap(Field::getName, (f) -> {
@@ -186,12 +187,14 @@ public class Json {
                         }));
             }
 
-            // convert an arbitrary Object (not an array) to JSON
-
-            // if the Object is a record, try to call accessor & pass to repr()
+            /*
+             * If the Object is a record, try to call an accessor on each field,
+             * making a recursive call to repr().
+             */
             RecordComponent[] components = c.getRecordComponents();
+            boolean isRecord = false;
             if (!(value instanceof Fake) && components != null) {
-                kind = "record";
+                isRecord = true;
                 fields.putAll(Arrays.stream(components).collect(Collectors.toMap(
                         (r) -> r.getName(),
                         (r) -> {
@@ -215,7 +218,11 @@ public class Json {
                     .map((Map.Entry<String, String> e) -> repr(e.getKey()) + ": " + e.getValue())
                     .collect(Collectors.joining(", "));
 
-            return "{\":java:" + kind + "\": " + repr(className) + ", " + fieldsRepr + "}";
+            if (isRecord) {
+                return "{" + fieldsRepr + "}";
+            } else {
+                return "{" + repr(":class") + ":" + repr(className) + ", " + fieldsRepr + "}";
+            }
         }
     }
 

@@ -184,7 +184,7 @@ public class TutorTrace {
     public record Step(Frame[] stack, String output) {
     }
 
-    public record Frame(String className, String methodName, int lineNumber, Variable[] visible) {
+    public record Frame(String file, String methodName, int lineNumber, Variable[] visible) {
     }
 
     public record Variable(String name, Object value) {
@@ -212,9 +212,15 @@ public class TutorTrace {
 
             String className = frame.location().sourceName();
             String methodName = frame.location().method().name();
+
+            List<Location> methodLocations = frame.location().method().allLineLocations();
+            int methodBeginLine = methodLocations.getFirst().lineNumber();
+            int methodEndLine = methodLocations.getLast().lineNumber();
+            String beginEnd = methodBeginLine + ":" + methodEndLine;
+
             int lineNumber = frame.location().lineNumber();
 
-            frameRecords[i] = new Frame(className, methodName, lineNumber, locals);
+            frameRecords[i] = new Frame(className, methodName + "@" + beginEnd, lineNumber, locals);
         }
 
         return frameRecords;
@@ -310,7 +316,7 @@ public class TutorTrace {
                 fields.put(fieldName, fieldValue);
             }
 
-            return new Json.Fake(className, fields);
+            return new Json.Fake(className, fields, x.toString());
         }
 
         return null;
