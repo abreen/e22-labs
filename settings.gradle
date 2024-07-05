@@ -1,5 +1,6 @@
 rootProject.name = 's22-labs'
 
+include 'shared'
 include 'lab1', 'lab1-solution'
 include 'lab2', 'lab2-solution'
 include 'lab3', 'lab3-solution'

@@ -13,25 +13,23 @@ public class SortTest {
 
     @Test
     public void testSelectionSort() {
-        var s = new Sort();
-        s.selectionSort(input);
+        new SelectionSort().sort(input);
         assertTrue("array should be sorted", isSorted(input));
     }
 
     @Test
     public void testInsertionSort() {
-        var s = new Sort();
-        s.insertionSort(input);
+        new InsertionSort().sort(input);
         assertTrue("array should be sorted", isSorted(input));
     }
 
     @Test
     public void testQuicksort() {
-        var s = new Sort();
-        s.quicksort(input);
+        new Quicksort().sort(input);
         assertTrue("array should be sorted", isSorted(input));
     }
 
+    /** Returns true if the array is in ascending order */
     private static boolean isSorted(int[] arr) {
         for (int i = 0; i < arr.length - 1; i++) {
             if (arr[i] > arr[i + 1]) {
