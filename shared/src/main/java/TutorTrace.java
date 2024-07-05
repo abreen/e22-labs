@@ -1,5 +1,4 @@
 import java.io.*;
-import java.nio.file.*;
 import java.util.*;
 import java.util.zip.*;
 import java.lang.reflect.Array;
@@ -7,7 +6,6 @@ import com.sun.jdi.*;
 import com.sun.jdi.connect.*;
 import com.sun.jdi.request.*;
 import com.sun.jdi.event.*;
-import static java.nio.file.StandardOpenOption.CREATE;
 import static com.sun.jdi.request.StepRequest.STEP_LINE;
 import static com.sun.jdi.request.StepRequest.STEP_INTO;
 
