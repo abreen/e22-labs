@@ -3,3 +3,7 @@ plugins {
 }
 
 apply from: rootProject.file('buildSrc/shared.gradle')
+
+//compileJava {
+//    options.compilerArgs << '-g'
+//}
