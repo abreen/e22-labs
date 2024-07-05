@@ -77,6 +77,7 @@ public class TutorTrace {
                 System.out.print(programOutput.toString());
                 printInputStream(vm.process().getErrorStream());
                 writer.append("]" + System.lineSeparator());
+                writer.close();
             } catch (IOException e) {
                 throw new DebuggingFailure(e);
             }
@@ -97,11 +98,6 @@ public class TutorTrace {
                 throw new ProgramCrashed();
             }
         } catch (InterruptedException ignored) {
-        }
-
-        try {
-            writer.close();
-        } catch (IOException ignored) {
         }
     }
 
