@@ -32,4 +32,4 @@ gradle-app.setting
 todos.txt
 _site/*
 *.trace.json
-*.trace.json.zip
+*.zip
