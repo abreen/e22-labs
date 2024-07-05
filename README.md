@@ -183,6 +183,30 @@ method runs. `@After` could also be used to set `bag` to `null` or do any other
 such cleanup.
 
 
+## Generating slides and PDFs
+
+This repository also contains some JavaScript code that generates HTML and PDFs
+from Markdown. The `build-slides.js` script contains this logic.
+
+### Installing Node
+
+Make sure you're using Node 18 or newer.
+Here are instructions for macOS using [Homebrew][homebrew] and
+the [Node Version Manager][nvm]:
+
+- Use `brew install nvm` to install NVM
+- Use `nvm install 18` to install Node 18 and the Node Package Manager (`npm`)
+- Run `npm install` to download JavaScript libraries (saved in `node_modules/`)
+
+### Generating slides
+
+Once `npm` has installed the JavaScript libraries for converting Markdown and
+generating slides, use `npm run build` to run the `build-slides.js` script.
+
+The generated HTML and PDF files are saved to the `_site/` folder (the [default
+for GitHub Pages][pages-site-folder]), but this can be customized with an environment variable.
+
+
 [gradle]: https://gradle.org/
 [sdkman]: https://sdkman.io/
 [gradle-extension]: https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-gradle
@@ -190,3 +214,6 @@ such cleanup.
 [coding-pack]: https://code.visualstudio.com/docs/languages/java#_install-visual-studio-code-for-java
 [gradle-wrapper]: https://docs.gradle.org/current/userguide/gradle_wrapper_basics.html
 [github-extension]: https://code.visualstudio.com/docs/sourcecontrol/github
+[nvm]: https://github.com/nvm-sh/nvm
+[homebrew]: https://brew.sh/
+[pages-site-folder]: https://github.com/actions/upload-pages-artifact/blob/1780dfc2cece65a782cc86fa133f96aef8ad0345/action.yml#L12
