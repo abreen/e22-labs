@@ -201,15 +201,18 @@ public class Json {
 
     public static String repr(char value) {
         // JSON has no character type, just use a string
-        return "\"" + value + "\"";
+        return "\"" + escape("" + value) + "\"";
     }
 
     public static String repr(String value) {
-        return "\"" + value
+        return "\"" + escape(value) + "\"";
+    }
+
+    private static String escape(String value) {
+        return value
                 .replaceAll("\\\\", "\\\\\\\\") // replace \ with \\
                 .replaceAll("\"", "\\\\\"") // replace " with \"
-                .replaceAll("\\r?\\n", "\\\\n") // replace newlines with \n
-                + "\"";
+                .replaceAll("\\r?\\n", "\\\\n"); // replace newlines with \n
     }
 
     public static String repr(byte[] arr) {

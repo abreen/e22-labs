@@ -39,6 +39,12 @@ public class JsonTest {
     }
 
     @Test
+    public void testChars() {
+        assertEquals("\"'\"", Json.repr('\''));
+        assertEquals("\"\\\"\"", Json.repr('"'));
+    }
+
+    @Test
     public void testStrings() {
         assertEquals("\"foobar\"", Json.repr("foobar"));
 
