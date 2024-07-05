@@ -221,7 +221,7 @@ public class Json {
             if (isRecord) {
                 return "{" + fieldsRepr + "}";
             } else {
-                return "{" + repr(":class") + ":" + repr(className) + ", " + fieldsRepr + "}";
+                return "{" + repr(":class") + ": " + repr(className) + ", " + fieldsRepr + "}";
             }
         }
     }

@@ -1,17 +1,17 @@
 import java.io.*;
-import java.nio.*;
+import java.nio.file.*;
 import java.util.*;
+import java.util.zip.*;
 import java.lang.reflect.Array;
 import com.sun.jdi.*;
 import com.sun.jdi.connect.*;
 import com.sun.jdi.request.*;
 import com.sun.jdi.event.*;
+import static java.nio.file.StandardOpenOption.CREATE;
 import static com.sun.jdi.request.StepRequest.STEP_LINE;
 import static com.sun.jdi.request.StepRequest.STEP_INTO;
 
 public class TutorTrace {
-    private static final int OUTPUT_BUFFER_SIZE = (int) Math.pow(2, 11);
-
     /** The class whose main() method we will trace */
     private Class<?> targetClass;
 
@@ -24,15 +24,18 @@ public class TutorTrace {
     }
 
     public void traceToFile(String fileName) throws DebuggingFailure, ProgramCrashed {
+        Path tempFile = null;
+        BufferedWriter jsonFileWriter = null;
         VirtualMachine vm = null;
         Thread outputWatcher = null;
-        FileWriter writer = null;
         StringBuilder programOutput = new StringBuilder();
         boolean firstStep = true;
 
         try {
-            writer = new FileWriter(fileName);
-            writer.append("[");
+            tempFile = Files.createTempFile(fileName, "");
+
+            jsonFileWriter = Files.newBufferedWriter(tempFile, CREATE);
+            jsonFileWriter.append("[");
 
             vm = connectAndLaunchVirtualMachine(args, targetClass.getName());
 
@@ -51,18 +54,20 @@ public class TutorTrace {
                         startStepping(vm, e.thread());
 
                     } else if (event instanceof StepEvent e) {
-                        if (shouldRecordStep(e)) {
+                        if (shouldSaveStepToFile(e)) {
                             List<StackFrame> stackFrames = e.thread().frames();
                             String currentOutput = programOutput.toString();
 
-                            String step = Json.repr(new Step(toFrameRecords(stackFrames), currentOutput));
+                            Frame[] frames = toFrameRecords(stackFrames);
+                            Step step = new Step(frames, currentOutput);
 
+                            String repr = Json.repr(step);
                             if (firstStep) {
-                                writer.append(step);
+                                jsonFileWriter.append(repr);
                                 firstStep = false;
                             } else {
-                                writer.append("," + System.lineSeparator());
-                                writer.append(step);
+                                jsonFileWriter.append("," + System.lineSeparator());
+                                jsonFileWriter.append(repr);
                             }
                         }
                     }
@@ -74,10 +79,21 @@ public class TutorTrace {
 
         } catch (VMDisconnectedException ignored) {
             try {
-                System.out.print(programOutput.toString());
-                printInputStream(vm.process().getErrorStream());
-                writer.append("]" + System.lineSeparator());
-                writer.close();
+                jsonFileWriter.append("]" + System.lineSeparator());
+                jsonFileWriter.close();
+            } catch (IOException e) {
+                throw new DebuggingFailure(e);
+            }
+
+            try (var fileOut = new FileOutputStream(fileName + ".zip");
+                    var bufferedOut = new BufferedOutputStream(fileOut);
+                    var zipOut = new ZipOutputStream(bufferedOut);
+                    var writer = new OutputStreamWriter(zipOut);
+                    var reader = Files.newBufferedReader(tempFile)) {
+                zipOut.putNextEntry(new ZipEntry(fileName));
+                reader.transferTo(writer);
+                writer.flush();
+                zipOut.closeEntry();
             } catch (IOException e) {
                 throw new DebuggingFailure(e);
             }
@@ -101,19 +117,9 @@ public class TutorTrace {
         }
     }
 
-    private boolean shouldRecordStep(StepEvent event) {
+    private boolean shouldSaveStepToFile(StepEvent event) {
         String className = event.location().declaringType().name();
         return className.equals(targetClass.getName()) && !event.location().method().isConstructor();
-    }
-
-    private static void printInputStream(InputStream input) throws IOException {
-        var reader = new InputStreamReader(input);
-        var buffer = CharBuffer.allocate(OUTPUT_BUFFER_SIZE);
-        reader.read(buffer);
-
-        var writer = new OutputStreamWriter(System.out);
-        writer.write(buffer.array());
-        writer.flush();
     }
 
     private BufferedReader getProgramOutputReader(VirtualMachine vm) {
@@ -181,36 +187,15 @@ public class TutorTrace {
         request.enable();
     }
 
-    public record Step(Frame[] stack, String output) {
-    }
-
-    public record Frame(String file, String methodName, int lineNumber, Variable[] visible) {
-    }
-
-    public record Variable(String name, Object value) {
-    }
-
-    /** An exception thrown when something went wrong trying to debug the target program */
-    public class DebuggingFailure extends Exception {
-        public DebuggingFailure(Throwable cause) {
-            super(cause);
-        }
-    }
-
-    /** An exception thrown when the target program crashed while trying to debug it */
-    public class ProgramCrashed extends Exception {
-    }
-
     private Frame[] toFrameRecords(List<StackFrame> frames) throws AbsentInformationException {
         Frame[] frameRecords = new Frame[frames.size()];
         StackFrame frameForMain = frames.getLast();
 
-        for (int i = 0; i < frames.size(); i++) {
-            StackFrame frame = frames.get(i);
-
+        {
+            StackFrame frame = frames.getFirst();
             Variable[] locals = toVariableRecords(frame, frame.equals(frameForMain));
 
-            String className = frame.location().sourceName();
+            String className = frame.location().declaringType().name();
             String methodName = frame.location().method().name();
 
             List<Location> methodLocations = frame.location().method().allLineLocations();
@@ -220,7 +205,18 @@ public class TutorTrace {
 
             int lineNumber = frame.location().lineNumber();
 
-            frameRecords[i] = new Frame(className, methodName + "@" + beginEnd, lineNumber, locals);
+            frameRecords[0] = new Frame(className, methodName + ":" + lineNumber + "&" + beginEnd, locals);
+        }
+
+        for (int i = 1; i < frames.size(); i++) {
+            StackFrame frame = frames.get(i);
+
+            String className = frame.location().declaringType().name();
+            String methodName = frame.location().method().name();
+
+            int lineNumber = frame.location().lineNumber();
+
+            frameRecords[i] = new Frame(className, methodName + ":" + lineNumber);
         }
 
         return frameRecords;
@@ -237,8 +233,9 @@ public class TutorTrace {
 
             String variableName = local.name();
             Object variableValue = jdiValueToJavaObject(frame.getValue(local));
+            String variableType = local.typeName();
 
-            variables.add(new Variable(variableName, variableValue));
+            variables.add(new Variable(variableName, variableValue, variableType));
         }
 
         return variables.toArray(Variable[]::new);
@@ -320,5 +317,28 @@ public class TutorTrace {
         }
 
         return null;
+    }
+
+    public record Step(Frame[] stack, String output) {
+    }
+
+    public record Frame(String className, String methodName, Variable[] visible) {
+        public Frame(String className, String methodName) {
+            this(className, methodName, null);
+        }
+    }
+
+    public record Variable(String name, Object value, String type) {
+    }
+
+    /** An exception thrown when something went wrong trying to debug the target program */
+    public class DebuggingFailure extends Exception {
+        public DebuggingFailure(Throwable cause) {
+            super(cause);
+        }
+    }
+
+    /** An exception thrown when the target program crashed while trying to debug it */
+    public class ProgramCrashed extends Exception {
     }
 }
