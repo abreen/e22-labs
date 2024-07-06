@@ -21,21 +21,23 @@ public class TutorTrace {
         this.args = args;
     }
 
-    public void traceToFile() throws DebuggingFailure, ProgramCrashed {
-        traceToFile(targetClass.getName() + ".trace");
+    public File traceToFile() throws DebuggingFailure, ProgramCrashed {
+        return traceToFile(targetClass.getName() + ".trace");
     }
 
-    public void traceToFile(String fileNamePrefix) throws DebuggingFailure, ProgramCrashed {
+    public File traceToFile(String fileNamePrefix) throws DebuggingFailure, ProgramCrashed {
         VirtualMachine vm = null;
         Thread outputWatcher = null;
         StringBuilder programOutput = new StringBuilder();
 
         long stepCount = 0;
         ZipOutputStream zipOut = null;
+        File zipFile = null;
         PrintWriter writer = null;
 
         try {
-            zipOut = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(fileNamePrefix + ".zip")));
+            zipFile = new File(fileNamePrefix + ".zip");
+            zipOut = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zipFile)));
             writer = new PrintWriter(zipOut);
 
             vm = connectAndLaunchVirtualMachine(args, targetClass.getName());
@@ -103,6 +105,8 @@ public class TutorTrace {
             }
         } catch (InterruptedException ignored) {
         }
+
+        return zipFile;
     }
 
     private boolean shouldSaveStepToFile(StepEvent event) {

@@ -2,8 +2,12 @@
   "testing.openTesting": "openExplorerOnTestStart",
   "files.exclude": {
     // "buildSrc/": true,
-    "**/bin/": true,
-    "**/build/": true,
+    // "**/bin/": true,
+    // "**/build/": true,
+    "lab*/bin/": true,
+    "lab*/build/": true,
+    "shared/bin/": true,
+    "shared/build/": true,
     "**/.*": true,
     "node_modules": true
   },

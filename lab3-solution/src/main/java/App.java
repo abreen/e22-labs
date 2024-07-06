@@ -21,7 +21,8 @@ public class App {
 
         for (Class<?> type : classes) {
             try {
-                new TutorTrace(type, input).traceToFile();
+                var file = new TutorTrace(type, input).traceToFile();
+                System.out.println("saved file: " + file.getName());
 
             } catch (TutorTrace.ProgramCrashed e) {
                 System.out.println("program crashed (exited non-zero)");

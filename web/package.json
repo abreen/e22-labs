@@ -1,0 +1,48 @@
+{
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@marp-team/marp-cli": "^1.4.1",
+    "coherentpdf": "^2.5.5",
+    "ejs": "^3.1.10",
+    "node-stream-zip": "^1.15.0",
+    "watcher": "^2.3.1"
+  },
+  "marp": {
+    "options": {
+      "markdown": {
+        "html": true,
+        "breaks": false,
+        "linkify": true,
+        "typographer": true
+      }
+    }
+  },
+  "scripts": {
+    "build": "node index.js",
+    "watch": "node index.js --watch"
+  },
+  "config": {
+    "traces": {
+      "gradleDir": "../",
+      "gradleSubprojects": [
+        "lab2-solution",
+        "lab3-solution"
+      ]
+    },
+    "marpit": {
+      "slidesDir": "./slides",
+      "marpArgs": [
+        "--html",
+        "--theme gerard",
+        "--theme-set gerard.css"
+      ]
+    },
+    "copyDirs": {
+      "../lab1-solution/main/java": "./code/lab1",
+      "../lab2-solution/main/java": "./code/lab2",
+      "../lab3-solution/main/java": "./code/lab3",
+      "../lab4-solution/main/java": "./code/lab4"
+    }
+  }
+}
