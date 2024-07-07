@@ -153,8 +153,6 @@ function renderTraceStep(
     .slice(startLine - 2, endLine + 1)
     .join("\n");
 
-  hljs.
-
   const highlightedCode = hljs.highlight(sourceCode, {
     language: "java",
   }).value;
