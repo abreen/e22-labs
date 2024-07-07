@@ -1,12 +1,9 @@
 import { readdir } from "fs/promises";
-import child_process from "child_process";
+import { fork } from "child_process";
 import path from "path";
-import { promisify } from "util";
 import { config, runMarp } from "../utils.js";
 
-const fork = promisify(child_process.fork);
-
-async function filter(relativePath) {
+function shouldConvert(relativePath) {
   return relativePath.startsWith("slides/");
 }
 
@@ -24,13 +21,13 @@ async function convertFile(relativePath) {
   const pdfFilePath = path.join(slidesOutputDir, noExt + ".pdf");
   const twoUpFilePath = path.join(slidesOutputDir, noExt + "-2up.pdf");
 
-  await createTwoUpPdf(pdfFilePath, twoUpFilePath);
+  return createTwoUpPdf(pdfFilePath, twoUpFilePath);
 }
 
-async function convertAll() {
+function convertAll() {
   const slidesOutputDir = path.join(config.outputDir, "slides");
 
-  await Promise.all([
+  return Promise.all([
     generateHtml(slidesOutputDir),
     generatePdfsAndTwoUpPdfs(slidesOutputDir),
   ]);
@@ -42,14 +39,14 @@ async function generatePdfsAndTwoUpPdfs(slidesOutputDir) {
 
   // for each PDF, generate a two-up version (in parallel)
   const files = await readdir(slidesOutputDir);
-  await Promise.all(
+  return Promise.all(
     files
       .filter((filePath) => filePath.endsWith(".pdf"))
       .filter((filePath) => !filePath.endsWith("-2up.pdf"))
       .map((filePath) => path.parse(filePath).name)
       .map((name) => ({
         input: path.join(slidesOutputDir, name + ".pdf"),
-        output: path.join(slidesOutputDir, name + "-2up.df"),
+        output: path.join(slidesOutputDir, name + "-2up.pdf"),
       }))
       .map(({ input, output }) => createTwoUpPdf(input, output))
   );
@@ -76,7 +73,17 @@ function generatePdfs(slidesOutputDir) {
 
 /** Run separate script in a child process to create a two-up version of a PDF */
 function createTwoUpPdf(...args) {
-  return fork("create-two-up-pdf.js", [...args], {});
+  return new Promise((resolve, reject) => {
+    const child = fork("create-two-up-pdf.js", [...args], {});
+    child.on("error", reject);
+    child.on("exit", (exitCode) => {
+      if (exitCode != 0) {
+        reject(exitCode);
+      } else {
+        resolve();
+      }
+    });
+  });
 }
 
-export default { filter, convertFile, convertAll };
+export default { shouldConvert, convertFile, convertAll };

@@ -9,21 +9,20 @@ function renderTemplates() {
   console.log(html);
 }
 
-async function filter(relativePath) {
+function shouldConvert(relativePath) {
   // always rebuild the HTML for the site
   return true;
 }
 
-async function convertFile(relativePath) {
-  console.log("site", relativePath);
+function convertFile(relativePath) {
   let people = ["geddy", "neil", "alex"];
   let html = render('<%= people.join(", "); %>', { people: people });
 
-  await writeFile(path.join(config.outputDir, "index.html"), html);
+  return writeFile(path.join(config.outputDir, "index.html"), html);
 }
 
-async function convertAll() {
+function convertAll() {
   return convertFile(null);
 }
 
-export default { filter, convertFile, convertAll };
+export default { shouldConvert, convertFile, convertAll };

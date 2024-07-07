@@ -9,6 +9,7 @@
     "watcher": "^2.3.1"
   },
   "marp": {
+    "pdfOutlines": true,
     "options": {
       "markdown": {
         "html": true,

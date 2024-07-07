@@ -12,12 +12,12 @@ import { config, runMarp } from "../utils.js";
 
 const exec = promisify(child_process.exec);
 
-async function filter(relativePath) {
-  return relativePath.startsWith("../lab");
+function shouldConvert(relativePath) {
+  return relativePath.startsWith("../lab") && relativePath.endsWith(".java");
 }
 
 /** Given a path to a .java file that changed, do `gradle run` and generate traces */
-async function convertFile(relativePath) {
+function convertFile(relativePath) {
   // "../lab2-solution/src/main/java/App.java" -> "lab2-solution"
   const subproject = relativePath.split(path.sep)[1];
 
@@ -28,15 +28,19 @@ async function convertFile(relativePath) {
     return Promise.resolve();
   }
 
-  await exec(`pushd .. && ./gradlew :${changedSubproject}:run`);
+  return exec(`pushd .. && ./gradlew :${changedSubproject}:run`);
   // TODO read the ZIP files and create the htmx files using a template (?)
 }
 
 /** Does `gradle run` and generates all traces from subprojects listed in package.json */
-async function convertAll() {
+function convertAll() {
   const subprojects = config.traces.gradleSubprojects || [];
+  console.log(subprojects);
   const tasks = subprojects.map((proj) => `:${proj}:run`);
-  await exec(`pushd .. && ./gradlew --parallel ${tasks.join(" ")}`);
+  console.log(tasks);
+  console.log(`pushd .. && ./gradlew --parallel ${tasks.join(" ")}`);
+
+  return Promise.resolve();
   // TODO read the ZIP files and create the htmx files using a template (?)
 }
 
@@ -46,4 +50,4 @@ function tracesToHypertext() {}
 
 function traceToHypertext(path) {}
 
-export default { filter, convertFile, convertAll };
+export default { shouldConvert, convertFile, convertAll };

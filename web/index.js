@@ -1,12 +1,13 @@
 import path from "path";
 import { mkdir } from "fs/promises";
 import Watcher from "watcher";
-import { config } from "./utils.js";
+import { config, relativeToHere } from "./utils.js";
 
 import traces from "./build-steps/build-traces.js";
 import slides from "./build-steps/build-standard-slides.js";
+import site from "./build-steps/build-site.js";
 
-const converters = [traces, slides];
+const converters = [traces, slides, site];
 
 if (process.argv[2] == "-w" || process.argv[2] === "--watch") {
   await init();
@@ -14,44 +15,45 @@ if (process.argv[2] == "-w" || process.argv[2] === "--watch") {
   log("starting watch mode");
 
   const dirsToWatch = [config.traces.gradleDir, config.marpit.slidesDir];
-  new Watcher(
-    dirsToWatch,
-    {
-      recursive: config.watcher.recursive,
-      renameDetection: true,
-      ignoreInitial: true,
-      debounce: config.watcher.debounce,
-    },
-    (event, absolutePath) => {
-      // "/Users/abreen/repo/web/file.md" -> "web/file.md"
-      const relativePath = path.relative(path.dirname(""), absolutePath);
-      const fileName = path.basename(absolutePath);
-
-      if ([".", "_"].includes(fileName[0])) {
-        return;
-      }
-
-      converters.forEach(async ({ filter, convertFile }) => {
-        if (await filter(relativePath)) {
-          convertFile(relativePath);
-        }
-      });
+  new Watcher(dirsToWatch, getWatcherConfig(), (event, absolutePath) => {
+    const relativePath = relativeToHere(absolutePath);
+    if (skipFile(relativePath)) {
+      return;
     }
-  );
+
+    converters.forEach(async ({ shouldConvert, convertFile }) => {
+      if (await shouldConvert(relativePath)) {
+        convertFile(relativePath);
+      }
+    });
+  });
 } else {
   await init();
 
   log("building everything");
 
-  converters.forEach(async ({ convertAll }) => {
-    await convertAll();
-  });
+  await Promise.all(converters.map(({ convertAll }) => convertAll()));
 }
 
-async function init() {
-  await mkdir(config.outputDir, { recursive: true });
+function init() {
+  return mkdir(config.outputDir, { recursive: true });
 }
 
 function log(str) {
-  console.log("build:", str);
+  const scriptName = path.basename(process.argv[1]);
+  console.log(`${scriptName}:`, str);
+}
+
+function skipFile(filePath) {
+  const fileName = path.basename(filePath);
+  return [".", "_"].includes(fileName[0]);
+}
+
+function getWatcherConfig() {
+  return {
+    recursive: config.watcher.recursive,
+    renameDetection: true,
+    ignoreInitial: true,
+    debounce: config.watcher.debounce,
+  };
 }

@@ -26,7 +26,6 @@ coherentpdf.scaleToFitPaper(
 );
 coherentpdf.toFile(pdf, outputFilePath, false, false);
 log(`wrote two-up PDF to ${outputFilePath}`);
-coherentpdf.deletePdf(pdf);
 
 function log(str) {
   console.log("coherentpdf:", str);
