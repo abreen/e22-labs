@@ -1,13 +1,13 @@
 Each module in this directory is a *converter* which exports three functions:
 
-* `filter(filePath)` returns `true` if the converter cares about the file
+* `shouldConvert(filePath)` returns `true` if the converter cares about the file
   located at `filePath` (e.g., return `true` if it ends with `.md` for a Markdown
   converter)
 * `convertFile(filePath)` does the necessary file operations/runs subprocesses
   to convert the `filePath` into an output file in `OUTPUT_DIR`
 * `convertAll()` converts all the files into `OUTPUT_DIR`
 
-All of the functions return `Promise`s. They get configuration values from
+All of the functions may return `Promise`s. They get configuration values from
 `package.json`.
 
 The converters were written with these principles in mind:
