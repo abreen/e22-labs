@@ -4,13 +4,13 @@
   </pre>
 
   <ol class="stack">
-    <% stack.forEach(({className, methodName, visible}) => { %>
+    <% stack.forEach(({currentLine, className, methodName, visible}) => { %>
     <li class="frame">
-      <%= className %>.<%= methodName %>
+      <%= className %>.<%= methodName %>:<%= currentLine %>
       <dl>
         <% visible != null && visible.forEach(({name, type, value}) => { %>
         <dt><%= type %>&nbsp;<%= name %></dt>
-        <dd><%= value %></dd>
+        <dd><%= JSON.stringify(value) %></dd>
         <% }); %>
       </dl>
     </li>

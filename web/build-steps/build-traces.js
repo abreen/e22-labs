@@ -9,16 +9,18 @@ import { readFile, writeFile, readdir, mkdir } from "fs/promises";
 import path from "path";
 import { promisify } from "util";
 import child_process from "child_process";
+import StreamZip from "node-stream-zip";
 import pLimit from "p-limit";
 import ejs from "ejs";
-import hljs from "highlight.js/lib/core";
-import java from "highlight.js/lib/languages/java";
+import { createStarryNight } from "@wooorm/starry-night";
+import sourceJava from "@wooorm/starry-night/source.java";
+import { toHtml } from "hast-util-to-html";
+
+const starryNight = await createStarryNight([sourceJava]);
+const starryNightJavaScope = starryNight.flagToScope("java");
 
 import { log, config, runMarp } from "../utils.cjs";
-
-import StreamZip from "node-stream-zip";
-
-hljs.registerLanguage("java", java);
+import { starryNightGutter } from "./hast-util-starry-night-gutter.js";
 
 const exec = promisify(child_process.exec);
 
@@ -27,7 +29,6 @@ const tracesOutputDir = path.join(config.outputDir, "traces");
 const limitReadZips = pLimit(2);
 const limitReadZipEntries = pLimit(1);
 const limitWriteFile = pLimit(30);
-const limitRender = pLimit(100);
 
 /** Rebuild traces when a file changes in one of the known Gradle subprojects */
 function shouldConvert(relativePath) {
@@ -43,8 +44,7 @@ function shouldConvert(relativePath) {
 async function convertFile(relativePath) {
   // "../lab2-solution/src/main/java/App.java" -> "lab2-solution"
   const subproject = relativePath.split(path.sep)[1];
-
-  await exec(`pushd .. && ./gradlew :${changedSubproject}:run`);
+  await exec(`pushd .. && ./gradlew :${subproject}:run`);
 }
 
 /** Does `gradle run` and generates all traces from subprojects listed in package.json */
@@ -147,15 +147,21 @@ function renderTraceStep(
   javaSourceLines
 ) {
   // process the top frame to get the start & end code line ranges
-  const { startLine, endLine } = parseMethodName(data.stack[0].methodName);
+  const { startLine, endLine, currentLine } = parseMethodName(
+    data.stack[0].methodName
+  );
+
+  const [leadingSpaces] = javaSourceLines[startLine - 2].match(/^\s*/);
+  const numLeadingSpaces = leadingSpaces.length;
 
   const sourceCode = javaSourceLines
     .slice(startLine - 2, endLine + 1)
+    .map((line) => line.substring(numLeadingSpaces))
     .join("\n");
 
-  const highlightedCode = hljs.highlight(sourceCode, {
-    language: "java",
-  }).value;
+  const tree = starryNight.highlight(sourceCode, starryNightJavaScope);
+  starryNightGutter(tree, startLine, currentLine + 1);
+  const highlightedCode = toHtml(tree);
 
   const stepUrl = (n) => stepPrefix + n + ".html";
 
@@ -186,7 +192,7 @@ function renderIndexPage(firstStepHtml) {
 }
 
 function parseMethodName(methodName) {
-  let lineNumber, startLine, endLine;
+  let currentLine, startLine, endLine;
   let methodNameAndLineNumber;
 
   if (methodName.indexOf("&") > 0) {
@@ -203,10 +209,10 @@ function parseMethodName(methodName) {
   }
 
   // "findSolutions:34" -> ["findSolutions", "34"]
-  [methodName, lineNumber] = methodNameAndLineNumber.split(":");
-  lineNumber = parseInt(lineNumber);
+  [methodName, currentLine] = methodNameAndLineNumber.split(":");
+  currentLine = parseInt(currentLine);
 
-  return { methodName, lineNumber, startLine, endLine };
+  return { methodName, currentLine, startLine, endLine };
 }
 
 export default { shouldConvert, convertFile, convertAll };
