@@ -38,11 +38,9 @@
         "--theme-set gerard.css"
       ]
     },
-    "copyDirs": {
-      "../lab1-solution/main/java": "./code/lab1",
-      "../lab2-solution/main/java": "./code/lab2",
-      "../lab3-solution/main/java": "./code/lab3",
-      "../lab4-solution/main/java": "./code/lab4"
+    "watcher": {
+      "recursive": true,
+      "debounce": 1000
     }
   }
 }

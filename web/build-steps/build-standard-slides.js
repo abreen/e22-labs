@@ -1,54 +1,82 @@
-// run Marp to convert Markdown to slides
-// convert to HTML and PDF
-// from .trace.json files, generate the slides
-
+import { readdir } from "fs/promises";
+import child_process from "child_process";
 import path from "path";
-import coherentpdf from "coherentpdf";
+import { promisify } from "util";
 import { config, runMarp } from "../utils.js";
+
+const fork = promisify(child_process.fork);
 
 async function filter(relativePath) {
   return relativePath.startsWith("slides/");
 }
 
 async function convertFile(relativePath) {
-  await runMarp(
-    path,
-    `--output ${relativePath.join(config.outputDir, "slides")}`
-  );
+  const slidesOutputDir = path.join(config.outputDir, "slides");
+  const noExt = path.parse(relativePath).name;
+
+  // generate the HTML file
+  await runMarp(relativePath, "--output", slidesOutputDir);
+
+  // generate the PDF file
+  await runMarp(relativePath, "--pdf", "--output", slidesOutputDir);
+
+  // get the path to the PDF we just generated
+  const pdfFilePath = path.join(slidesOutputDir, noExt + ".pdf");
+  const twoUpFilePath = path.join(slidesOutputDir, noExt + "-2up.pdf");
+
+  await createTwoUpPdf(pdfFilePath, twoUpFilePath);
 }
 
 async function convertAll() {
-  await runMarp(
-    `--input-dir ${config.marpit.slidesDir}`,
-    `--output ${path.join(config.outputDir, "slides")}`
-  );
+  const slidesOutputDir = path.join(config.outputDir, "slides");
 
-  // TODO generate PDFs
+  await Promise.all([
+    generateHtml(slidesOutputDir),
+    generatePdfsAndTwoUpPdfs(slidesOutputDir),
+  ]);
 }
 
-function generateTwoUpPdf(pdfFileName) {
-  const pdf = coherentpdf.fromFile(pdfFileName + ".pdf", "");
-  coherentpdf.impose(
-    pdf,
-    1.0,
-    2.0,
-    false,
-    false,
-    false,
-    false,
-    false,
-    150.0,
-    150.0,
-    2.0
+async function generatePdfsAndTwoUpPdfs(slidesOutputDir) {
+  // generate all the PDFs
+  await generatePdfs(slidesOutputDir);
+
+  // for each PDF, generate a two-up version (in parallel)
+  const files = await readdir(slidesOutputDir);
+  await Promise.all(
+    files
+      .filter((filePath) => filePath.endsWith(".pdf"))
+      .filter((filePath) => !filePath.endsWith("-2up.pdf"))
+      .map((filePath) => path.parse(filePath).name)
+      .map((name) => ({
+        input: path.join(slidesOutputDir, name + ".pdf"),
+        output: path.join(slidesOutputDir, name + "-2up.df"),
+      }))
+      .map(({ input, output }) => createTwoUpPdf(input, output))
   );
-  coherentpdf.scaleToFitPaper(
-    pdf,
-    coherentpdf.all(pdf),
-    coherentpdf.usletterportrait,
-    1.0
+}
+
+function generateHtml(slidesOutputDir) {
+  return runMarp(
+    "--input-dir",
+    config.marpit.slidesDir,
+    "--output",
+    slidesOutputDir
   );
-  coherentpdf.toFile(pdf, pdfFileName + "-2up.pdf", false, false);
-  coherentpdf.deletePdf(pdf);
+}
+
+function generatePdfs(slidesOutputDir) {
+  return runMarp(
+    "--input-dir",
+    config.marpit.slidesDir,
+    "--pdf",
+    "--output",
+    slidesOutputDir
+  );
+}
+
+/** Run separate script in a child process to create a two-up version of a PDF */
+function createTwoUpPdf(...args) {
+  return fork("create-two-up-pdf.js", [...args], {});
 }
 
 export default { filter, convertFile, convertAll };

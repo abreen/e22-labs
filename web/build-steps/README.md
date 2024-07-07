@@ -1,15 +1,22 @@
-These scripts were written with these principles in mind:
+Each module in this directory is a *converter* which exports three functions:
 
-- Import any constants or configurable values through `package.json`
-- Don't pass around huge strings
-- Functions should do filesystem work immediately when called
-- All file paths can be relative and `index.js` always runs in the same dir as `package.json`
-- `package.json` specifies a single output directory for everything
-- Use `async` as much as possible (`fs/promises`, `Promise` for Marp CLI)
-- Parallelize work as much as possible
-  - Gradle builds and runs can be parallel with `./gradlew --parallel :lab2-solution:run :lab3-solution:run`
-- Build logic inside event handler (file change event) in `index.js`
-  - When a file changes, do the minimum amount of work
-- Use EJS templates if needed, but keep them small
-- `index.js` reads `package.json` and passes config and other deps to function
-- The default function takes a path for the file that changed
+* `filter(filePath)` returns `true` if the converter cares about the file
+  located at `filePath` (e.g., return `true` if it ends with `.md` for a Markdown
+  converter)
+* `convertFile(filePath)` does the necessary file operations/runs subprocesses
+  to convert the `filePath` into an output file in `OUTPUT_DIR`
+* `convertAll()` converts all the files into `OUTPUT_DIR`
+
+All of the functions return `Promise`s. They get configuration values from
+`package.json`.
+
+The converters were written with these principles in mind:
+
+- Prioritize speed: use `Promise.all()`, subprocesses, parallelization
+  - Use `./gradlew --parallel`
+- Maximize use of config in `package.json`
+- Use env var for the output path (`process.env.OUTPUT_DIR`)
+- Don't pass around huge strings, do everything with files/subprocesses
+- Use relative paths for all the file watching logic
+- When a file changes, do the minimum amount of work (allow converters to skip
+  conversion if they don't care about a file that changed)

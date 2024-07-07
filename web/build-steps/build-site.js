@@ -15,6 +15,7 @@ async function filter(relativePath) {
 }
 
 async function convertFile(relativePath) {
+  console.log("site", relativePath);
   let people = ["geddy", "neil", "alex"];
   let html = render('<%= people.join(", "); %>', { people: people });
 

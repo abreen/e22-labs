@@ -7,10 +7,10 @@
 
 import path from "path";
 import { promisify } from "util";
-import { exec } from "child_process";
+import child_process from "child_process";
 import { config, runMarp } from "../utils.js";
 
-const execPromise = promisify(exec);
+const exec = promisify(child_process.exec);
 
 async function filter(relativePath) {
   return relativePath.startsWith("../lab");
@@ -28,7 +28,7 @@ async function convertFile(relativePath) {
     return Promise.resolve();
   }
 
-  await execPromise(`pushd .. && ./gradlew :${changedSubproject}:run`);
+  await exec(`pushd .. && ./gradlew :${changedSubproject}:run`);
   // TODO read the ZIP files and create the htmx files using a template (?)
 }
 
@@ -36,7 +36,7 @@ async function convertFile(relativePath) {
 async function convertAll() {
   const subprojects = config.traces.gradleSubprojects || [];
   const tasks = subprojects.map((proj) => `:${proj}:run`);
-  await execPromise(`pushd .. && ./gradlew --parallel ${tasks.join(" ")}`);
+  await exec(`pushd .. && ./gradlew --parallel ${tasks.join(" ")}`);
   // TODO read the ZIP files and create the htmx files using a template (?)
 }
 
