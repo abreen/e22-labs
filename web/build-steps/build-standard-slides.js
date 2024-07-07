@@ -1,14 +1,15 @@
 import { readdir } from "fs/promises";
 import { fork } from "child_process";
 import path from "path";
-import { config, runMarp } from "../utils.js";
+import { config, runMarp } from "../utils.cjs";
+
+const slidesOutputDir = path.join(config.outputDir, "slides");
 
 function shouldConvert(relativePath) {
   return relativePath.startsWith("slides/");
 }
 
 async function convertFile(relativePath) {
-  const slidesOutputDir = path.join(config.outputDir, "slides");
   const noExt = path.parse(relativePath).name;
 
   // generate the HTML file
@@ -25,8 +26,6 @@ async function convertFile(relativePath) {
 }
 
 function convertAll() {
-  const slidesOutputDir = path.join(config.outputDir, "slides");
-
   return Promise.all([
     generateHtml(slidesOutputDir),
     generatePdfsAndTwoUpPdfs(slidesOutputDir),

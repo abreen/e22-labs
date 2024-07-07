@@ -5,7 +5,9 @@
     "@marp-team/marp-cli": "^1.4.1",
     "coherentpdf": "^2.5.5",
     "ejs": "^3.1.10",
+    "highlight.js": "^11.10.0",
     "node-stream-zip": "^1.15.0",
+    "p-limit": "^6.0.0",
     "watcher": "^2.3.1"
   },
   "marp": {
@@ -35,8 +37,10 @@
       "slidesDir": "./slides",
       "marpArgs": [
         "--html",
-        "--theme gerard",
-        "--theme-set gerard.css"
+        "--theme",
+        "gerard",
+        "--theme-set",
+        "gerard.css"
       ]
     },
     "watcher": {

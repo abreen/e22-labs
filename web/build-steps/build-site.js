@@ -1,7 +1,7 @@
 import { writeFile } from "fs/promises";
 import path from "path";
 import { render } from "ejs";
-import { config } from "../utils.js";
+import { config } from "../utils.cjs";
 
 function renderTemplates() {
   let people = ["geddy", "neil", "alex"];

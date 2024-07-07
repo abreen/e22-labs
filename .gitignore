@@ -37,4 +37,4 @@ todos.txt
 _site/*
 *.trace*.zip
 *.zip
-
+*.trace*.json

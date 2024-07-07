@@ -1,7 +1,7 @@
 import path from "path";
 import { mkdir } from "fs/promises";
 import Watcher from "watcher";
-import { config, relativeToHere } from "./utils.js";
+import { log, config, relativeToHere } from "./utils.cjs";
 
 import traces from "./build-steps/build-traces.js";
 import slides from "./build-steps/build-standard-slides.js";
@@ -37,11 +37,6 @@ if (process.argv[2] == "-w" || process.argv[2] === "--watch") {
 
 function init() {
   return mkdir(config.outputDir, { recursive: true });
-}
-
-function log(str) {
-  const scriptName = path.basename(process.argv[1]);
-  console.log(`${scriptName}:`, str);
 }
 
 function skipFile(filePath) {

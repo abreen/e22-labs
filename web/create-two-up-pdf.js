@@ -1,10 +1,12 @@
 import coherentpdf from "coherentpdf";
+import { log } from "./utils.cjs";
 
 const inputFilePath = process.argv[2];
 const outputFilePath = process.argv[3];
 
 const pdf = coherentpdf.fromFile(inputFilePath, "");
-log(`opened ${inputFilePath}, transforming PDF...`);
+
+log(`transforming ${inputFilePath}...`);
 coherentpdf.impose(
   pdf,
   1.0,
@@ -25,8 +27,4 @@ coherentpdf.scaleToFitPaper(
   1.0
 );
 coherentpdf.toFile(pdf, outputFilePath, false, false);
-log(`wrote two-up PDF to ${outputFilePath}`);
-
-function log(str) {
-  console.log("coherentpdf:", str);
-}
+log(`saved two-up verson of PDF to ${outputFilePath}`);

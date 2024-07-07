@@ -1,0 +1,48 @@
+<form class="trace">
+  <pre class="source">
+<%- sourceCode %>
+  </pre>
+
+  <ol class="stack">
+    <% stack.forEach(({className, methodName, visible}) => { %>
+    <li class="frame">
+      <%= className %>.<%= methodName %>
+      <dl>
+        <% visible != null && visible.forEach(({name, type, value}) => { %>
+        <dt><%= type %>&nbsp;<%= name %></dt>
+        <dd><%= value %></dd>
+        <% }); %>
+      </dl>
+    </li>
+    <% }); %>
+  </ol>
+
+  <button
+    hx-get="<%= firstStepUrl %>"
+    hx-target="closest form"
+    hx-swap="outerHTML"
+  >
+    First
+  </button>
+  <button
+    hx-get="<%= prevStepUrl %>"
+    hx-target="closest form"
+    hx-swap="outerHTML"
+  >
+    Prev
+  </button>
+  <button
+    hx-get="<%= nextStepUrl %>"
+    hx-target="closest form"
+    hx-swap="outerHTML"
+  >
+    Next
+  </button>
+  <button
+    hx-get="<%= lastStepUrl %>"
+    hx-target="closest form"
+    hx-swap="outerHTML"
+  >
+    Last
+  </button>
+</form>

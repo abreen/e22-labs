@@ -5,49 +5,210 @@
 
 // TODO use AdditionalArguments for runMarp to change --output
 
+import { readFile, writeFile, readdir, mkdir } from "fs/promises";
 import path from "path";
 import { promisify } from "util";
 import child_process from "child_process";
-import { config, runMarp } from "../utils.js";
+import pLimit from "p-limit";
+import ejs from "ejs";
+import hljs from "highlight.js/lib/core";
+import java from "highlight.js/lib/languages/java";
+
+import { log, config, runMarp } from "../utils.cjs";
+
+import StreamZip from "node-stream-zip";
+
+hljs.registerLanguage("java", java);
 
 const exec = promisify(child_process.exec);
 
+const tracesOutputDir = path.join(config.outputDir, "traces");
+
+const limitReadZips = pLimit(2);
+const limitReadZipEntries = pLimit(1);
+const limitWriteFile = pLimit(30);
+const limitRender = pLimit(100);
+
+/** Rebuild traces when a file changes in one of the known Gradle subprojects */
 function shouldConvert(relativePath) {
-  return relativePath.startsWith("../lab") && relativePath.endsWith(".java");
+  if (!relativePath.startsWith("../lab") || !relativePath.endsWith(".java")) {
+    return false;
+  }
+
+  const subproject = relativePath.split(path.sep)[1];
+  return config.traces.gradleSubprojects.includes(subproject);
 }
 
 /** Given a path to a .java file that changed, do `gradle run` and generate traces */
-function convertFile(relativePath) {
+async function convertFile(relativePath) {
   // "../lab2-solution/src/main/java/App.java" -> "lab2-solution"
   const subproject = relativePath.split(path.sep)[1];
 
-  if (!config.traces.gradleSubprojects.includes(subproject)) {
-    console.warn(
-      `changed subproject "${subproject}" not in config.traces.gradleSubprojects`
-    );
-    return Promise.resolve();
-  }
-
-  return exec(`pushd .. && ./gradlew :${changedSubproject}:run`);
-  // TODO read the ZIP files and create the htmx files using a template (?)
+  await exec(`pushd .. && ./gradlew :${changedSubproject}:run`);
 }
 
 /** Does `gradle run` and generates all traces from subprojects listed in package.json */
-function convertAll() {
+async function convertAll() {
   const subprojects = config.traces.gradleSubprojects || [];
-  console.log(subprojects);
   const tasks = subprojects.map((proj) => `:${proj}:run`);
-  console.log(tasks);
-  console.log(`pushd .. && ./gradlew --parallel ${tasks.join(" ")}`);
 
-  return Promise.resolve();
-  // TODO read the ZIP files and create the htmx files using a template (?)
+  await exec(`pushd .. && ./gradlew --parallel ${tasks.join(" ")}`);
+  await Promise.all(subprojects.map(buildTraces));
 }
 
-async function generateTraces() {}
+/** Render trace ZIP files (e.g., Quicksort.trace.zip) into many HTMX files */
+async function buildTraces(subproject) {
+  // "lab2-solution" => "lab2"
+  const noSolutionsName = subproject.replace("-solution", "");
 
-function tracesToHypertext() {}
+  // "../_site/traces/lab2"
+  const outputDir = path.join(tracesOutputDir, noSolutionsName);
+  await mkdir(outputDir, { recursive: true });
 
-function traceToHypertext(path) {}
+  // "../lab2-solution"
+  const inputDir = `../${subproject}`;
+
+  const files = await readdir(inputDir);
+  return Promise.all(
+    files
+      .filter((name) => name.endsWith(".trace.zip"))
+      .map((name) => path.join(inputDir, name))
+      .map((zipPath) => [
+        zipPath,
+        limitReadZips(() => new StreamZip.async({ file: zipPath })),
+      ])
+      .map(async ([zipPath, myTurnToRead]) => {
+        const zipFile = await myTurnToRead;
+
+        const javaFileName = path
+          .basename(zipPath)
+          .replace(".trace.zip", ".java");
+
+        const javaClassName = javaFileName.replace(".java", "");
+
+        const javaSourceFile = await readFile(
+          path.join(inputDir, "src", "main", "java", javaFileName),
+          { encoding: "utf8" }
+        );
+        const javaSourceLines = javaSourceFile.split(/\r?\n/);
+
+        const entries = Object.values(await zipFile.entries());
+        const numEntries = entries.length;
+
+        const outputFilePaths = await Promise.all(
+          entries
+            .map((entry) => [
+              entry,
+              numEntries,
+              limitReadZipEntries(() => zipFile.entryData(entry)),
+            ])
+            .map(async ([entry, numEntries, myTurnToReadData]) => {
+              const data = await myTurnToReadData;
+
+              // "ComboSum.trace.743.json"
+              const nameParts = entry.name.split(".");
+              const stepNumber = parseInt(nameParts[2]);
+
+              const stepUrlPrefix = `${config.urlPrefix}/traces/${noSolutionsName}/${javaClassName}.trace.`;
+
+              // reads the EJS template and renders it
+              const output = await renderTraceStep(
+                stepNumber,
+                numEntries,
+                JSON.parse(data),
+                stepUrlPrefix,
+                javaSourceLines
+              );
+
+              const entryNameNoExt = path.parse(entry.name).name;
+              const outputPath = path.join(outputDir, entryNameNoExt + ".html");
+
+              // save the rendered template
+              await limitWriteFile(() => writeFile(outputPath, output));
+              return outputPath;
+            })
+        );
+
+        // all entries are rendered to HTMX, use step 1 to render index.html
+        const firstStepHtml = await readFile(outputFilePaths[0], {
+          encoding: "utf8",
+        });
+        const indexOutput = await renderIndexPage(firstStepHtml);
+        return writeFile(path.join(outputDir, "index.html"), indexOutput);
+      })
+  );
+}
+
+function renderTraceStep(
+  stepNumber,
+  numSteps,
+  data,
+  stepPrefix,
+  javaSourceLines
+) {
+  // process the top frame to get the start & end code line ranges
+  const { startLine, endLine } = parseMethodName(data.stack[0].methodName);
+
+  const sourceCode = javaSourceLines
+    .slice(startLine - 2, endLine + 1)
+    .join("\n");
+
+  hljs.
+
+  const highlightedCode = hljs.highlight(sourceCode, {
+    language: "java",
+  }).value;
+
+  const stepUrl = (n) => stepPrefix + n + ".html";
+
+  return ejs.renderFile(
+    "build-steps/traces/step.ejs",
+    {
+      ...data,
+      stack: data.stack.map((frame) => ({
+        ...frame,
+        ...parseMethodName(frame.methodName),
+      })),
+      sourceCode: highlightedCode,
+      firstStepUrl: stepUrl(1),
+      nextStepUrl: stepUrl(Math.min(stepNumber + 1, numSteps)),
+      prevStepUrl: stepUrl(Math.max(1, stepNumber - 1)),
+      lastStepUrl: stepUrl(numSteps),
+    },
+    { async: true }
+  );
+}
+
+function renderIndexPage(firstStepHtml) {
+  return ejs.renderFile(
+    "build-steps/traces/index.ejs",
+    { firstStepHtml },
+    { async: true }
+  );
+}
+
+function parseMethodName(methodName) {
+  let lineNumber, startLine, endLine;
+  let methodNameAndLineNumber;
+
+  if (methodName.indexOf("&") > 0) {
+    // "findSolutions:34&29:51" (current line 34, method range 29-51)
+    const parts = methodName.split("&");
+    [methodNameAndLineNumber, [startLine, endLine]] = [
+      parts[0],
+      parts[1].split(":"),
+    ];
+    startLine = parseInt(startLine);
+    endLine = parseInt(endLine);
+  } else {
+    methodNameAndLineNumber = methodName;
+  }
+
+  // "findSolutions:34" -> ["findSolutions", "34"]
+  [methodName, lineNumber] = methodNameAndLineNumber.split(":");
+  lineNumber = parseInt(lineNumber);
+
+  return { methodName, lineNumber, startLine, endLine };
+}
 
 export default { shouldConvert, convertFile, convertAll };
