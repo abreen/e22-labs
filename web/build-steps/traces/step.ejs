@@ -1,4 +1,5 @@
 <form class="trace" hx-ext="morph">
+
   <div class="controls">
     <button
       hx-get="<%= firstStepUrl %>"
@@ -40,6 +41,21 @@
     >
       Last
     </button>
+  </div>
+
+  <div class="controls">
+    <input
+      hx-get="<%= stepPrefix %>"
+      hx-on::config-request="event.detail.path += this.value + '.html'"
+      hx-target="closest form"
+      hx-swap="morph"
+      type="range"
+      min="1"
+      max="<%= numSteps %>"
+      step="1"
+      value="<%= stepNumber %>"
+      class="timeline"
+    >
   </div>
 
   <div class="source-and-stack">

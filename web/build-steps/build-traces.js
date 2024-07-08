@@ -37,7 +37,10 @@ function shouldConvert(relativePath) {
   }
 
   const subproject = relativePath.split(path.sep)[1];
-  return config.traces.gradleSubprojects.includes(subproject);
+  return (
+    subproject.endsWith("-solution") &&
+    config.traces.gradleSubprojects.includes(subproject)
+  );
 }
 
 /** Given a path to a .java file that changed, do `gradle run` and generate traces */
@@ -143,6 +146,17 @@ async function buildTraces(subproject) {
   );
 }
 
+/** Starting at the given line, search upwards for a blank line in the code */
+function improveStartLine(startLine, sourceLines) {
+  for (let i = startLine - 1; i >= startLine - 5; i--) {
+    if (sourceLines[i - 1] != null && sourceLines[i - 1].trim().length == 0) {
+      return i + 1;
+    }
+  }
+
+  return startLine;
+}
+
 function renderTraceStep(
   stepNumber,
   numSteps,
@@ -155,20 +169,17 @@ function renderTraceStep(
     data.stack[0].methodName
   );
 
-  const [leadingSpaces] = javaSourceLines[startLine - 2].match(/^\s*/);
-  const numLeadingSpaces = leadingSpaces.length;
-
   const sourceCode = javaSourceLines
-    .slice(startLine - 2, endLine + 1)
-    .map((line) => line.substring(numLeadingSpaces))
+    .slice(startLine - 3, endLine + 1)
     .join("\n");
 
+  // do syntax highlighting
   const tree = starryNight.highlight(sourceCode, starryNightJavaScope);
-  starryNightGutter(tree, startLine - 1, currentLine);
+  starryNightGutter(tree, startLine - 2, currentLine);
   const highlightedCode = toHtml(tree);
 
+  // render the step
   const stepUrl = (n) => stepPrefix + n + ".html";
-
   return ejs.renderFile(
     "build-steps/traces/step.ejs",
     {
@@ -180,6 +191,7 @@ function renderTraceStep(
       sourceCode: highlightedCode,
       stepNumber,
       numSteps,
+      stepPrefix,
       firstStepUrl: stepUrl(1),
       nextStepUrl: stepUrl(Math.min(stepNumber + 1, numSteps)),
       prevStepUrl: stepUrl(Math.max(1, stepNumber - 1)),

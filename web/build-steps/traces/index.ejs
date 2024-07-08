@@ -33,6 +33,13 @@
         --color-prettylights-syntax-markup-ignored-bg: #0550ae;
         --color-prettylights-syntax-meta-diff-range: #8250df;
         --color-prettylights-syntax-sublimelinter-gutter-mark: #8c959f;
+
+        --color-highlighted-line: gold;
+        --color-range-track: whitesmoke;
+        --color-range-thumb: steelblue;
+        --height-range-thumb: 29px;
+        --width-range-thumb: 5px;
+        --height-range-track: 10px;
       }
 
       .pl-c {
@@ -161,11 +168,64 @@
           "Segoe UI Emoji", "Segoe UI Symbol";
       }
 
+      input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        background: transparent;
+        cursor: pointer;
+      }
+
+      input[type="range"]:focus {
+        outline: none;
+      }
+
+      input[type="range"]::-webkit-slider-runnable-track {
+        background-color: var(--color-range-track);
+        border-radius: 0px;
+        height: var(--height-range-track);
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        margin-top: calc(
+          0.5 * var(--height-range-track) - 0.5 * var(--height-range-thumb)
+        );
+        background-color: var(--color-range-thumb);
+        border-radius: 0px;
+        height: var(--height-range-thumb);
+        width: var(--width-range-thumb);
+      }
+
+      input[type="range"]:focus::-webkit-slider-thumb {
+        outline: 3px solid var(--color-range-thumb);
+        outline-offset: 0.125rem;
+      }
+
+      input[type="range"]::-moz-range-track {
+        background-color: var(--color-range-track);
+        border-radius: 0px;
+        height: var(--height-range-track);
+      }
+
+      input[type="range"]::-moz-range-thumb {
+        background-color: var(--color-range-thumb);
+        border: none;
+        border-radius: 0px;
+        height: var(--height-range-thumb);
+        width: var(--width-range-thumb);
+      }
+
+      input[type="range"]:focus::-moz-range-thumb {
+        outline: 3px solid var(--color-range-thumb);
+        outline-offset: 0.125rem;
+      }
+
       button {
         background: lightblue;
         border-style: solid;
-        border-radius: 7px;
-        border-width: 5px;
+        border-radius: 9px;
+        border-width: 4px;
         border-color: steelblue;
       }
 
@@ -194,6 +254,11 @@
 
       .controls button {
         flex-grow: 1;
+      }
+
+      .timeline {
+        flex-grow: 1;
+        padding: 12px 0;
       }
 
       .source-and-stack {
@@ -239,7 +304,7 @@
       }
 
       .line.highlight {
-        background: lightgoldenrodyellow;
+        background: var(--color-highlighted-line);
       }
 
       .line:before {
