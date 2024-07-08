@@ -1,10 +1,3 @@
-// run Gradle
-// unzip & convert .trace.json to htmx
-// from .trace.json files, generate Markdown files
-// run Marp to convert Markdown to slides (no PDFs)
-
-// TODO use AdditionalArguments for runMarp to change --output
-
 import { readFile, writeFile, readdir, mkdir } from "fs/promises";
 import path from "path";
 import { promisify } from "util";
@@ -32,7 +25,10 @@ const limitWriteFile = pLimit(30);
 
 /** Rebuild traces when a file changes in one of the known Gradle subprojects */
 function shouldConvert(relativePath) {
-  if (!relativePath.startsWith("../lab") || !relativePath.endsWith(".java")) {
+  if (
+    !relativePath.startsWith(path.join(config.traces.gradleDir, "lab")) ||
+    !relativePath.endsWith(".java")
+  ) {
     return false;
   }
 
