@@ -155,12 +155,152 @@
         color: var(--color-prettylights-syntax-constant-other-reference-link);
       }
 
+      body {
+        font-family: "San Francisco", -apple-system, BlinkMacSystemFont,
+          "Segoe UI", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+          "Segoe UI Emoji", "Segoe UI Symbol";
+      }
+
+      button {
+        background: lightblue;
+        border-style: solid;
+        border-radius: 7px;
+        border-width: 5px;
+        border-color: steelblue;
+      }
+
+      button:active {
+        border-style: inset;
+        background: goldenrod;
+        border-color: gold;
+        color: white;
+      }
+
+      button:disabled {
+        background: gray;
+        border-color: dimgray;
+        border-style: solid;
+      }
+
+      .trace {
+        max-height: 90vh;
+      }
+
+      .controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      .controls button {
+        flex-grow: 1;
+      }
+
+      .source-and-stack {
+        display: flex;
+        gap: 10px;
+      }
+
+      .source {
+        margin: 0;
+        background: whitesmoke;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      @media (min-width: 600px) {
+        .source-and-stack {
+          flex-direction: row;
+        }
+
+        .source,
+        .stack {
+          flex: 1;
+        }
+
+        .controls button {
+          flex: 0;
+          min-width: 120px;
+        }
+
+        .controls {
+          justify-content: center;
+        }
+
+        .vars {
+          max-width: 50vw;
+        }
+      }
+
       .line {
         display: inline-block;
         min-width: 100%;
+        line-height: 1.4;
       }
+
       .line.highlight {
         background: lightgoldenrodyellow;
+      }
+
+      .line:before {
+        content: attr(data-line-number);
+        display: inline-block;
+        width: 3ch;
+        text-align: right;
+        margin-right: 3ch;
+      }
+
+      .stack {
+        font-family: monospace;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        border: 1px solid black;
+        border-bottom: none;
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+      }
+
+      .frame:first-child {
+        background: aliceblue;
+      }
+
+      .frame {
+        border-bottom: 1px solid black;
+        padding: 5px;
+      }
+
+      .className {
+        font-weight: bold;
+      }
+
+      .vars {
+        display: table;
+        border-spacing: 5px;
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+      }
+
+      .var {
+        display: table-row;
+      }
+
+      .var {
+        display: table-row;
+      }
+
+      .var-type-and-name,
+      .var-value {
+        display: table-cell;
+      }
+
+      .var-value {
+        border: 1px solid black;
+        background: white;
+        padding: 5px;
+        word-break: break-all;
       }
     </style>
     <script
@@ -168,8 +308,13 @@
       integrity="sha384-wS5l5IKJBvK6sPTKa2WZ1js3d947pvWXbPJ1OmWfEuxLgeHcEbjUUA5i9V5ZkpCw"
       crossorigin="anonymous"
     ></script>
+    <script src="https://unpkg.com/idiomorph/dist/idiomorph-ext.min.js"></script>
   </head>
   <body>
-    <%- firstStepHtml %>
+    <p>
+      This is a trace of the <code><%= className %></code> class in the
+      <code><%= project %></code> project.
+    </p>
+    <section><%- firstStepHtml %></section>
   </body>
 </html>

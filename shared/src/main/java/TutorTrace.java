@@ -180,11 +180,11 @@ public class TutorTrace {
     }
 
     private Frame[] toFrameRecords(List<StackFrame> frames) throws AbsentInformationException {
-        Frame[] frameRecords = new Frame[frames.size()];
         StackFrame frameForMain = frames.getLast();
+        Frame[] frameRecords = new Frame[frames.size()];
 
-        {
-            StackFrame frame = frames.getFirst();
+        for (int i = 0; i < frames.size(); i++) {
+            StackFrame frame = frames.get(i);
             Variable[] locals = toVariableRecords(frame, frame.equals(frameForMain));
 
             String className = frame.location().declaringType().name();
@@ -197,18 +197,7 @@ public class TutorTrace {
 
             int lineNumber = frame.location().lineNumber();
 
-            frameRecords[0] = new Frame(className, methodName + ":" + lineNumber + "&" + beginEnd, locals);
-        }
-
-        for (int i = 1; i < frames.size(); i++) {
-            StackFrame frame = frames.get(i);
-
-            String className = frame.location().declaringType().name();
-            String methodName = frame.location().method().name();
-
-            int lineNumber = frame.location().lineNumber();
-
-            frameRecords[i] = new Frame(className, methodName + ":" + lineNumber);
+            frameRecords[i] = new Frame(className, methodName + ":" + lineNumber + "&" + beginEnd, locals);
         }
 
         return frameRecords;

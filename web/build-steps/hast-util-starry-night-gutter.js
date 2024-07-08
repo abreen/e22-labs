@@ -78,7 +78,10 @@ function createLine(children, lineNumber, highlightLineNumber) {
   return {
     type: "element",
     tagName: "span",
-    properties: { className: classes.join(" "), dataLineNumber: lineNumber },
+    properties: {
+      className: classes.join(" "),
+      dataLineNumber: lineNumber,
+    },
     children,
   };
 }

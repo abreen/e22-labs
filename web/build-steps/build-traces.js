@@ -133,7 +133,11 @@ async function buildTraces(subproject) {
         const firstStepHtml = await readFile(outputFilePaths[0], {
           encoding: "utf8",
         });
-        const indexOutput = await renderIndexPage(firstStepHtml);
+        const indexOutput = await renderIndexPage(
+          noSolutionsName,
+          javaClassName,
+          firstStepHtml
+        );
         return writeFile(path.join(outputDir, "index.html"), indexOutput);
       })
   );
@@ -146,7 +150,7 @@ function renderTraceStep(
   stepPrefix,
   javaSourceLines
 ) {
-  // process the top frame to get the start & end code line ranges
+  // process the top (active) frame to get the start & end code line ranges
   const { startLine, endLine, currentLine } = parseMethodName(
     data.stack[0].methodName
   );
@@ -160,7 +164,7 @@ function renderTraceStep(
     .join("\n");
 
   const tree = starryNight.highlight(sourceCode, starryNightJavaScope);
-  starryNightGutter(tree, startLine, currentLine + 1);
+  starryNightGutter(tree, startLine - 1, currentLine);
   const highlightedCode = toHtml(tree);
 
   const stepUrl = (n) => stepPrefix + n + ".html";
@@ -174,6 +178,8 @@ function renderTraceStep(
         ...parseMethodName(frame.methodName),
       })),
       sourceCode: highlightedCode,
+      stepNumber,
+      numSteps,
       firstStepUrl: stepUrl(1),
       nextStepUrl: stepUrl(Math.min(stepNumber + 1, numSteps)),
       prevStepUrl: stepUrl(Math.max(1, stepNumber - 1)),
@@ -183,10 +189,10 @@ function renderTraceStep(
   );
 }
 
-function renderIndexPage(firstStepHtml) {
+function renderIndexPage(noSolutionsName, className, firstStepHtml) {
   return ejs.renderFile(
     "build-steps/traces/index.ejs",
-    { firstStepHtml },
+    { className, project: noSolutionsName, firstStepHtml },
     { async: true }
   );
 }
