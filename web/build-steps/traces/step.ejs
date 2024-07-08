@@ -2,9 +2,11 @@
 
   <div class="controls">
     <button
+      class="input"
       hx-get="<%= firstStepUrl %>"
       hx-target="closest form"
       hx-swap="morph"
+      hx-disabled-elt=".trace .input"
       <% if (stepNumber == 1) { %>
       disabled
       <% } %>
@@ -12,9 +14,11 @@
       First
     </button>
     <button
+      class="input"
       hx-get="<%= prevStepUrl %>"
       hx-target="closest form"
       hx-swap="morph"
+      hx-disabled-elt=".trace .input"
       <% if (stepNumber == 1) { %>
       disabled
       <% } %>
@@ -22,9 +26,11 @@
       Prev
     </button>
     <button
+      class="input"
       hx-get="<%= nextStepUrl %>"
       hx-target="closest form"
       hx-swap="morph"
+      hx-disabled-elt=".trace .input"
       <% if (stepNumber == numSteps) { %>
       disabled
       <% } %>
@@ -32,9 +38,11 @@
       Next
     </button>
     <button
+      class="input"
       hx-get="<%= lastStepUrl %>"
       hx-target="closest form"
       hx-swap="morph"
+      hx-disabled-elt=".trace .input"
       <% if (stepNumber == numSteps) { %>
       disabled
       <% } %>
@@ -45,16 +53,17 @@
 
   <div class="controls">
     <input
+      class="input timeline"
       hx-get="<%= stepPrefix %>"
       hx-on::config-request="event.detail.path += this.value + '.html'"
       hx-target="closest form"
       hx-swap="morph"
+      hx-disabled-elt=".trace .input"
       type="range"
       min="1"
       max="<%= numSteps %>"
       step="1"
       value="<%= stepNumber %>"
-      class="timeline"
     >
   </div>
 
