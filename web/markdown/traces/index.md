@@ -16,3 +16,7 @@ title = Interactive Traces of Algorithms
 - [`ShellSort.java`](<%= prefix %>/traces/lab3/ShellSort/)
 - [`Quicksort.java`](<%= prefix %>/traces/lab3/Quicksort/)
 - [`MergeSort.java`](<%= prefix %>/traces/lab3/MergeSort/)
+
+## Linked Lists
+
+- [`StringNode.java`](<%= prefix %>/traces/lab4/StringNode/)

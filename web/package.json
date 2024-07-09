@@ -38,7 +38,8 @@
       "gradleDir": "../",
       "gradleSubprojects": [
         "lab2-solution",
-        "lab3-solution"
+        "lab3-solution",
+        "lab4-solution"
       ]
     },
     "marpit": {
