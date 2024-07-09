@@ -306,7 +306,7 @@ button:disabled {
   overflow-x: auto;
 }
 
-@media only screen and (min-width: 660px) {
+@media only screen and (min-width: 665px) {
   body {
     overflow-y: scroll;
   }
