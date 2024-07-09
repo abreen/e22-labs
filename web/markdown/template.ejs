@@ -8,14 +8,15 @@
       integrity="sha384-wS5l5IKJBvK6sPTKa2WZ1js3d947pvWXbPJ1OmWfEuxLgeHcEbjUUA5i9V5ZkpCw"
       crossorigin="anonymous"
     ></script>
+    <script src="https://unpkg.com/htmx-ext-preload@2.0.0/preload.js"></script>
   </head>
   <body>
     <header>
-      <nav hx-boost="true">
+      <nav hx-boost="true" hx-ext="preload">
         <ul>
-          <li><a href="<%= prefix %>/">Home</a></li>
-          <li><a href="<%= prefix %>/code">Code</a></li>
-          <li><a href="<%= prefix %>/traces">Traces</a></li>
+          <li><a href="<%= prefix %>/" preload>Home</a></li>
+          <li><a href="<%= prefix %>/code" preload>Code</a></li>
+          <li><a href="<%= prefix %>/traces" preload>Traces</a></li>
         </ul>
       </nav>
     </header>
