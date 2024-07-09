@@ -9,6 +9,7 @@ import markdownit from "markdown-it";
 import markdownItFrontMatter from "markdown-it-front-matter";
 import ini from "ini";
 import { log, config, isFileInDir, makeConvertAll } from "../utils.cjs";
+import traces from "./build-traces.js";
 
 const limitReadFile = pLimit(5);
 
@@ -59,7 +60,7 @@ async function convertFile(relativePath) {
   if (isTemplateFile(relativePath)) {
     // rebuild the entire site if the template file changes
     log("template file changed, rebuilding site");
-    return convertAll();
+    return Promise.all([convertAll(), traces.convertAll()]);
   }
 
   // treat the .md file like an EJS template, then render it

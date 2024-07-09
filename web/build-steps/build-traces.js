@@ -143,8 +143,6 @@ async function buildTraces(subproject) {
             })
         );
 
-        log("generated HTMX traces for", javaFileName);
-
         // all entries are rendered to HTMX, use step 1 to render index.html
         const firstStepHtml = await readFile(outputFilePaths[0], {
           encoding: "utf8",
@@ -163,6 +161,7 @@ async function buildTraces(subproject) {
 
         await mkdir(classDir, { recursive: true });
 
+        log(`.trace.zip => html`, `${noSolutionsName}/${javaFileName}`);
         return writeFile(path.join(classDir, "index.html"), indexOutput);
       })
   );
