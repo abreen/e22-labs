@@ -226,7 +226,7 @@ function renderIndexPage(noSolutionsName, className, firstStepHtml) {
     `<p>This is a trace of the
     <code><%= className %></code> class in the
     <code><%= project %></code> project.</p>
-    <form><%- firstStepHtml %></form>`,
+    <form class="trace"><%- firstStepHtml %></form>`,
     { className, project: noSolutionsName, firstStepHtml }
   );
 

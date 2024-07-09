@@ -19,7 +19,7 @@ async function convertFile(relativePath) {
   await mkdir(path.parse(outputPath).dir, { recursive: true });
 
   const ext = path.parse(relativePath).ext.substring(1) || "?";
-  if (ext == "css") {
+  if (ext == "css" && !process.argv.includes("--watch")) {
     const input = await readFile(relativePath, { encoding: "utf8" });
     const cleaned = clean.minify(input);
     log(`css => minified-css: ${relativePath} => ${outputPath}`);

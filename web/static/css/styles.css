@@ -33,9 +33,12 @@
   --color-highlighted-line: gold;
   --color-range-track: whitesmoke;
   --color-range-thumb: steelblue;
-  --height-range-thumb: 29px;
-  --width-range-thumb: 5px;
-  --height-range-track: 10px;
+  --height-range-thumb: 32px;
+  --width-range-thumb: 8px;
+  --height-range-track: 24px;
+
+  --scrollbar-track: whitesmoke;
+  --scrollbar-thumb: seagreen;
 }
 
 .pl-c {
@@ -201,24 +204,24 @@ main {
   padding: 2em;
 }
 
-input[type="range"] {
+.trace .timeline {
   -webkit-appearance: none;
   appearance: none;
   background: transparent;
   cursor: pointer;
 }
 
-input[type="range"]:focus {
+.trace .timeline:focus {
   outline: none;
 }
 
-input[type="range"]::-webkit-slider-runnable-track {
+.trace .timeline::-webkit-slider-runnable-track {
   background-color: var(--color-range-track);
   border-radius: 0px;
   height: var(--height-range-track);
 }
 
-input[type="range"]::-webkit-slider-thumb {
+.trace .timeline::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   box-shadow: none;
@@ -231,18 +234,18 @@ input[type="range"]::-webkit-slider-thumb {
   width: var(--width-range-thumb);
 }
 
-input[type="range"]:focus::-webkit-slider-thumb {
+.trace .timeline:focus::-webkit-slider-thumb {
   outline: 3px solid var(--color-range-thumb);
   outline-offset: 0.125rem;
 }
 
-input[type="range"]::-moz-range-track {
+.trace .timeline::-moz-range-track {
   background-color: var(--color-range-track);
   border-radius: 0px;
   height: var(--height-range-track);
 }
 
-input[type="range"]::-moz-range-thumb {
+.trace .timeline::-moz-range-thumb {
   background-color: var(--color-range-thumb);
   border: none;
   border-radius: 0px;
@@ -250,18 +253,30 @@ input[type="range"]::-moz-range-thumb {
   width: var(--width-range-thumb);
 }
 
-input[type="range"]:focus::-moz-range-thumb {
+.trace .timeline:focus::-moz-range-thumb {
   outline: 3px solid var(--color-range-thumb);
   outline-offset: 0.125rem;
+}
+
+.trace .timeline:disabled {
+  background: inherit;
+  color: inherit;
+  opacity: inherit;
+}
+
+.trace .input.disabled {
+  background: gray;
+  border-color: darkgray;
 }
 
 button {
   color: black;
   background: lightblue;
   border-style: solid;
-  border-radius: 9px;
   border-width: 4px;
   border-color: steelblue;
+  font-size: 1rem;
+  padding: .3rem .5rem;
 }
 
 button:active {
@@ -271,7 +286,7 @@ button:active {
   color: white;
 }
 
-button:disabled {
+.trace .input:disabled {
   color: inherit;
 }
 
@@ -279,28 +294,29 @@ button:disabled {
   max-height: 90vh;
 }
 
-.controls {
+.trace .controls {
   display: flex;
   gap: 10px;
   margin-bottom: 12px;
 }
 
-.controls button {
+.trace .controls button {
   flex-grow: 1;
+  padding: .5rem .5rem;
 }
 
-.timeline {
+.trace .timeline {
   flex-grow: 1;
   padding: 12px 0;
 }
 
-.source-and-stack {
+.trace .source-and-stack {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.source {
+.trace .source {
   margin: 0;
   border-radius: 10px;
   overflow-x: auto;
@@ -308,7 +324,7 @@ button:disabled {
 
 @media only screen and (min-width: 665px) {
   body {
-    overflow-y: scroll;
+
   }
 
   main {
@@ -323,28 +339,27 @@ button:disabled {
     background: seagreen;
   }
 
-  .source-and-stack {
+  .trace .source-and-stack {
     flex-direction: row;
   }
 
-  .stack {
+  .trace .stack {
     max-width: min-content;
   }
 
-  .source,
-  .stack {
+  .trace .source,
+  .trace .stack {
   }
 
-  .controls button {
-    flex: 0;
-    min-width: 120px;
+  .trace .controls button {
+
   }
 
-  .controls {
-    justify-content: center;
+  .trace .controls {
+
   }
 
-  .vars {
+  .trace .vars {
     max-width: 50vw;
   }
 }
@@ -432,23 +447,28 @@ nav {
   justify-content: space-evenly;
 }
 
-* {
+html {
   scrollbar-width: auto;
-  scrollbar-color: white seagreen;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
-*::-webkit-scrollbar {
-  width: 12px;
+html::-webkit-scrollbar {
+
 }
 
-*::-webkit-scrollbar-track {
-  background: seagreen;
+html::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
 }
 
-*::-webkit-scrollbar-thumb {
-  background-color: white;
+html::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
   border-radius: 20px;
-  border: 3px solid seagreen;
+  border: 3px solid var(--scrollbar-track);
+}
+
+html {
+  scrollbar-width: auto;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
 main > h1,
@@ -459,3 +479,5 @@ main > h5,
 main > h6 {
   margin-top: 0;
 }
+
+footer {}

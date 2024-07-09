@@ -1,49 +1,37 @@
 <div class="controls">
   <button
-    class="input"
+    class="input <%= stepNumber == 1 ? 'disabled' : '' %>"
     hx-get="<%= firstStepUrl %>"
     hx-target="closest form"
     hx-swap="morph:innerHTML"
     hx-disabled-elt="form .input"
-    <% if (stepNumber == 1) { %>
-    disabled
-    <% } %>
   >
     First
   </button>
   <button
-    class="input"
+    class="input <%= stepNumber == 1 ? 'disabled' : '' %>"
     hx-get="<%= prevStepUrl %>"
     hx-target="closest form"
     hx-swap="morph:innerHTML"
     hx-disabled-elt="form .input"
-    <% if (stepNumber == 1) { %>
-    disabled
-    <% } %>
   >
     Prev
   </button>
   <button
-    class="input"
+    class="input <%= stepNumber == numSteps ? 'disabled' : '' %>"
     hx-get="<%= nextStepUrl %>"
     hx-target="closest form"
     hx-swap="morph:innerHTML"
     hx-disabled-elt="form .input"
-    <% if (stepNumber == numSteps) { %>
-    disabled
-    <% } %>
   >
     Next
   </button>
   <button
-    class="input"
+    class="input <%= stepNumber == numSteps ? 'disabled' : '' %>"
     hx-get="<%= lastStepUrl %>"
     hx-target="closest form"
     hx-swap="morph:innerHTML"
     hx-disabled-elt="form .input"
-    <% if (stepNumber == numSteps) { %>
-    disabled
-    <% } %>
   >
     Last
   </button>
