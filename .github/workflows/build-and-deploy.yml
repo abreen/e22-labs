@@ -1,4 +1,4 @@
-name: build-and-deploy-slides
+name: build-and-deploy
 
 on:
   push:
