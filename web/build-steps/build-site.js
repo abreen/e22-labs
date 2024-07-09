@@ -76,7 +76,7 @@ async function convertFile(relativePath) {
   );
 
   const html = ejs.render(templateEjs, {
-    ...(lastParsedFrontMatter || {}),
+    ...(lastParsedFrontMatter || { title: "" }),
     content: pageHtml,
     prefix: config.urlPrefix,
   });
