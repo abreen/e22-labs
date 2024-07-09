@@ -9,7 +9,7 @@ import ejs from "ejs";
 import { createStarryNight } from "@wooorm/starry-night";
 import sourceJava from "@wooorm/starry-night/source.java";
 import { toHtml } from "hast-util-to-html";
-import { log, config } from "../utils.cjs";
+import { log, config, isFileInDir } from "../utils.cjs";
 import { starryNightGutter } from "./hast-util-starry-night-gutter.js";
 
 const starryNight = await createStarryNight([sourceJava]);
@@ -23,26 +23,35 @@ const limitReadZips = pLimit(2);
 const limitReadZipEntries = pLimit(1);
 const limitWriteFile = pLimit(30);
 
-/** Rebuild traces when a file changes in one of the known Gradle subprojects */
+/** Rebuild traces when a .java file or the EJS template for a step changes */
 function shouldConvert(relativePath) {
-  if (
-    !relativePath.startsWith(path.join(config.traces.gradleDir, "lab")) ||
-    !relativePath.endsWith(".java")
-  ) {
-    return false;
+  const { ext } = path.parse(relativePath);
+
+  if (ext == ".java") {
+    const subproject = getSubprojectFromPath(relativePath);
+    return (
+      subproject.endsWith("-solution") &&
+      config.traces.gradleSubprojects.includes(subproject)
+    );
   }
 
-  const subproject = relativePath.split(path.sep)[1];
-  return (
-    subproject.endsWith("-solution") &&
-    config.traces.gradleSubprojects.includes(subproject)
-  );
+  if (ext == ".ejs") {
+    return isFileInDir(relativePath, "./build-steps/traces");
+  }
+
+  return false;
 }
 
 /** Given a path to a .java file that changed, do `gradle run` and generate traces */
 async function convertFile(relativePath) {
-  // "../lab2-solution/src/main/java/App.java" -> "lab2-solution"
-  const subproject = relativePath.split(path.sep)[1];
+  const { ext } = path.parse(relativePath);
+  if (ext == ".ejs") {
+    // if an EJS template changed, rebuild traces
+    log("EJS template for traces changed, rebuilding traces");
+    return convertAll();
+  }
+
+  const subproject = getSubprojectFromPath(relativePath);
 
   log("building Gradle subproject", subproject);
   await exec(`pushd .. && ./gradlew :${subproject}:run; popd`);
@@ -217,7 +226,7 @@ function renderIndexPage(noSolutionsName, className, firstStepHtml) {
     `<p>This is a trace of the
     <code><%= className %></code> class in the
     <code><%= project %></code> project.</p>
-    <section><%- firstStepHtml %></section>`,
+    <form><%- firstStepHtml %></form>`,
     { className, project: noSolutionsName, firstStepHtml }
   );
 
@@ -254,6 +263,11 @@ function parseMethodName(methodName) {
   currentLine = parseInt(currentLine);
 
   return { methodName, currentLine, startLine, endLine };
+}
+
+function getSubprojectFromPath(filePath) {
+  const rel = path.relative(config.traces.gradleDir, filePath);
+  return rel.split(path.sep)[0];
 }
 
 export default {

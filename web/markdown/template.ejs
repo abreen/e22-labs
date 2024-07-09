@@ -8,11 +8,12 @@
       integrity="sha384-wS5l5IKJBvK6sPTKa2WZ1js3d947pvWXbPJ1OmWfEuxLgeHcEbjUUA5i9V5ZkpCw"
       crossorigin="anonymous"
     ></script>
+    <script src="https://unpkg.com/idiomorph/dist/idiomorph-ext.min.js"></script>
     <script src="https://unpkg.com/htmx-ext-preload@2.0.0/preload.js"></script>
   </head>
-  <body>
+  <body hx-ext="preload,morph">
     <header>
-      <nav hx-boost="true" hx-ext="preload">
+      <nav hx-boost="true">
         <ul>
           <li><a href="<%= prefix %>/" preload>Home</a></li>
           <li><a href="<%= prefix %>/code" preload>Code</a></li>
@@ -21,6 +22,6 @@
       </nav>
     </header>
 
-    <main hx-boost="true"><%- content %></main>
+    <main><%- content %></main>
   </body>
 </html>

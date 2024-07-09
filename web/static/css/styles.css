@@ -177,6 +177,14 @@ body {
     "Segoe UI Symbol";
 }
 
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  background: white;
+  padding: 0 12px 12px 12px;
+  text-align: justify;
+}
+
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
@@ -278,9 +286,8 @@ button:disabled {
 
 .source {
   margin: 0;
-  background: whitesmoke;
   border-radius: 10px;
-  overflow: hidden;
+  overflow-x: auto;
 }
 
 @media (min-width: 600px) {
@@ -288,9 +295,12 @@ button:disabled {
     flex-direction: row;
   }
 
+  .stack {
+    max-width: min-content;
+  }
+
   .source,
   .stack {
-    flex: 1;
   }
 
   .controls button {
@@ -323,6 +333,11 @@ button:disabled {
   width: 3ch;
   text-align: right;
   margin-right: 3ch;
+  color: gray;
+}
+
+.line.highlight:before {
+  color: goldenrod;
 }
 
 .stack {
@@ -375,7 +390,7 @@ button:disabled {
   border: 1px solid black;
   background: white;
   padding: 5px;
-  word-break: break-all;
+  word-break: break-word;
 }
 
 header nav ul {
@@ -387,4 +402,5 @@ header nav ul {
 header nav ul {
   display: flex;
   justify-content: space-evenly;
+  margin-block: 0;
 }
