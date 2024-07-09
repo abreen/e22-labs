@@ -1,5 +1,4 @@
  import java.io.*;
- import java.util.*;
 
  /**
   * A class for representing a string using a linked list
@@ -263,4 +262,8 @@
          }
      }
 
+     public static void main(String[] args) {
+        StringNode str = StringNode.convert("hello");
+        StringNode.print(str);
+     }
  }
