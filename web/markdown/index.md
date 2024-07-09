@@ -32,6 +32,9 @@ the iterative implementation, and finally examined `findSolutions()` in
 * [`StringRecursion.java`](<%= prefix %>/code/lab2/main/StringRecursion.java.html)
   - [`StringRecursionTest.java`](<%= prefix %>/code/lab2/test/StringRecursionTest.java.html)
 * [`Crossword.java`](<%= prefix %>/code/lab2/main/Crossword.java.html)
+* Bonus material
+  - [`ComboSum.java`](<%= prefix %>/code/lab2/main/ComboSum.java.html)
+  - [Interactive trace of `ComboSum.java`](<%= prefix %>/traces/lab2/ComboSum/)
 
 ## Lab 3
 
@@ -42,6 +45,13 @@ sort, and quicksort.
   - [HTML slides](<%= prefix %>/slides/lab3.html)
   - [PDF](<%= prefix %>/slides/lab3.pdf)
   - [PDF (two slides per page)](<%= prefix %>/slides/lab3.pdf)
+* Interactive traces
+  - [`BubbleSort.java`](<%= prefix %>/traces/lab3/BubbleSort/)
+  - [`SelectionSort.java`](<%= prefix %>/traces/lab3/SelectionSort/)
+  - [`InsertionSort.java`](<%= prefix %>/traces/lab3/InsertionSort/)
+  - [`ShellSort.java`](<%= prefix %>/traces/lab3/ShellSort/)
+  - [`Quicksort.java`](<%= prefix %>/traces/lab3/Quicksort/)
+  - [`MergeSort.java`](<%= prefix %>/traces/lab3/MergeSort/)
 * [`Matrix.java`](<%= prefix %>/code/lab3/main/Matrix.java.html)
 * [`NestedLoops.java`](<%= prefix %>/code/lab3/main/NestedLoops.java.html)
   - [`NestedLoopsTest.java`](<%= prefix %>/code/lab3/main/NestedLoopsTest.java.html)

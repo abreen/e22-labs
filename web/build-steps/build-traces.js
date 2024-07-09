@@ -160,21 +160,12 @@ async function buildTraces(subproject) {
           noSolutionsName,
           javaClassName
         );
+
         await mkdir(classDir, { recursive: true });
+
         return writeFile(path.join(classDir, "index.html"), indexOutput);
       })
   );
-}
-
-/** Starting at the given line, search upwards for a blank line in the code */
-function improveStartLine(startLine, sourceLines) {
-  for (let i = startLine - 1; i >= startLine - 5; i--) {
-    if (sourceLines[i - 1] != null && sourceLines[i - 1].trim().length == 0) {
-      return i + 1;
-    }
-  }
-
-  return startLine;
 }
 
 function renderTraceStep(
@@ -223,9 +214,21 @@ function renderTraceStep(
 }
 
 function renderIndexPage(noSolutionsName, className, firstStepHtml) {
+  const html = ejs.render(
+    `<p>This is a trace of the
+    <code><%= className %></code> class in the
+    <code><%= project %></code> project.</p>
+    <section><%- firstStepHtml %></section>`,
+    { className, project: noSolutionsName, firstStepHtml }
+  );
+
   return ejs.renderFile(
-    "build-steps/traces/index.ejs",
-    { className, project: noSolutionsName, firstStepHtml },
+    path.join(config.markdownit.inputDir, "template.ejs"),
+    {
+      title: `${className}.java Trace`,
+      content: html,
+      prefix: config.urlPrefix,
+    },
     { async: true }
   );
 }
