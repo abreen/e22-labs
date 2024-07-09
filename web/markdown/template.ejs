@@ -2,6 +2,10 @@
 <html>
   <head>
     <title><%= title %></title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes"
+    />
     <link rel="stylesheet" href="<%= prefix %>/css/styles.css" />
     <script
       src="https://unpkg.com/htmx.org@2.0.0"
@@ -12,15 +16,11 @@
     <script src="https://unpkg.com/htmx-ext-preload@2.0.0/preload.js"></script>
   </head>
   <body hx-ext="preload,morph">
-    <header>
-      <nav hx-boost="true">
-        <ul>
-          <li><a href="<%= prefix %>/" preload>Home</a></li>
-          <li><a href="<%= prefix %>/code" preload>Code</a></li>
-          <li><a href="<%= prefix %>/traces" preload>Traces</a></li>
-        </ul>
-      </nav>
-    </header>
+    <nav>
+      <a href="<%= prefix %>/">Home</a>
+      <a href="<%= prefix %>/code">Code</a>
+      <a href="<%= prefix %>/traces">Traces</a>
+    </nav>
 
     <main><%- content %></main>
   </body>
