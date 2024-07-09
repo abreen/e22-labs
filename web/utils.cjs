@@ -5,8 +5,9 @@ const { marpCli } = require("@marp-team/marp-cli");
 const packageJson = require("./package.json");
 const config = {
   ...packageJson.config,
-  outputDir: process.env.OUTPUT_DIR || "../_site",
-  urlPrefix: process.env.URL_PREFIX || "",
+  outputDir:
+    process.env.OUTPUT_DIR || packageJson.config.outputDir || "../_site",
+  urlPrefix: process.env.URL_PREFIX || packageJson.config.urlPrefix || "",
 };
 
 const dateFormat = new Intl.DateTimeFormat("en-US", {

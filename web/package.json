@@ -28,9 +28,12 @@
   },
   "scripts": {
     "build": "node index.js",
-    "watch": "node index.js --watch"
+    "watch": "node index.js --watch",
+    "clean": "rm -rf ${OUTPUT_DIR:-$npm_package_config_outputDir}"
   },
   "config": {
+    "outputDir": "../_site",
+    "urlPrefix": "",
     "traces": {
       "gradleDir": "../",
       "gradleSubprojects": [
