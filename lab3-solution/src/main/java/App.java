@@ -15,9 +15,7 @@ public class App {
                 BubbleSort.class,
                 SelectionSort.class,
                 InsertionSort.class,
-                ShellSort.class,
-                Quicksort.class,
-                MergeSort.class);
+                ShellSort.class);
 
         for (Class<?> type : classes) {
             try {

@@ -12,31 +12,27 @@ public class SortTest {
     }
 
     @Test
+    public void testBubbleSort() {
+        new BubbleSort().sort(input);
+        assertTrue("array should be sorted", Sort.isSorted(input));
+    }
+
+    @Test
     public void testSelectionSort() {
         new SelectionSort().sort(input);
-        assertTrue("array should be sorted", isSorted(input));
+        assertTrue("array should be sorted", Sort.isSorted(input));
     }
 
     @Test
     public void testInsertionSort() {
         new InsertionSort().sort(input);
-        assertTrue("array should be sorted", isSorted(input));
+        assertTrue("array should be sorted", Sort.isSorted(input));
     }
 
     @Test
-    public void testQuicksort() {
-        new Quicksort().sort(input);
-        assertTrue("array should be sorted", isSorted(input));
+    public void testShellSort() {
+        new ShellSort().sort(input);
+        assertTrue("array should be sorted", Sort.isSorted(input));
     }
 
-    /** Returns true if the array is in ascending order */
-    private static boolean isSorted(int[] arr) {
-        for (int i = 0; i < arr.length - 1; i++) {
-            if (arr[i] > arr[i + 1]) {
-                return false;
-            }
-        }
-
-        return true;
-    }
 }
