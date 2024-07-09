@@ -1,3 +1,7 @@
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -70,5 +74,37 @@ public class StringNodeTest {
         str = StringNode.insertSorted(str, 'm');
 
         Assert.assertEquals("abcmxyz", str.toString());
+    }
+
+    @Test
+    public void testNumOccur() {
+        StringNode str = StringNode.convert("hello");
+        Assert.assertEquals(2, StringNode.numOccur(str, 'l'));
+        Assert.assertEquals(0, StringNode.numOccur(str, 'z'));
+    }
+
+    @Test
+    public void testNumOccurIterative() {
+        StringNode str = StringNode.convert("hello");
+        Assert.assertEquals(2, StringNode.numOccurIterative(str, 'l'));
+        Assert.assertEquals(0, StringNode.numOccurIterative(str, 'z'));
+    }
+
+    @Test
+    public void testRead() throws IOException {
+        var input = getStreamForString("hello\n");
+        StringNode str = StringNode.read(input);
+        Assert.assertEquals("hello", str.toString());
+    }
+
+    @Test
+    public void testReadIterative() throws IOException {
+        var input = getStreamForString("hello\n");
+        StringNode str = StringNode.readIterative(input);
+        Assert.assertEquals("hello", str.toString());
+    }
+
+    private InputStream getStreamForString(String str) {
+        return new ByteArrayInputStream(str.getBytes(StandardCharsets.UTF_8));
     }
 }

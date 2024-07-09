@@ -198,21 +198,6 @@ public class StringNode {
         }
     }
 
-    /** An iterative verison of numOccur() */
-    public static int numOccurIterative(StringNode str, char ch) {
-        int numOccur = 0;
-        StringNode trav = str;
-
-        while (trav != null) {
-            if (trav.ch == ch) {
-                numOccur++;
-            }
-
-            trav = trav.next;
-        }
-        return numOccur;
-    }
-
     /**
      * print - recursively writes the specified linked-list string to System.out
      */
@@ -239,30 +224,6 @@ public class StringNode {
             StringNode first = new StringNode(ch, restOfString);
             return first;
         }
-    }
-
-    /** An iterative version of read() */
-    public static StringNode readIterative(InputStream in) throws IOException {
-        StringNode str = null;
-        StringNode current;
-        char ch = (char) in.read();
-
-        if (ch == '\n') {
-            return str;
-        }
-
-        current = new StringNode(ch, null);
-        str = current;
-
-        ch = (char) in.read();
-        while (ch != '\n') {
-            current.next = new StringNode(ch, null);
-
-            current = current.next;
-            ch = (char) in.read();
-        }
-
-        return str;
     }
 
     /*
@@ -296,10 +257,5 @@ public class StringNode {
             trav.ch = Character.toUpperCase(trav.ch);
             trav = trav.next;
         }
-    }
-
-    public static void main(String[] args) {
-        StringNode str = StringNode.convert("hello");
-        StringNode.print(str);
     }
 }
