@@ -1,3 +1,10 @@
+# `common`: functionality shared across projects
+
+This Gradle subproject is included by each of the `lab*` Gradle projects.
+See the `dependencies` block in `buildSrc/shared.gradle`.
+
+## `TutorTrace`
+
 Inspired by [Python Tutor][python-tutor], `TutorTrace.java` is a custom Java
 debugger that generates a line-by-line trace of a program.
 
