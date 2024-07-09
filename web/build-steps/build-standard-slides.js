@@ -1,12 +1,17 @@
 import { readdir } from "fs/promises";
 import { fork } from "child_process";
 import path from "path";
-import { config, runMarp } from "../utils.cjs";
+import pDebounce from "p-debounce";
+import { config, isFileInDir, runMarp } from "../utils.cjs";
 
 const slidesOutputDir = path.join(config.outputDir, "slides");
 
 function shouldConvert(relativePath) {
-  return relativePath.startsWith("slides/");
+  const { ext } = path.parse(relativePath);
+  return (
+    [".md", ".markdown"].includes(ext) &&
+    isFileInDir(relativePath, config.marpit.slidesDir)
+  );
 }
 
 async function convertFile(relativePath) {
@@ -85,4 +90,8 @@ function createTwoUpPdf(...args) {
   });
 }
 
-export default { shouldConvert, convertFile, convertAll };
+export default {
+  shouldConvert,
+  convertFile: pDebounce(convertFile, 1000),
+  convertAll,
+};

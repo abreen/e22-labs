@@ -1,3 +1,7 @@
+---
+title = Lab Exercises
+---
+
 # Lab Exercises
 
 ## Lab 1

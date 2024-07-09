@@ -6,7 +6,7 @@ const outputFilePath = process.argv[3];
 
 const pdf = coherentpdf.fromFile(inputFilePath, "");
 
-log(`transforming ${inputFilePath}...`);
+log(`pdf => pdf: ${inputFilePath} => ${outputFilePath}`);
 coherentpdf.impose(
   pdf,
   1.0,
@@ -27,4 +27,3 @@ coherentpdf.scaleToFitPaper(
   1.0
 );
 coherentpdf.toFile(pdf, outputFilePath, false, false);
-log(`saved two-up verson of PDF to ${outputFilePath}`);

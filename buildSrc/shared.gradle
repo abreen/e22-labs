@@ -23,3 +23,8 @@ task deleteClassFiles(type: Delete) {
   delete 'bin'
 }
 clean.dependsOn(deleteClassFiles)
+
+task deleteTraceZipFiles(type: Delete) {
+  delete fileTree(dir: '.', include: '**.trace.zip')
+}
+clean.dependsOn(deleteTraceZipFiles)

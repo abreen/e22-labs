@@ -7,8 +7,11 @@
     "coherentpdf": "^2.5.5",
     "ejs": "^3.1.10",
     "hast-util-to-html": "^9.0.1",
+    "ini": "^4.1.3",
     "markdown-it": "^14.1.0",
+    "markdown-it-front-matter": "^0.2.4",
     "node-stream-zip": "^1.15.0",
+    "p-debounce": "^4.0.0",
     "p-limit": "^6.0.0",
     "watcher": "^2.3.1"
   },
@@ -42,16 +45,40 @@
         "--theme",
         "gerard",
         "--theme-set",
-        "gerard.css"
+        "static/css/gerard.css"
       ]
     },
     "watcher": {
       "recursive": true,
-      "debounce": 1000
+      "debounce": 500
     },
     "markdownit": {
       "inputDir": "./markdown",
-      "options": {}
+      "options": {
+        "html": true,
+        "breaks": false,
+        "linkify": true,
+        "typographer": true
+      }
+    },
+    "static": {
+      "inputDir": "./static"
+    },
+    "code": {
+      "inputDirs": [
+        {
+          "from": "../lab1-solution/src",
+          "to": "code/lab1"
+        },
+        {
+          "from": "../lab2-solution/src",
+          "to": "code/lab2"
+        },
+        {
+          "from": "../lab3-solution/src",
+          "to": "code/lab3"
+        }
+      ]
     }
   }
 }

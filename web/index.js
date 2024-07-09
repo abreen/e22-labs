@@ -1,54 +1,92 @@
 import path from "path";
-import { mkdir } from "fs/promises";
+import { mkdir, lstat } from "fs/promises";
 import Watcher from "watcher";
-import { log, config, relativeToHere } from "./utils.cjs";
-
+import {
+  debug,
+  config,
+  relativeToHere,
+  isFileInDir,
+  fileIsHidden,
+} from "./utils.cjs";
 import traces from "./build-steps/build-traces.js";
 import slides from "./build-steps/build-standard-slides.js";
 import site from "./build-steps/build-site.js";
+import copyStatic from "./build-steps/copy-static-files.js";
 
-const converters = [traces, slides, site];
+const DIRS_TO_WATCH = [
+  config.marpit.slidesDir,
+  config.markdownit.inputDir,
+  config.static.inputDir,
+  config.traces.gradleDir,
+];
+const DIRS_TO_IGNORE = [".gitignore", "node_modules", config.outputDir];
 
-if (process.argv[2] == "-w" || process.argv[2] === "--watch") {
+const converters = {
+  traces,
+  slides,
+  site,
+  copyStatic,
+};
+
+if (process.argv.includes("-w") || process.argv.includes("--watch")) {
+  debug("starting watch mode");
+
   await init();
 
-  log("starting watch mode");
-
-  const dirsToWatch = [config.traces.gradleDir, config.marpit.slidesDir];
-  new Watcher(dirsToWatch, getWatcherConfig(), (event, absolutePath) => {
-    const relativePath = relativeToHere(absolutePath);
-    if (skipFile(relativePath)) {
-      return;
-    }
-
-    converters.forEach(async ({ shouldConvert, convertFile }) => {
-      if (await shouldConvert(relativePath)) {
-        convertFile(relativePath);
+  new Watcher(
+    DIRS_TO_WATCH,
+    getWatcherConfig(DIRS_TO_IGNORE),
+    async (event, absolutePath) => {
+      debug(`got ${event} event for ${absolutePath}`);
+      if (!shouldHandleEvent(event)) {
+        return;
       }
-    });
-  });
+
+      const fileName = path.basename(absolutePath);
+      if (fileIsHidden(fileName) || (await lstat(absolutePath)).isDirectory()) {
+        return;
+      }
+
+      const relativePath = relativeToHere(absolutePath);
+
+      await Promise.all(
+        Object.entries(converters).map(
+          async ([name, { shouldConvert, convertFile }]) => {
+            if (await shouldConvert(relativePath)) {
+              debug(name, "converting", relativePath);
+              return convertFile(relativePath);
+            }
+
+            debug(name, "skipping");
+          }
+        )
+      );
+    }
+  );
 } else {
+  debug("building everything");
+
   await init();
 
-  log("building everything");
-
-  await Promise.all(converters.map(({ convertAll }) => convertAll()));
+  await Promise.all(
+    Object.values(converters).map(({ convertAll }) => convertAll())
+  );
 }
 
 function init() {
   return mkdir(config.outputDir, { recursive: true });
 }
 
-function skipFile(filePath) {
-  const fileName = path.basename(filePath);
-  return [".", "_"].includes(fileName[0]);
+function getWatcherConfig(ignoreDirs) {
+  return {
+    ...config.watcher,
+    ignoreInitial: true,
+    ignore: (filePath) =>
+      fileIsHidden(filePath) ||
+      ignoreDirs.filter((dir) => isFileInDir(filePath, dir)).length > 0,
+  };
 }
 
-function getWatcherConfig() {
-  return {
-    recursive: config.watcher.recursive,
-    renameDetection: true,
-    ignoreInitial: true,
-    debounce: config.watcher.debounce,
-  };
+function shouldHandleEvent(event) {
+  return ["add", "change"].includes(event);
 }

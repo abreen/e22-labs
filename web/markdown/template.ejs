@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title></title>
-    <link rel="stylesheet" href="styles.css" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="<%= prefix %>styles.css" />
     <script
       src="https://unpkg.com/htmx.org@2.0.0"
       integrity="sha384-wS5l5IKJBvK6sPTKa2WZ1js3d947pvWXbPJ1OmWfEuxLgeHcEbjUUA5i9V5ZkpCw"
@@ -10,7 +10,6 @@
     ></script>
   </head>
   <body>
-    <div></div>
-    <!--  -->
+    <%- content %>
   </body>
 </html>

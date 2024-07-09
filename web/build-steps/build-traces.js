@@ -4,16 +4,16 @@ import { promisify } from "util";
 import child_process from "child_process";
 import StreamZip from "node-stream-zip";
 import pLimit from "p-limit";
+import pDebounce from "p-debounce";
 import ejs from "ejs";
 import { createStarryNight } from "@wooorm/starry-night";
 import sourceJava from "@wooorm/starry-night/source.java";
 import { toHtml } from "hast-util-to-html";
+import { log, config } from "../utils.cjs";
+import { starryNightGutter } from "./hast-util-starry-night-gutter.js";
 
 const starryNight = await createStarryNight([sourceJava]);
 const starryNightJavaScope = starryNight.flagToScope("java");
-
-import { log, config, runMarp } from "../utils.cjs";
-import { starryNightGutter } from "./hast-util-starry-night-gutter.js";
 
 const exec = promisify(child_process.exec);
 
@@ -43,7 +43,11 @@ function shouldConvert(relativePath) {
 async function convertFile(relativePath) {
   // "../lab2-solution/src/main/java/App.java" -> "lab2-solution"
   const subproject = relativePath.split(path.sep)[1];
-  await exec(`pushd .. && ./gradlew :${subproject}:run`);
+
+  log("building Gradle subproject", subproject);
+  await exec(`pushd .. && ./gradlew :${subproject}:run; popd`);
+
+  return buildTraces(subproject);
 }
 
 /** Does `gradle run` and generates all traces from subprojects listed in package.json */
@@ -51,7 +55,9 @@ async function convertAll() {
   const subprojects = config.traces.gradleSubprojects || [];
   const tasks = subprojects.map((proj) => `:${proj}:run`);
 
-  await exec(`pushd .. && ./gradlew --parallel ${tasks.join(" ")}`);
+  log("building Gradle subprojects", subprojects.join(", "));
+  await exec(`pushd .. && ./gradlew --parallel ${tasks.join(" ")}; popd`);
+
   await Promise.all(subprojects.map(buildTraces));
 }
 
@@ -108,7 +114,7 @@ async function buildTraces(subproject) {
               const nameParts = entry.name.split(".");
               const stepNumber = parseInt(nameParts[2]);
 
-              const stepUrlPrefix = `${config.urlPrefix}/traces/${noSolutionsName}/${javaClassName}.trace.`;
+              const stepUrlPrefix = `${config.urlPrefix}/traces/${noSolutionsName}/${javaClassName}/${javaClassName}.trace.`;
 
               // reads the EJS template and renders it
               const output = await renderTraceStep(
@@ -120,13 +126,24 @@ async function buildTraces(subproject) {
               );
 
               const entryNameNoExt = path.parse(entry.name).name;
-              const outputPath = path.join(outputDir, entryNameNoExt + ".html");
+              const outputPathBase = path.join(
+                tracesOutputDir,
+                noSolutionsName,
+                javaClassName
+              );
+              const outputPath = path.join(
+                outputPathBase,
+                entryNameNoExt + ".html"
+              );
 
-              // save the rendered template
+              await mkdir(outputPathBase, { recursive: true });
+
               await limitWriteFile(() => writeFile(outputPath, output));
               return outputPath;
             })
         );
+
+        log("generated HTMX traces for", javaFileName);
 
         // all entries are rendered to HTMX, use step 1 to render index.html
         const firstStepHtml = await readFile(outputFilePaths[0], {
@@ -137,7 +154,14 @@ async function buildTraces(subproject) {
           javaClassName,
           firstStepHtml
         );
-        return writeFile(path.join(outputDir, "index.html"), indexOutput);
+
+        const classDir = path.join(
+          tracesOutputDir,
+          noSolutionsName,
+          javaClassName
+        );
+        await mkdir(classDir, { recursive: true });
+        return writeFile(path.join(classDir, "index.html"), indexOutput);
       })
   );
 }
@@ -176,6 +200,7 @@ function renderTraceStep(
 
   // render the step
   const stepUrl = (n) => stepPrefix + n + ".html";
+
   return ejs.renderFile(
     "build-steps/traces/step.ejs",
     {
@@ -229,4 +254,8 @@ function parseMethodName(methodName) {
   return { methodName, currentLine, startLine, endLine };
 }
 
-export default { shouldConvert, convertFile, convertAll };
+export default {
+  shouldConvert,
+  convertFile: pDebounce(convertFile, 5000),
+  convertAll,
+};
