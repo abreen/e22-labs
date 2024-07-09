@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="<%= prefix %>/css/styles.css" />
+    <script
+      src="https://unpkg.com/htmx.org@2.0.0"
+      integrity="sha384-wS5l5IKJBvK6sPTKa2WZ1js3d947pvWXbPJ1OmWfEuxLgeHcEbjUUA5i9V5ZkpCw"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="<%= prefix %>/">Home</a></li>
+          <li><a href="<%= prefix %>/code">Code</a></li>
+          <li><a href="<%= prefix %>/traces">Traces</a></li>
+        </ul>
+      </nav>
+    </header>
+    <%- content %>
+  </body>
+</html>

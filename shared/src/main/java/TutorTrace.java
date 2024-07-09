@@ -1,5 +1,4 @@
 import java.io.*;
-import java.nio.file.*;
 import java.util.*;
 import java.util.zip.*;
 import java.lang.reflect.Array;
@@ -7,7 +6,6 @@ import com.sun.jdi.*;
 import com.sun.jdi.connect.*;
 import com.sun.jdi.request.*;
 import com.sun.jdi.event.*;
-import static java.nio.file.StandardOpenOption.CREATE;
 import static com.sun.jdi.request.StepRequest.STEP_LINE;
 import static com.sun.jdi.request.StepRequest.STEP_INTO;
 
@@ -23,19 +21,24 @@ public class TutorTrace {
         this.args = args;
     }
 
-    public void traceToFile(String fileName) throws DebuggingFailure, ProgramCrashed {
-        Path tempFile = null;
-        BufferedWriter jsonFileWriter = null;
+    public File traceToFile() throws DebuggingFailure, ProgramCrashed {
+        return traceToFile(targetClass.getName() + ".trace");
+    }
+
+    public File traceToFile(String fileNamePrefix) throws DebuggingFailure, ProgramCrashed {
         VirtualMachine vm = null;
         Thread outputWatcher = null;
         StringBuilder programOutput = new StringBuilder();
-        boolean firstStep = true;
+
+        long stepCount = 0;
+        ZipOutputStream zipOut = null;
+        File zipFile = null;
+        PrintWriter writer = null;
 
         try {
-            tempFile = Files.createTempFile(fileName, "");
-
-            jsonFileWriter = Files.newBufferedWriter(tempFile, CREATE);
-            jsonFileWriter.append("[");
+            zipFile = new File(fileNamePrefix + ".zip");
+            zipOut = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zipFile)));
+            writer = new PrintWriter(zipOut);
 
             vm = connectAndLaunchVirtualMachine(args, targetClass.getName());
 
@@ -55,6 +58,8 @@ public class TutorTrace {
 
                     } else if (event instanceof StepEvent e) {
                         if (shouldSaveStepToFile(e)) {
+                            stepCount++;
+
                             List<StackFrame> stackFrames = e.thread().frames();
                             String currentOutput = programOutput.toString();
 
@@ -62,13 +67,11 @@ public class TutorTrace {
                             Step step = new Step(frames, currentOutput);
 
                             String repr = Json.repr(step);
-                            if (firstStep) {
-                                jsonFileWriter.append(repr);
-                                firstStep = false;
-                            } else {
-                                jsonFileWriter.append("," + System.lineSeparator());
-                                jsonFileWriter.append(repr);
-                            }
+
+                            zipOut.putNextEntry(new ZipEntry(fileNamePrefix + "." + stepCount + ".json"));
+                            writer.append(repr + System.lineSeparator());
+                            writer.flush();
+                            zipOut.closeEntry();
                         }
                     }
 
@@ -79,21 +82,8 @@ public class TutorTrace {
 
         } catch (VMDisconnectedException ignored) {
             try {
-                jsonFileWriter.append("]" + System.lineSeparator());
-                jsonFileWriter.close();
-            } catch (IOException e) {
-                throw new DebuggingFailure(e);
-            }
-
-            try (var fileOut = new FileOutputStream(fileName + ".zip");
-                    var bufferedOut = new BufferedOutputStream(fileOut);
-                    var zipOut = new ZipOutputStream(bufferedOut);
-                    var writer = new OutputStreamWriter(zipOut);
-                    var reader = Files.newBufferedReader(tempFile)) {
-                zipOut.putNextEntry(new ZipEntry(fileName));
-                reader.transferTo(writer);
-                writer.flush();
-                zipOut.closeEntry();
+                writer.close();
+                zipOut.close();
             } catch (IOException e) {
                 throw new DebuggingFailure(e);
             }
@@ -115,6 +105,8 @@ public class TutorTrace {
             }
         } catch (InterruptedException ignored) {
         }
+
+        return zipFile;
     }
 
     private boolean shouldSaveStepToFile(StepEvent event) {
@@ -188,11 +180,11 @@ public class TutorTrace {
     }
 
     private Frame[] toFrameRecords(List<StackFrame> frames) throws AbsentInformationException {
-        Frame[] frameRecords = new Frame[frames.size()];
         StackFrame frameForMain = frames.getLast();
+        Frame[] frameRecords = new Frame[frames.size()];
 
-        {
-            StackFrame frame = frames.getFirst();
+        for (int i = 0; i < frames.size(); i++) {
+            StackFrame frame = frames.get(i);
             Variable[] locals = toVariableRecords(frame, frame.equals(frameForMain));
 
             String className = frame.location().declaringType().name();
@@ -205,18 +197,7 @@ public class TutorTrace {
 
             int lineNumber = frame.location().lineNumber();
 
-            frameRecords[0] = new Frame(className, methodName + ":" + lineNumber + "&" + beginEnd, locals);
-        }
-
-        for (int i = 1; i < frames.size(); i++) {
-            StackFrame frame = frames.get(i);
-
-            String className = frame.location().declaringType().name();
-            String methodName = frame.location().method().name();
-
-            int lineNumber = frame.location().lineNumber();
-
-            frameRecords[i] = new Frame(className, methodName + ":" + lineNumber);
+            frameRecords[i] = new Frame(className, methodName + ":" + lineNumber + "&" + beginEnd, locals);
         }
 
         return frameRecords;
