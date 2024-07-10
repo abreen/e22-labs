@@ -6,8 +6,6 @@ title = Lab Exercises
 
 ## Lab 1
 
-<section class="two-columns">
-
 `ArrayBag`, the `remove()` method, memory, and an `ArrayBag` constructor that
 copies items from another bag. I demonstrated test-driven development (TDD)
 by writing some failing tests before adding a feature.
@@ -19,12 +17,8 @@ by writing some failing tests before adding a feature.
   - [PDF (two slides per page)](<%= prefix %>/slides/lab1.pdf)
 * [`ArrayBag.java`](<%= prefix %>/code/lab1/main/ArrayBag.java.html)
 
-</section>
-
 
 ## Lab 2
-
-<section class="two-columns">
 
 We looked at `removeCapitals()` (a recursive method that removes capital letters
 from a string), the Fibonacci function and its simple recursive implementation,
@@ -44,12 +38,8 @@ the iterative implementation, and finally examined `findSolutions()` in
   - [`ComboSum.java`](<%= prefix %>/code/lab2/main/ComboSum.java.html)
   - [Interactive trace of `ComboSum.java`](<%= prefix %>/traces/lab2/ComboSum/)
 
-</section>
-
 
 ## Lab 3
-
-<section class="two-columns">
 
 Big O notation, matrix multiplication, nested loops, selection sort, insertion
 sort, and quicksort.
@@ -76,11 +66,7 @@ sort, and quicksort.
   - [`Quicksort.java`](<%= prefix %>/code/lab3/main/Quicksort.java.html)
   - [`MergeSort.java`](<%= prefix %>/code/lab3/main/MergeSort.java.html)
 
-</section>
-
 ## Lab 4
-
-<section class="two-columns">
 
 In this recorded lab, we covered merge sort, radix sort, and discussed memory
 diagrams of `StringNode` objects.
@@ -90,8 +76,6 @@ diagrams of `StringNode` objects.
   - [PDF](<%= prefix %>/slides/lab4.pdf)
   - [PDF (two slides per page)](<%= prefix %>/slides/lab4.pdf)
 * [`StringNode.java`](<%= prefix %>/code/lab4/main/Sort.java.html)
-
-</section>
 
 
 [repo]: https://github.com/abreen/e22-labs
