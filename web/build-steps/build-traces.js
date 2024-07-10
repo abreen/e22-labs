@@ -44,13 +44,6 @@ function shouldConvert(relativePath) {
 
 /** Given a path to a .java file that changed, do `gradle run` and generate traces */
 async function convertFile(relativePath) {
-  const { ext } = path.parse(relativePath);
-  if (ext == ".ejs") {
-    // if an EJS template changed, rebuild traces
-    log("EJS template for traces changed, rebuilding traces");
-    return convertAll();
-  }
-
   const subproject = getSubprojectFromPath(relativePath);
 
   log("building Gradle subproject", subproject);
@@ -201,7 +194,7 @@ function renderTraceStep(
   const stepUrl = (n) => stepPrefix + n + ".html";
 
   return ejs.renderFile(
-    "build-steps/traces/step.ejs",
+    "build-steps/ejs/step.ejs",
     {
       ...data,
       output: showInvisibles(data.output),
@@ -226,14 +219,12 @@ function showInvisibles(str) {
   return str.replaceAll(/\n/g, '<span class="invis">\\n</span>\n');
 }
 
-function renderIndexPage(noSolutionsName, className, firstStepHtml) {
-  const html = ejs.render(
-    `<p>This is a trace of the
-    <code><%= className %></code> class in the
-    <code><%= project %></code> project.</p>
-    <form class="trace"><%- firstStepHtml %></form>`,
-    { className, project: noSolutionsName, firstStepHtml }
-  );
+async function renderIndexPage(noSolutionsName, className, firstStepHtml) {
+  const html = await ejs.renderFile("build-steps/ejs/trace.ejs", {
+    className,
+    project: noSolutionsName,
+    firstStepHtml,
+  });
 
   return ejs.renderFile(
     path.join(config.markdownit.inputDir, "template.ejs"),
@@ -270,7 +261,7 @@ function parseMethodName(methodName) {
   return { methodName, currentLine, startLine, endLine };
 }
 
-function getSubprojectFromPath(filePath) {
+export function getSubprojectFromPath(filePath) {
   const rel = path.relative(config.traces.gradleDir, filePath);
   return rel.split(path.sep)[0];
 }

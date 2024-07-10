@@ -15,19 +15,17 @@ function shouldConvert(relativePath) {
 }
 
 async function convertFile(relativePath) {
-  const noExt = path.parse(relativePath).name;
+  const fromSlides = path.relative(config.marpit.slidesDir, relativePath);
+  const { name } = path.parse(fromSlides);
 
-  // generate the HTML file
-  await runMarp(relativePath, "--output", slidesOutputDir);
+  const htmlPath = path.join(slidesOutputDir, name + ".html");
+  const pdfPath = path.join(slidesOutputDir, name + ".pdf");
 
-  // generate the PDF file
-  await runMarp(relativePath, "--pdf", "--output", slidesOutputDir);
+  await runMarp(relativePath, "--output", htmlPath);
+  await runMarp(relativePath, "--pdf", "--output", pdfPath);
 
-  // get the path to the PDF we just generated
-  const pdfFilePath = path.join(slidesOutputDir, noExt + ".pdf");
-  const twoUpFilePath = path.join(slidesOutputDir, noExt + "-2up.pdf");
-
-  return createTwoUpPdf(pdfFilePath, twoUpFilePath);
+  const pdf2UpPath = path.join(slidesOutputDir, name + "-2up.pdf");
+  return createTwoUpPdf(pdfPath, pdf2UpPath);
 }
 
 function convertAll() {

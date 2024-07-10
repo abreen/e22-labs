@@ -327,6 +327,7 @@ button:active {
   background: whitesmoke;
   padding: 0.5em 1rem;
   max-width: fit-content;
+  min-width: 300px;
 }
 
 .trace .output:before {
@@ -337,6 +338,7 @@ button:active {
 
 .trace .invis {
   color: gray;
+  user-select: none;
 }
 
 @media only screen and (min-width: 765px) {
@@ -387,7 +389,6 @@ button:active {
 .line {
   display: inline-block;
   line-height: 1.4;
-  width: 100%;
 }
 
 .line.highlight {

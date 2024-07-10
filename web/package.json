@@ -71,18 +71,11 @@
     },
     "code": {
       "inputDirs": [
-        {
-          "from": "../lab1-solution/src",
-          "to": "code/lab1"
-        },
-        {
-          "from": "../lab2-solution/src",
-          "to": "code/lab2"
-        },
-        {
-          "from": "../lab3-solution/src",
-          "to": "code/lab3"
-        }
+        "../lab1-solution",
+        "../lab2-solution",
+        "../lab3-solution",
+        "../lab4-solution",
+        "../lab5-solution"
       ]
     }
   }

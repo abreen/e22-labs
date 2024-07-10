@@ -9,7 +9,6 @@ import markdownit from "markdown-it";
 import markdownItFrontMatter from "markdown-it-front-matter";
 import ini from "ini";
 import { log, config, isFileInDir, makeConvertAll } from "../utils.cjs";
-import traces from "./build-traces.js";
 
 const limitReadFile = pLimit(5);
 
@@ -50,19 +49,12 @@ function markdownitRender(...args) {
 function shouldConvert(relativePath) {
   const { ext } = path.parse(relativePath);
   return (
-    isTemplateFile(relativePath) ||
-    ([".md", ".markdown"].includes(ext) &&
-      isFileInDir(relativePath, config.markdownit.inputDir))
+    [".md", ".markdown"].includes(ext) &&
+    isFileInDir(relativePath, config.markdownit.inputDir)
   );
 }
 
 async function convertFile(relativePath) {
-  if (isTemplateFile(relativePath)) {
-    // rebuild the entire site if the template file changes
-    log("template file changed, rebuilding site");
-    return Promise.all([convertAll(), traces.convertAll()]);
-  }
-
   // treat the .md file like an EJS template, then render it
   const pageEjs = await limitReadFile(() =>
     readFile(relativePath, { encoding: "utf8" })
@@ -71,16 +63,14 @@ async function convertFile(relativePath) {
   const pageHtml = markdownitRender(pageMarkdown);
 
   // insert the HTML into the template file
-  const templateEjs = await readFile(
+  const html = await ejs.renderFile(
     path.join(config.markdownit.inputDir, "template.ejs"),
-    { encoding: "utf8" }
+    {
+      ...(lastParsedFrontMatter || { title: "" }),
+      content: pageHtml,
+      prefix: config.urlPrefix,
+    }
   );
-
-  const html = ejs.render(templateEjs, {
-    ...(lastParsedFrontMatter || { title: "" }),
-    content: pageHtml,
-    prefix: config.urlPrefix,
-  });
 
   // save the file
   const { dir, name } = path.parse(relativePath);
@@ -97,16 +87,12 @@ async function convertFile(relativePath) {
   return writeFile(path.join(config.outputDir, outputPath), html);
 }
 
-function isTemplateFile(filePath) {
-  return path.relative(config.markdownit.inputDir, filePath) == "template.ejs";
-}
-
-const convertAll = makeConvertAll(config.markdownit.inputDir, convertFile, {
-  skip: ["template.ejs"],
-});
-
 export default {
   shouldConvert,
   convertFile: pDebounce(convertFile, 500),
-  convertAll,
+  convertAll: makeConvertAll(
+    shouldConvert,
+    convertFile,
+    config.markdownit.inputDir
+  ),
 };
