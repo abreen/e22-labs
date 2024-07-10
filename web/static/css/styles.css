@@ -31,7 +31,7 @@
   --color-prettylights-syntax-sublimelinter-gutter-mark: #8c959f;
   --color-highlighted-line: lightyellow;
   --color-range-track: whitesmoke;
-  --color-range-thumb: orange;
+  --color-range-thumb: goldenrod;
   --height-range-thumb: 32px;
   --width-range-thumb: 4px;
   --height-range-track: 32px;
@@ -303,7 +303,7 @@ button:active {
 
 .trace button {
   flex-grow: 1;
-  padding: 0.5rem 0.5rem;
+  padding: 0.5rem 0;
 }
 
 .trace .timeline {
@@ -325,12 +325,12 @@ button:active {
 
 .trace .output {
   background: whitesmoke;
-  padding: .5em 1rem;
+  padding: 0.5em 1rem;
   max-width: fit-content;
 }
 
 .trace .output:before {
-  content: 'Program output';
+  content: "Program output";
   display: block;
   color: gray;
 }
@@ -366,12 +366,7 @@ button:active {
     column-span: all;
   }
 
-  .trace .source-and-stack {
-    flex-direction: row;
-  }
-
   .trace .stack {
-
   }
 
   .trace .source,
@@ -392,6 +387,7 @@ button:active {
 .line {
   display: inline-block;
   line-height: 1.4;
+  width: 100%;
 }
 
 .line.highlight {
