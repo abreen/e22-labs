@@ -53,18 +53,18 @@ sort, and quicksort.
   - [`SelectionSort.java`](<%= prefix %>/traces/lab3/SelectionSort/)
   - [`InsertionSort.java`](<%= prefix %>/traces/lab3/InsertionSort/)
   - [`ShellSort.java`](<%= prefix %>/traces/lab3/ShellSort/)
-  - [`Quicksort.java`](<%= prefix %>/traces/lab3/Quicksort/)
-  - [`MergeSort.java`](<%= prefix %>/traces/lab3/MergeSort/)
+  - [`Quicksort.java`](<%= prefix %>/traces/lab4/Quicksort/)
+  - [`MergeSort.java`](<%= prefix %>/traces/lab4/MergeSort/)
 * [`Matrix.java`](<%= prefix %>/code/lab3/main/Matrix.java.html)
 * [`NestedLoops.java`](<%= prefix %>/code/lab3/main/NestedLoops.java.html)
   - [`NestedLoopsTest.java`](<%= prefix %>/code/lab3/main/NestedLoopsTest.java.html)
-* [`Sort.java`](<%= prefix %>/code/lab3/main/Sort.java.html)
+* [`Sort.java`](<%= prefix %>/code/common/main/Sort.java.html)
   - [`BubbleSort.java`](<%= prefix %>/code/lab3/main/BubbleSort.java.html)
   - [`SelectionSort.java`](<%= prefix %>/code/lab3/main/SelectionSort.java.html)
   - [`InsertionSort.java`](<%= prefix %>/code/lab3/main/InsertionSort.java.html)
   - [`ShellSort.java`](<%= prefix %>/code/lab3/main/ShellSort.java.html)
-  - [`Quicksort.java`](<%= prefix %>/code/lab3/main/Quicksort.java.html)
-  - [`MergeSort.java`](<%= prefix %>/code/lab3/main/MergeSort.java.html)
+  - [`Quicksort.java`](<%= prefix %>/code/lab4/main/Quicksort.java.html)
+  - [`MergeSort.java`](<%= prefix %>/code/lab4/main/MergeSort.java.html)
 
 ## Lab 4
 
@@ -75,7 +75,22 @@ diagrams of `StringNode` objects.
   - [HTML slides](<%= prefix %>/slides/lab4.html)
   - [PDF](<%= prefix %>/slides/lab4.pdf)
   - [PDF (two slides per page)](<%= prefix %>/slides/lab4-2up.pdf)
-* [`StringNode.java`](<%= prefix %>/code/lab4/main/Sort.java.html)
+* [`Sort.java`](<%= prefix %>/code/common/main/Sort.java.html)
+  - [`MergeSort.java`](<%= prefix %>/code/lab4/main/MergeSort.java.html)
+* [`StringNode.java`](<%= prefix %>/code/lab5/main/StringNode.java.html)
+
+## Lab 5
+
+The `StringNode` class (a class that implements a linked list node), the
+`print()` method, the recursive `numOccur()` method, `numOccurIterative()`,
+tracing the recursive `read()` method, and `readIterative()`.
+
+* Presentation slides
+  - [HTML slides](<%= prefix %>/slides/lab5.html)
+  - [PDF](<%= prefix %>/slides/lab5.pdf)
+  - [PDF (two slides per page)](<%= prefix %>/slides/lab5-2up.pdf)
+* [`StringNode.java`](<%= prefix %>/code/lab5/main/StringNode.java.html)
+  - [`StringNodeTest.java`](<%= prefix %>/code/lab5/test/StringNodeTest.java.html)
 
 
 [repo]: https://github.com/abreen/e22-labs

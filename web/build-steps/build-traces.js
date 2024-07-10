@@ -204,6 +204,7 @@ function renderTraceStep(
     "build-steps/traces/step.ejs",
     {
       ...data,
+      output: showInvisibles(data.output),
       stack: data.stack.map((frame) => ({
         ...frame,
         ...parseMethodName(frame.methodName),
@@ -219,6 +220,10 @@ function renderTraceStep(
     },
     { async: true }
   );
+}
+
+function showInvisibles(str) {
+  return str.replaceAll(/\n/g, '<span class="invis">\\n</span>\n');
 }
 
 function renderIndexPage(noSolutionsName, className, firstStepHtml) {

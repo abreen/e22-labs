@@ -316,17 +316,27 @@ button:active {
   font-size: 0.8rem;
 }
 
-.trace .source-and-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
 .trace .source {
   margin: 0;
   overflow-x: auto;
   overflow-y: hidden;
   line-height: 1;
+}
+
+.trace .output {
+  background: whitesmoke;
+  padding: .5em 1rem;
+  max-width: fit-content;
+}
+
+.trace .output:before {
+  content: 'Program output';
+  display: block;
+  color: gray;
+}
+
+.trace .invis {
+  color: gray;
 }
 
 @media only screen and (min-width: 765px) {
@@ -361,7 +371,7 @@ button:active {
   }
 
   .trace .stack {
-    max-width: min-content;
+
   }
 
   .trace .source,

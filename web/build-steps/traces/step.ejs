@@ -53,11 +53,11 @@
   value="<%= stepNumber %>"
 >
 
-<div class="source-and-stack">
-  <pre class="source">
+<pre class="source">
 <%- sourceCode %>
-  </pre>
+</pre>
 
+<div class="stack-and-heap">
   <ol class="stack">
     <% stack.forEach(({currentLine, className, methodName, visible}) => { %>
     <li class="frame">
@@ -77,3 +77,7 @@
     <% }); %>
   </ol>
 </div>
+
+<pre class="output">
+<%- output %>
+</pre>
