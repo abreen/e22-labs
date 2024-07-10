@@ -32,10 +32,10 @@
 
   --color-highlighted-line: gold;
   --color-range-track: whitesmoke;
-  --color-range-thumb: steelblue;
+  --color-range-thumb: goldenrod;
   --height-range-thumb: 32px;
-  --width-range-thumb: 8px;
-  --height-range-track: 24px;
+  --width-range-thumb: 4px;
+  --height-range-track: 32px;
 
   --scrollbar-track: whitesmoke;
   --scrollbar-thumb: seagreen;
@@ -276,7 +276,7 @@ button {
   border-width: 4px;
   border-color: steelblue;
   font-size: 1rem;
-  padding: .3rem .5rem;
+  padding: 0.3rem 0.5rem;
 }
 
 button:active {
@@ -292,22 +292,29 @@ button:active {
 
 .trace {
   max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  row-gap: .5rem;
 }
 
-.trace .controls {
+.trace .buttons {
   display: flex;
   gap: 10px;
-  margin-bottom: 12px;
 }
 
-.trace .controls button {
+.trace button {
   flex-grow: 1;
-  padding: .5rem .5rem;
+  padding: 0.5rem 0.5rem;
 }
 
 .trace .timeline {
   flex-grow: 1;
-  padding: 12px 0;
+}
+
+.trace .step {
+  margin: 0;
+  text-align: center;
+  font-size: .8rem;
 }
 
 .trace .source-and-stack {
@@ -322,13 +329,12 @@ button:active {
   overflow-x: auto;
 }
 
-@media only screen and (min-width: 665px) {
+@media only screen and (min-width: 765px) {
   body {
-
   }
 
   main {
-    width: 650px;
+    width: 750px;
     margin: 0 auto;
     border-radius: 1em 1em 0 0;
   }
@@ -337,6 +343,16 @@ button:active {
     position: sticky;
     top: 0;
     background: seagreen;
+  }
+
+  .two-columns {
+    column-count: 2;
+    column-gap: 30px;
+    column-rule: seagreen solid;
+  }
+
+  .two-columns ul {
+    column-span: all;
   }
 
   .trace .source-and-stack {
@@ -352,11 +368,9 @@ button:active {
   }
 
   .trace .controls button {
-
   }
 
   .trace .controls {
-
   }
 
   .trace .vars {
@@ -453,7 +467,6 @@ html {
 }
 
 html::-webkit-scrollbar {
-
 }
 
 html::-webkit-scrollbar-track {
@@ -477,7 +490,27 @@ main > h3,
 main > h4,
 main > h5,
 main > h6 {
+  margin: 0;
+}
+
+h1 + p,
+h2 + p,
+h3 + p,
+h4 + p,
+h5 + p,
+h6 + p {
   margin-top: 0;
 }
 
-footer {}
+main > section,
+main > section,
+main > section,
+main > section,
+main > section,
+main > section {
+  margin: 0;
+}
+
+section > p {
+  margin-top: 0;
+}

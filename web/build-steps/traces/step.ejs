@@ -1,4 +1,4 @@
-<div class="controls">
+<div class="buttons">
   <button
     class="input <%= stepNumber == 1 ? 'disabled' : '' %>"
     hx-get="<%= firstStepUrl %>"
@@ -37,21 +37,21 @@
   </button>
 </div>
 
-<div class="controls">
-  <input
-    class="input timeline"
-    hx-get="<%= stepPrefix %>"
-    hx-on::config-request="event.detail.path += this.value + '.html'"
-    hx-target="closest form"
-    hx-swap="morph:innerHTML"
-    hx-disabled-elt="form .input"
-    type="range"
-    min="1"
-    max="<%= numSteps %>"
-    step="1"
-    value="<%= stepNumber %>"
-  >
-</div>
+<p class="step">Step <%= stepNumber %> of <%= numSteps %></p>
+
+<input
+  class="input timeline"
+  hx-get="<%= stepPrefix %>"
+  hx-on::config-request="event.detail.path += this.value + '.html'"
+  hx-target="closest form"
+  hx-swap="morph:innerHTML"
+  hx-disabled-elt="form .input"
+  type="range"
+  min="1"
+  max="<%= numSteps %>"
+  step="1"
+  value="<%= stepNumber %>"
+>
 
 <div class="source-and-stack">
   <pre class="source">
