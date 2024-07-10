@@ -175,7 +175,7 @@ body {
 
 nav {
   background: seagreen;
-  transition: border-radius .25s ease;
+  transition: border-radius 0.25s ease;
 }
 
 main {
@@ -286,8 +286,8 @@ button:active {
 }
 
 .trace {
-    display: inline-block;
-    /* width: 100%; */
+  display: inline-block;
+  /* width: 100%; */
 }
 
 .trace .buttons {
@@ -357,7 +357,9 @@ button:active {
     column-rule: seagreen solid;
   }
 
-  .two-columns ul, .two-columns h1, .two-columns h2 {
+  .two-columns ul,
+  .two-columns h1,
+  .two-columns h2 {
     column-span: all;
   }
 
@@ -376,7 +378,8 @@ button:active {
     overflow-y: auto;
   }
 
-  .trace .stack, .trace .heap {
+  .trace .stack,
+  .trace .heap {
     flex: 1;
   }
 
@@ -385,7 +388,8 @@ button:active {
     height: 30rem;
   }
 
-  .trace .source, .trace .output {
+  .trace .source,
+  .trace .output {
     flex: 1;
   }
 
