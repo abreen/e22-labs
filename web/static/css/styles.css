@@ -179,12 +179,12 @@ nav {
 }
 
 main {
-  max-width: 2048px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   padding: 1rem;
+}
+
+section {
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 a {
@@ -286,18 +286,22 @@ button:active {
 }
 
 .trace {
-  display: inline-block;
-  /* width: 100%; */
+  width: 100%;
 }
 
 .trace .buttons {
   display: flex;
-  gap: 10px;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .trace button {
   flex-grow: 1;
   padding: 0.5rem 0;
+}
+
+.trace .controls {
+  padding: 1rem 0;
 }
 
 .trace .timeline {
@@ -312,6 +316,20 @@ button:active {
   content: attr(data-label);
   position: absolute;
   color: gray;
+}
+
+.trace .stack-and-heap {
+  display: flex;
+  height: 20rem;
+}
+
+.trace .stack {
+  overflow-y: auto;
+}
+
+.trace .code-and-output {
+  display: flex;
+  flex-direction: column;
 }
 
 .trace .source {
@@ -338,10 +356,24 @@ button:active {
   user-select: none;
 }
 
-@media only screen and (min-width: 965px) {
+@media only screen and (min-width: 550px) {
+  .tiny-column {
+    width: 500px;
+    margin: 0 auto;
+  }
+}
+
+@media only screen and (min-width: 765px) {
+  .column, .trace .controls {
+    width: 750px;
+    margin: 0 auto;
+  }
+}
+
+@media only screen and (min-width: 765px) {
   section,
   nav {
-    width: 950px;
+    width: 750px;
     margin: 0 auto;
   }
 
@@ -363,8 +395,8 @@ button:active {
     column-span: all;
   }
 
+
   .trace .stack {
-    overflow-y: auto;
     min-width: 250px;
   }
 
@@ -372,25 +404,21 @@ button:active {
   .trace .stack {
   }
 
-  .trace .stack-and-heap {
-    display: flex;
-    height: 30rem;
-    overflow-y: auto;
-  }
-
   .trace .stack,
   .trace .heap {
     flex: 1;
   }
-
+  
   .trace .code-and-output {
-    display: flex;
     height: 30rem;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
   }
 
   .trace .source,
   .trace .output {
-    flex: 1;
+    /* flex: 1; */
   }
 
   .trace .controls button {
@@ -398,15 +426,13 @@ button:active {
 
   .trace .controls {
   }
-
-  .trace .vars {
-    max-width: 50vw;
-  }
 }
 
 .line {
   display: inline-block;
   line-height: 1.4;
+  background: whitesmoke;
+  width: 100%;
 }
 
 .line.highlight {
@@ -510,13 +536,8 @@ html {
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
-main > h1,
-main > h2,
-main > h3,
-main > h4,
-main > h5,
-main > h6 {
-  margin: 0;
+h1, h2, h3, h4, h5, h6 {
+  text-align: center;
 }
 
 h1 + p,
@@ -526,15 +547,6 @@ h4 + p,
 h5 + p,
 h6 + p {
   margin-top: 0;
-}
-
-main > section,
-main > section,
-main > section,
-main > section,
-main > section,
-main > section {
-  margin: 0;
 }
 
 section > p {

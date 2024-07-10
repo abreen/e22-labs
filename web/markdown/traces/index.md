@@ -6,9 +6,15 @@ title = Interactive Traces of Algorithms
 
 ## Recursive backtracking
 
-- [`BubbleSort.java`](<%= prefix %>/traces/lab2/ComboSum/)
+<section class="tiny-column">
+
+- [`ComboSum.java`](<%= prefix %>/traces/lab2/ComboSum/)
+
+</section>
 
 ## Sorting algorithms
+
+<section class="tiny-column">
 
 - [`BubbleSort.java`](<%= prefix %>/traces/lab3/BubbleSort/)
 - [`SelectionSort.java`](<%= prefix %>/traces/lab3/SelectionSort/)
@@ -17,6 +23,12 @@ title = Interactive Traces of Algorithms
 - [`Quicksort.java`](<%= prefix %>/traces/lab4/Quicksort/)
 - [`MergeSort.java`](<%= prefix %>/traces/lab4/MergeSort/)
 
+</section>
+
 ## Linked Lists
 
+<section class="tiny-column">
+
 - [`StringNode.java`](<%= prefix %>/traces/lab5/StringNode/)
+
+</section>
