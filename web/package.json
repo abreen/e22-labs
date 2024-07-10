@@ -40,7 +40,8 @@
       "gradleSubprojects": [
         "lab2-solution",
         "lab3-solution",
-        "lab4-solution"
+        "lab4-solution",
+        "lab5-solution"
       ]
     },
     "marpit": {
@@ -71,6 +72,7 @@
     },
     "code": {
       "inputDirs": [
+        "../common",
         "../lab1-solution",
         "../lab2-solution",
         "../lab3-solution",

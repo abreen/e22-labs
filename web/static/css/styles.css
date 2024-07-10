@@ -173,9 +173,13 @@ body {
   line-height: 1.4;
 }
 
-nav {
+body > nav {
   background: seagreen;
   transition: border-radius 0.25s ease;
+}
+
+body > nav a {
+  color: white;
 }
 
 main {
@@ -195,8 +199,14 @@ a:hover {
   text-decoration: underline;
 }
 
-nav a {
-  color: white;
+pre {
+  background: whitesmoke;
+  overflow-x: auto;
+  padding: 1rem;
+}
+
+.source-code {
+  border-radius: 1rem;
 }
 
 .trace .timeline {
@@ -364,7 +374,8 @@ button:active {
 }
 
 @media only screen and (min-width: 765px) {
-  .column, .trace .controls {
+  .column,
+  .trace .controls {
     width: 750px;
     margin: 0 auto;
   }
@@ -372,12 +383,12 @@ button:active {
 
 @media only screen and (min-width: 765px) {
   section,
-  nav {
+  body > nav {
     width: 750px;
     margin: 0 auto;
   }
 
-  nav {
+  body > nav {
     position: sticky;
     top: 0;
     border-radius: 0 0 1rem 1rem;
@@ -395,7 +406,6 @@ button:active {
     column-span: all;
   }
 
-
   .trace .stack {
     min-width: 250px;
   }
@@ -408,7 +418,7 @@ button:active {
   .trace .heap {
     flex: 1;
   }
-  
+
   .trace .code-and-output {
     height: 30rem;
     flex-direction: row;
@@ -431,7 +441,6 @@ button:active {
 .line {
   display: inline-block;
   line-height: 1.4;
-  background: whitesmoke;
   width: 100%;
 }
 
@@ -507,7 +516,7 @@ button:active {
 }
 
 nav {
-  padding: 1rem 0;
+  padding: 0.5rem 0;
   margin: 0 auto;
   display: flex;
   justify-content: space-evenly;
@@ -536,7 +545,12 @@ html {
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   text-align: center;
 }
 

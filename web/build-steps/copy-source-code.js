@@ -23,7 +23,10 @@ function shouldConvert(relativePath) {
   }
 
   const subproject = getSubprojectFromPath(relativePath);
-  return subproject != null && subproject.endsWith("-solution");
+  return (
+    (subproject != null && subproject.endsWith("-solution")) ||
+    subproject == "common"
+  );
 }
 
 async function convertFile(relativePath) {
@@ -46,28 +49,68 @@ async function convertFile(relativePath) {
     mainOrTest,
     restOfPath
   );
-
   await mkdir(path.parse(outputPath).dir, { recursive: true });
+
+  const rawOutputPath = path.join(
+    config.outputDir,
+    "code",
+    "raw",
+    subprojectNoSolution,
+    mainOrTest,
+    restOfPath
+  );
+  await mkdir(path.parse(rawOutputPath).dir, { recursive: true });
+
+  const rawUrl = [
+    config.prefix,
+    "code",
+    "raw",
+    subprojectNoSolution,
+    mainOrTest,
+    restOfPath,
+  ].join("/");
+
+  // https://github.com/abreen/e22-labs/blob/main/lab2-solution/src/main/java/App.java
+  // https://github.com/abreen/e22-labs/blob/lab3-solution/src/test/java/SortTest.java
+  const gitHubUrl = [
+    "https://github.com/abreen/e22-labs/blob/main",
+    relativePath.split(path.sep).slice(1).join("/"),
+  ].join("/");
+  console.log("githubUrl", gitHubUrl);
 
   const input = await readFile(relativePath, { encoding: "utf8" });
 
   const html = await renderSourceCodePage(
     restOfPath,
+    rawUrl,
+    gitHubUrl,
     subprojectNoSolution,
     input
   );
 
   log(`java => html: ${relativePath} => ${outputPath + ".html"}`);
-  return writeFile(outputPath + ".html", html);
+  await writeFile(outputPath + ".html", html);
+
+  // also copy the original .java file to "code/raw/"
+  log(`java => java: ${relativePath} => ${rawOutputPath}`);
+  return writeFile(rawOutputPath, input);
 }
 
-async function renderSourceCodePage(fileName, subproject, sourceCode) {
+async function renderSourceCodePage(
+  fileName,
+  fileUrl,
+  gitHubUrl,
+  subproject,
+  sourceCode
+) {
   const tree = starryNight.highlight(sourceCode, starryNightJavaScope);
   gutter2(tree);
   const highlightedCode = toHtml(tree);
 
   const pageHtml = await ejs.renderFile("build-steps/ejs/source-code.ejs", {
     fileName,
+    fileUrl,
+    gitHubUrl,
     project: subproject,
     sourceCode: highlightedCode,
   });
