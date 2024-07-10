@@ -14,7 +14,7 @@ by writing some failing tests before adding a feature.
 * Presentation slides
   - [HTML slides](<%= prefix %>/slides/lab1.html)
   - [PDF](<%= prefix %>/slides/lab1.pdf)
-  - [PDF (two slides per page)](<%= prefix %>/slides/lab1.pdf)
+  - [PDF (two slides per page)](<%= prefix %>/slides/lab1-2up.pdf)
 * [`ArrayBag.java`](<%= prefix %>/code/lab1/main/ArrayBag.java.html)
 
 
@@ -28,7 +28,7 @@ the iterative implementation, and finally examined `findSolutions()` in
 * Presentation slides
   - [HTML slides](<%= prefix %>/slides/lab2.html)
   - [PDF](<%= prefix %>/slides/lab2.pdf)
-  - [PDF (two slides per page)](<%= prefix %>/slides/lab2.pdf)
+  - [PDF (two slides per page)](<%= prefix %>/slides/lab2-2up.pdf)
 * [`IntRecursion.java`](<%= prefix %>/code/lab2/main/IntRecursion.java.html)
   - [`IntRecursionTest.java`](<%= prefix %>/code/lab2/test/IntRecursionTest.java.html)
 * [`StringRecursion.java`](<%= prefix %>/code/lab2/main/StringRecursion.java.html)
@@ -47,7 +47,7 @@ sort, and quicksort.
 * Presentation slides
   - [HTML slides](<%= prefix %>/slides/lab3.html)
   - [PDF](<%= prefix %>/slides/lab3.pdf)
-  - [PDF (two slides per page)](<%= prefix %>/slides/lab3.pdf)
+  - [PDF (two slides per page)](<%= prefix %>/slides/lab3-2up.pdf)
 * Interactive traces
   - [`BubbleSort.java`](<%= prefix %>/traces/lab3/BubbleSort/)
   - [`SelectionSort.java`](<%= prefix %>/traces/lab3/SelectionSort/)
@@ -74,7 +74,7 @@ diagrams of `StringNode` objects.
 * Presentation slides
   - [HTML slides](<%= prefix %>/slides/lab4.html)
   - [PDF](<%= prefix %>/slides/lab4.pdf)
-  - [PDF (two slides per page)](<%= prefix %>/slides/lab4.pdf)
+  - [PDF (two slides per page)](<%= prefix %>/slides/lab4-2up.pdf)
 * [`StringNode.java`](<%= prefix %>/code/lab4/main/Sort.java.html)
 
 
