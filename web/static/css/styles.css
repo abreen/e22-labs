@@ -200,7 +200,7 @@ nav a {
 }
 
 main {
-  transition: border-radius .25s ease;
+  transition: border-radius 0.25s ease;
   box-sizing: border-box;
   padding: 2em;
 }
@@ -295,7 +295,7 @@ button:active {
   max-height: 90vh;
   display: flex;
   flex-direction: column;
-  row-gap: .5rem;
+  row-gap: 0.5rem;
 }
 
 .trace .buttons {
@@ -315,7 +315,7 @@ button:active {
 .trace .step {
   margin: 0;
   text-align: center;
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 
 .trace .source-and-stack {
@@ -328,10 +328,12 @@ button:active {
   margin: 0;
   border-radius: 10px;
   overflow-x: auto;
+  font-size: 0.8rem;
 }
 
 @media only screen and (min-width: 765px) {
-  main, nav {
+  main,
+  nav {
     width: 750px;
     margin: 0 auto;
   }
