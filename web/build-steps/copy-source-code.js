@@ -5,7 +5,7 @@ import pDebounce from "p-debounce";
 import { createStarryNight } from "@wooorm/starry-night";
 import sourceJava from "@wooorm/starry-night/source.java";
 import { toHtml } from "hast-util-to-html";
-import { log, config, isFileInDir, makeConvertAll } from "../utils.cjs";
+import { log, debug, config, isFileInDir, makeConvertAll } from "../utils.cjs";
 import { getSubprojectFromPath } from "./build-traces.js";
 import { gutter2 } from "./hast-util-starry-night-gutter.js";
 
@@ -28,7 +28,9 @@ function shouldConvert(relativePath) {
 
 async function convertFile(relativePath) {
   // "lab1-solution/src/main/java/ArrayBag.java"
-  const relativeToGradle = path.relative(config.gradleDir, relativePath);
+  const relativeToGradle = path.relative(config.traces.gradleDir, relativePath);
+  debug("relativeToGradle", relativeToGradle);
+
   const parts = relativeToGradle.split(path.sep);
 
   const [subproject, mainOrTest] = [parts[0], parts[2]];
@@ -49,7 +51,11 @@ async function convertFile(relativePath) {
 
   const input = await readFile(relativePath, { encoding: "utf8" });
 
-  const html = await renderSourceCodePage(restOfPath, subproject, input);
+  const html = await renderSourceCodePage(
+    restOfPath,
+    subprojectNoSolution,
+    input
+  );
 
   log(`java => html: ${relativePath} => ${outputPath + ".html"}`);
   return writeFile(outputPath + ".html", html);

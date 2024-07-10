@@ -171,18 +171,20 @@ body {
     "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol";
   line-height: 1.4;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
 }
 
-html,
-body {
+nav {
   background: seagreen;
+  transition: border-radius .25s ease;
 }
 
 main {
-  background: white;
+  max-width: 2048px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 1em;
 }
 
 a {
@@ -195,12 +197,6 @@ a:hover {
 
 nav a {
   color: white;
-}
-
-main {
-  transition: border-radius 0.25s ease;
-  box-sizing: border-box;
-  padding: 2em;
 }
 
 .trace .timeline {
@@ -217,7 +213,7 @@ main {
 .trace .timeline::-webkit-slider-runnable-track {
   background-color: var(--color-range-track);
   border-radius: 0px;
-  height: var(--height-range-track);
+  height: var(--height-range-thumb);
 }
 
 .trace .timeline::-webkit-slider-thumb {
@@ -290,10 +286,8 @@ button:active {
 }
 
 .trace {
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  row-gap: 0.5rem;
+    display: inline-block;
+    /* width: 100%; */
 }
 
 .trace .buttons {
@@ -307,20 +301,23 @@ button:active {
 }
 
 .trace .timeline {
-  flex-grow: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
 
-.trace .step {
-  margin: 0;
-  text-align: center;
-  font-size: 0.8rem;
+.trace .timeline:before {
+  content: attr(data-label);
+  position: absolute;
+  color: gray;
 }
 
 .trace .source {
   margin: 0;
-  overflow-x: auto;
-  overflow-y: hidden;
-  line-height: 1;
+  overflow: hidden;
+  display: block;
 }
 
 .trace .output {
@@ -341,21 +338,17 @@ button:active {
   user-select: none;
 }
 
-@media only screen and (min-width: 765px) {
-  main,
+@media only screen and (min-width: 965px) {
+  section,
   nav {
-    width: 750px;
+    width: 950px;
     margin: 0 auto;
-  }
-
-  main {
-    border-radius: 2em 2em 0 0;
   }
 
   nav {
     position: sticky;
     top: 0;
-    background: seagreen;
+    border-radius: 0 0 1em 1em;
   }
 
   .two-columns {
@@ -364,15 +357,36 @@ button:active {
     column-rule: seagreen solid;
   }
 
-  .two-columns ul {
+  .two-columns ul, .two-columns h1, .two-columns h2 {
     column-span: all;
   }
 
   .trace .stack {
+    overflow-y: auto;
+    min-width: 250px;
   }
 
   .trace .source,
   .trace .stack {
+  }
+
+  .trace .stack-and-heap {
+    display: flex;
+    height: 30rem;
+    overflow-y: auto;
+  }
+
+  .trace .stack, .trace .heap {
+    flex: 1;
+  }
+
+  .trace .code-and-output {
+    display: flex;
+    height: 30rem;
+  }
+
+  .trace .source, .trace .output {
+    flex: 1;
   }
 
   .trace .controls button {
@@ -408,7 +422,7 @@ button:active {
   color: goldenrod;
 }
 
-.stack {
+.trace .stack {
   font-family: monospace;
   display: flex;
   flex-direction: column;
@@ -418,6 +432,7 @@ button:active {
   padding: 0;
   margin: 0;
   list-style-type: none;
+  max-width: max-content;
 }
 
 .frame:first-child {
@@ -463,7 +478,7 @@ button:active {
 
 nav {
   padding: 1rem 0;
-  list-style-type: none;
+  margin: 0 auto;
   display: flex;
   justify-content: space-evenly;
 }

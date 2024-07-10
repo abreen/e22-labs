@@ -28,7 +28,7 @@
     }
   },
   "scripts": {
-    "build": "node index.js",
+    "build": "node index.js --debug",
     "watch": "node index.js --watch",
     "clean": "rm -rf ${OUTPUT_DIR:-$npm_package_config_outputDir}"
   },

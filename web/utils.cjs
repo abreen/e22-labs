@@ -71,15 +71,19 @@ function debug(...args) {
   log(...args);
 }
 
+/** Return true if any part of the path starts with a dot (except '.' and '..') */
 function fileIsHidden(filePath) {
+  const startsWithDot = (s) => s[0] == ".";
   return (
     path
       .normalize(filePath)
       .split(path.sep)
-      .filter((part) => part[0] == ".").length > 0
+      .filter((part) => part != "." && part != "..")
+      .filter(startsWithDot).length > 0
   );
 }
 
+/** The core function for ignoring paths, used by the watcher & makeConvertAll() */
 function ignorePath(dirOrFilePath) {
   return (
     fileIsHidden(dirOrFilePath) ||
@@ -87,9 +91,11 @@ function ignorePath(dirOrFilePath) {
   );
 }
 
+/** Create a convertAll() function by iterating through files in the input dirs */
 function makeConvertAll(shouldConvert, convertFile, ...inputDirs) {
-  return () =>
-    Promise.all(
+  return () => {
+    debug("in synthetic convertAll for dirs", inputDirs);
+    return Promise.all(
       inputDirs.map(async (inputDir) => {
         const fileNames = await readdir(inputDir, { recursive: true });
 
@@ -97,6 +103,8 @@ function makeConvertAll(shouldConvert, convertFile, ...inputDirs) {
           .map((name) => path.join(inputDir, name))
           .filter((filePath) => !ignorePath(filePath))
           .filter(shouldConvert);
+
+        debug("filePathsToConvert", filePathsToConvert);
 
         return Promise.all(
           filePathsToConvert.map(async (filePath) => [
@@ -112,6 +120,7 @@ function makeConvertAll(shouldConvert, convertFile, ...inputDirs) {
         );
       })
     );
+  };
 }
 
 module.exports = {

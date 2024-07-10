@@ -2,7 +2,10 @@
 title = Lab Exercises
 ---
 
+
 # Lab Exercises
+
+<section class="two-columns">
 
 ## Lab 1
 
@@ -17,6 +20,10 @@ by writing some failing tests before adding a feature.
   - [PDF (two slides per page)](<%= prefix %>/slides/lab1-2up.pdf)
 * [`ArrayBag.java`](<%= prefix %>/code/lab1/main/ArrayBag.java.html)
 
+</section>
+
+
+<section class="two-columns">
 
 ## Lab 2
 
@@ -38,6 +45,9 @@ the iterative implementation, and finally examined `findSolutions()` in
   - [`ComboSum.java`](<%= prefix %>/code/lab2/main/ComboSum.java.html)
   - [Interactive trace of `ComboSum.java`](<%= prefix %>/traces/lab2/ComboSum/)
 
+</section>
+
+<section class="two-columns">
 
 ## Lab 3
 
@@ -66,6 +76,10 @@ sort, and quicksort.
   - [`Quicksort.java`](<%= prefix %>/code/lab4/main/Quicksort.java.html)
   - [`MergeSort.java`](<%= prefix %>/code/lab4/main/MergeSort.java.html)
 
+</section>
+
+<section class="two-columns">
+
 ## Lab 4
 
 In this recorded lab, we covered merge sort, radix sort, and discussed memory
@@ -78,6 +92,10 @@ diagrams of `StringNode` objects.
 * [`Sort.java`](<%= prefix %>/code/common/main/Sort.java.html)
   - [`MergeSort.java`](<%= prefix %>/code/lab4/main/MergeSort.java.html)
 * [`StringNode.java`](<%= prefix %>/code/lab5/main/StringNode.java.html)
+
+</section>
+
+<section class="two-columns">
 
 ## Lab 5
 
@@ -92,5 +110,6 @@ tracing the recursive `read()` method, and `readIterative()`.
 * [`StringNode.java`](<%= prefix %>/code/lab5/main/StringNode.java.html)
   - [`StringNodeTest.java`](<%= prefix %>/code/lab5/test/StringNodeTest.java.html)
 
+</section>
 
 [repo]: https://github.com/abreen/e22-labs
