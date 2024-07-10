@@ -1,4 +1,4 @@
-name: build-and-deploy-slides
+name: build-and-deploy
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: macos-latest
     env:
-      URL_PREFIX: /e22-labs/
+      URL_PREFIX: /e22-labs
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

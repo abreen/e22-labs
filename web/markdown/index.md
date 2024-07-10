@@ -10,11 +10,13 @@ title = Lab Exercises
 copies items from another bag. I demonstrated test-driven development (TDD)
 by writing some failing tests before adding a feature.
 
+
 * Presentation slides
   - [HTML slides](<%= prefix %>/slides/lab1.html)
   - [PDF](<%= prefix %>/slides/lab1.pdf)
-  - [PDF (two slides per page)](<%= prefix %>/slides/lab1.pdf)
+  - [PDF (two slides per page)](<%= prefix %>/slides/lab1-2up.pdf)
 * [`ArrayBag.java`](<%= prefix %>/code/lab1/main/ArrayBag.java.html)
+
 
 ## Lab 2
 
@@ -26,7 +28,7 @@ the iterative implementation, and finally examined `findSolutions()` in
 * Presentation slides
   - [HTML slides](<%= prefix %>/slides/lab2.html)
   - [PDF](<%= prefix %>/slides/lab2.pdf)
-  - [PDF (two slides per page)](<%= prefix %>/slides/lab2.pdf)
+  - [PDF (two slides per page)](<%= prefix %>/slides/lab2-2up.pdf)
 * [`IntRecursion.java`](<%= prefix %>/code/lab2/main/IntRecursion.java.html)
   - [`IntRecursionTest.java`](<%= prefix %>/code/lab2/test/IntRecursionTest.java.html)
 * [`StringRecursion.java`](<%= prefix %>/code/lab2/main/StringRecursion.java.html)
@@ -36,6 +38,7 @@ the iterative implementation, and finally examined `findSolutions()` in
   - [`ComboSum.java`](<%= prefix %>/code/lab2/main/ComboSum.java.html)
   - [Interactive trace of `ComboSum.java`](<%= prefix %>/traces/lab2/ComboSum/)
 
+
 ## Lab 3
 
 Big O notation, matrix multiplication, nested loops, selection sort, insertion
@@ -44,24 +47,24 @@ sort, and quicksort.
 * Presentation slides
   - [HTML slides](<%= prefix %>/slides/lab3.html)
   - [PDF](<%= prefix %>/slides/lab3.pdf)
-  - [PDF (two slides per page)](<%= prefix %>/slides/lab3.pdf)
+  - [PDF (two slides per page)](<%= prefix %>/slides/lab3-2up.pdf)
 * Interactive traces
   - [`BubbleSort.java`](<%= prefix %>/traces/lab3/BubbleSort/)
   - [`SelectionSort.java`](<%= prefix %>/traces/lab3/SelectionSort/)
   - [`InsertionSort.java`](<%= prefix %>/traces/lab3/InsertionSort/)
   - [`ShellSort.java`](<%= prefix %>/traces/lab3/ShellSort/)
-  - [`Quicksort.java`](<%= prefix %>/traces/lab3/Quicksort/)
-  - [`MergeSort.java`](<%= prefix %>/traces/lab3/MergeSort/)
+  - [`Quicksort.java`](<%= prefix %>/traces/lab4/Quicksort/)
+  - [`MergeSort.java`](<%= prefix %>/traces/lab4/MergeSort/)
 * [`Matrix.java`](<%= prefix %>/code/lab3/main/Matrix.java.html)
 * [`NestedLoops.java`](<%= prefix %>/code/lab3/main/NestedLoops.java.html)
   - [`NestedLoopsTest.java`](<%= prefix %>/code/lab3/main/NestedLoopsTest.java.html)
-* [`Sort.java`](<%= prefix %>/code/lab3/main/Sort.java.html)
+* [`Sort.java`](<%= prefix %>/code/common/main/Sort.java.html)
   - [`BubbleSort.java`](<%= prefix %>/code/lab3/main/BubbleSort.java.html)
   - [`SelectionSort.java`](<%= prefix %>/code/lab3/main/SelectionSort.java.html)
   - [`InsertionSort.java`](<%= prefix %>/code/lab3/main/InsertionSort.java.html)
   - [`ShellSort.java`](<%= prefix %>/code/lab3/main/ShellSort.java.html)
-  - [`Quicksort.java`](<%= prefix %>/code/lab3/main/Quicksort.java.html)
-  - [`MergeSort.java`](<%= prefix %>/code/lab3/main/MergeSort.java.html)
+  - [`Quicksort.java`](<%= prefix %>/code/lab4/main/Quicksort.java.html)
+  - [`MergeSort.java`](<%= prefix %>/code/lab4/main/MergeSort.java.html)
 
 ## Lab 4
 
@@ -71,8 +74,23 @@ diagrams of `StringNode` objects.
 * Presentation slides
   - [HTML slides](<%= prefix %>/slides/lab4.html)
   - [PDF](<%= prefix %>/slides/lab4.pdf)
-  - [PDF (two slides per page)](<%= prefix %>/slides/lab4.pdf)
-* [`StringNode.java`](<%= prefix %>/code/lab4/main/Sort.java.html)
+  - [PDF (two slides per page)](<%= prefix %>/slides/lab4-2up.pdf)
+* [`Sort.java`](<%= prefix %>/code/common/main/Sort.java.html)
+  - [`MergeSort.java`](<%= prefix %>/code/lab4/main/MergeSort.java.html)
+* [`StringNode.java`](<%= prefix %>/code/lab5/main/StringNode.java.html)
+
+## Lab 5
+
+The `StringNode` class (a class that implements a linked list node), the
+`print()` method, the recursive `numOccur()` method, `numOccurIterative()`,
+tracing the recursive `read()` method, and `readIterative()`.
+
+* Presentation slides
+  - [HTML slides](<%= prefix %>/slides/lab5.html)
+  - [PDF](<%= prefix %>/slides/lab5.pdf)
+  - [PDF (two slides per page)](<%= prefix %>/slides/lab5-2up.pdf)
+* [`StringNode.java`](<%= prefix %>/code/lab5/main/StringNode.java.html)
+  - [`StringNodeTest.java`](<%= prefix %>/code/lab5/test/StringNodeTest.java.html)
 
 
 [repo]: https://github.com/abreen/e22-labs
