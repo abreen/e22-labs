@@ -45,14 +45,15 @@ public class StringNodeTest {
         assertEquals('b', StringNode.charAt(str, 1));
         assertEquals('l', StringNode.charAt(str, 2));
         assertEquals('e', StringNode.charAt(str, 3));
-        //assertEquals("able", str.toString());
+
+        // can also use StringNode.toString(): "able".equals(str.toString());
     }
 
     @Test
-    public void testDeleteChar() {
-        StringNode str = StringNode.convert("summmer");
-        str = StringNode.deleteChar(str, 2);
-        assertEquals("summer", str.toString());
+    public void testDeleteLastChar() {
+        StringNode str = StringNode.convert("beard");
+        str = StringNode.deleteChar(str, 4);
+        assertEquals("bear", str.toString());
     }
 
     @Test
@@ -73,6 +74,14 @@ public class StringNodeTest {
         StringNode str = StringNode.convert("seam");
         str = StringNode.insertChar(str, 1, 't');
         assertEquals("steam", str.toString());
+    }
+
+    @Test
+    public void testDeleteAndInsertChar() {
+        StringNode str = StringNode.convert("beer");
+        str = StringNode.deleteChar(str, 2);
+        str = StringNode.insertChar(str, 2, 'a');
+        assertEquals("bear", str.toString());
     }
 
     @Test
