@@ -37,16 +37,17 @@ public class StringNodeTest {
     }
 
     @Test
+    public void testDeleteChar() {
+        StringNode str = StringNode.convert("bend");
+        str = StringNode.deleteChar(str, 2);
+        assertEquals("bed", str.toString());
+    }
+
+    @Test
     public void testDeleteFirstChar() {
         StringNode str = StringNode.convert("cable");
         str = StringNode.deleteChar(str, 0);
-
-        assertEquals('a', StringNode.charAt(str, 0));
-        assertEquals('b', StringNode.charAt(str, 1));
-        assertEquals('l', StringNode.charAt(str, 2));
-        assertEquals('e', StringNode.charAt(str, 3));
-
-        // can also use StringNode.toString(): "able".equals(str.toString());
+        assertEquals("able", str.toString());
     }
 
     @Test
