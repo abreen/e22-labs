@@ -1,0 +1,94 @@
+<div class="controls">
+  <div class="buttons">
+    <button
+      class="input <%= stepNumber == 1 ? 'disabled' : '' %>"
+      hx-get="<%= firstStepUrl %>"
+      hx-target="closest form"
+      hx-swap="morph:innerHTML"
+      hx-disabled-elt="form .input"
+    >
+      First
+    </button>
+    <button
+      class="input <%= stepNumber == 1 ? 'disabled' : '' %>"
+      hx-get="<%= prevStepUrl %>"
+      hx-target="closest form"
+      hx-swap="morph:innerHTML"
+      hx-disabled-elt="form .input"
+    >
+      Prev
+    </button>
+    <button
+      class="input <%= stepNumber == numSteps ? 'disabled' : '' %>"
+      hx-get="<%= nextStepUrl %>"
+      hx-target="closest form"
+      hx-swap="morph:innerHTML"
+      hx-disabled-elt="form .input"
+    >
+      Next
+    </button>
+    <button
+      class="input <%= stepNumber == numSteps ? 'disabled' : '' %>"
+      hx-get="<%= lastStepUrl %>"
+      hx-target="closest form"
+      hx-swap="morph:innerHTML"
+      hx-disabled-elt="form .input"
+    >
+      Last
+    </button>
+  </div>
+
+  <input
+    class="input timeline"
+    hx-get="<%= stepPrefix %>"
+    hx-on::config-request="event.detail.path += this.value + '.html'"
+    hx-target="closest form"
+    hx-swap="morph:innerHTML"
+    hx-disabled-elt="form .input"
+    type="range"
+    min="1"
+    max="<%= numSteps %>"
+    step="1"
+    value="<%= stepNumber %>"
+    data-label="Step <%= stepNumber %> of <%= numSteps %>"
+  >
+</div>
+
+<div class="stack-and-heap">
+  <ol class="stack">
+    <% stack.forEach(({currentLine, className, methodName, visible}, index) => { %>
+      <details class="frame" <% if (index == 0) { %> open <% } %>>
+        <summary>
+          <span class="className"><%= className %></span>.<span class="methodName"><%= methodName %></span>:<span class="currentLine"><%= currentLine %></span>
+        </summary>
+
+        <% if (visible == null || visible.length == 0) { %>
+        <p class="empty-frame">Empty stack frame</p>
+        <% } %>
+
+        <ul class="vars">
+          <% visible != null && visible.forEach(({name, type, value}) => { %>
+          <li class="var">
+            <span class="var-type-and-name">
+              <span class="var-type"><%= type %></span>
+              <span class="var-name"><%= name %></span>
+            </span>
+            <span class="var-value"><%= JSON.stringify(value) %></value>
+          </li>
+          <% }); %>
+        </ul>
+
+      </details>
+    <% }); %>
+  </ol>
+</div>
+
+<div class="code-and-output">
+<pre class="source-code">
+<%- sourceCode %>
+</pre>
+
+<pre class="output">
+<%- output %>
+</pre>
+</div>

@@ -28,7 +28,7 @@
     }
   },
   "scripts": {
-    "build": "node index.js",
+    "build": "node index.js --debug",
     "watch": "node index.js --watch",
     "clean": "rm -rf ${OUTPUT_DIR:-$npm_package_config_outputDir}"
   },
@@ -40,7 +40,8 @@
       "gradleSubprojects": [
         "lab2-solution",
         "lab3-solution",
-        "lab4-solution"
+        "lab4-solution",
+        "lab5-solution"
       ]
     },
     "marpit": {
@@ -70,19 +71,16 @@
       "inputDir": "./static"
     },
     "code": {
+      "github": {
+        "repo": "abreen/e22-labs"
+      },
       "inputDirs": [
-        {
-          "from": "../lab1-solution/src",
-          "to": "code/lab1"
-        },
-        {
-          "from": "../lab2-solution/src",
-          "to": "code/lab2"
-        },
-        {
-          "from": "../lab3-solution/src",
-          "to": "code/lab3"
-        }
+        "../common",
+        "../lab1-solution",
+        "../lab2-solution",
+        "../lab3-solution",
+        "../lab4-solution",
+        "../lab5-solution"
       ]
     }
   }

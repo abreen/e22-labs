@@ -10,6 +10,18 @@ const config = {
   urlPrefix: process.env.URL_PREFIX || packageJson.config.urlPrefix || "",
 };
 
+const IGNORED_DIRS = [
+  config.outputDir,
+  ".git",
+  "node_modules",
+  ".gradle",
+  "gradle",
+  "build",
+  "bin",
+  "temp",
+  "tmp",
+];
+
 const dateFormat = new Intl.DateTimeFormat("en-US", {
   hour: "numeric",
   minute: "numeric",
@@ -18,7 +30,8 @@ const dateFormat = new Intl.DateTimeFormat("en-US", {
 });
 
 async function runMarp(...args) {
-  const argv = (config.marpit.marpArgs || []).concat(args);
+  const argv = (args || []).concat(config.marpit.marpArgs);
+  debug("Marp CLI args", argv);
 
   const exitCode = await marpCli(argv);
   return exitCode != 0 ? Promise.reject(exitCode) : Promise.resolve();
@@ -58,30 +71,54 @@ function debug(...args) {
   log(...args);
 }
 
+/** Return true if any part of the path starts with a dot (except '.' and '..') */
 function fileIsHidden(filePath) {
-  return [".", "_"].includes(path.basename(filePath)[0]);
+  const startsWithDot = (s) => s[0] == ".";
+  return (
+    path
+      .normalize(filePath)
+      .split(path.sep)
+      .filter((part) => part != "." && part != "..")
+      .filter(startsWithDot).length > 0
+  );
 }
 
-function makeConvertAll(inputDir, convertFile, options = { skip: [] }) {
-  return async () => {
-    const fileNames = await readdir(inputDir, { recursive: true });
+/** The core function for ignoring paths, used by the watcher & makeConvertAll() */
+function ignorePath(dirOrFilePath) {
+  return (
+    fileIsHidden(dirOrFilePath) ||
+    IGNORED_DIRS.filter((dir) => isFileInDir(dirOrFilePath, dir)).length > 0
+  );
+}
 
-    const filePathsToConvert = fileNames
-      .filter((name) => !fileIsHidden(name))
-      .filter((name) => !options.skip.includes(name))
-      .map((name) => path.join(inputDir, name));
-
+/** Create a convertAll() function by iterating through files in the input dirs */
+function makeConvertAll(shouldConvert, convertFile, ...inputDirs) {
+  return () => {
+    debug("in synthetic convertAll for dirs", inputDirs);
     return Promise.all(
-      filePathsToConvert.map(async (filePath) => [
-        filePath,
-        await lstat(filePath),
-      ])
-    ).then((items) =>
-      items
-        .filter(([_, stats]) => stats.isFile())
-        .map(([filePath, _]) => filePath)
-        .map(relativeToHere)
-        .map(convertFile)
+      inputDirs.map(async (inputDir) => {
+        const fileNames = await readdir(inputDir, { recursive: true });
+
+        const filePathsToConvert = fileNames
+          .map((name) => path.join(inputDir, name))
+          .filter((filePath) => !ignorePath(filePath))
+          .filter(shouldConvert);
+
+        debug("filePathsToConvert", filePathsToConvert);
+
+        return Promise.all(
+          filePathsToConvert.map(async (filePath) => [
+            filePath,
+            await lstat(filePath),
+          ])
+        ).then((items) =>
+          items
+            .filter(([_, stats]) => stats.isFile())
+            .map(([filePath, _]) => filePath)
+            .map(relativeToHere)
+            .map(convertFile)
+        );
+      })
     );
   };
 }
@@ -93,6 +130,7 @@ module.exports = {
   relativeToHere,
   isFileInDir,
   fileIsHidden,
+  ignorePath,
   runMarp,
   makeConvertAll,
 };

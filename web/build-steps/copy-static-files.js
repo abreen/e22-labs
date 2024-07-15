@@ -33,5 +33,9 @@ async function convertFile(relativePath) {
 export default {
   shouldConvert,
   convertFile: pDebounce(convertFile, 500),
-  convertAll: makeConvertAll(config.static.inputDir, convertFile),
+  convertAll: makeConvertAll(
+    shouldConvert,
+    convertFile,
+    config.static.inputDir
+  ),
 };

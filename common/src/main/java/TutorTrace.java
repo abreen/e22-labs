@@ -179,6 +179,7 @@ public class TutorTrace {
         request.enable();
     }
 
+    /** Converts a Java Debug Interface stack to an array of Frame records */
     private Frame[] toFrameRecords(List<StackFrame> frames) throws AbsentInformationException {
         StackFrame frameForMain = frames.getLast();
         Frame[] frameRecords = new Frame[frames.size()];
@@ -203,6 +204,7 @@ public class TutorTrace {
         return frameRecords;
     }
 
+    /** Converts a Java Debug Interface stack frame to an array of Variable records */
     private Variable[] toVariableRecords(StackFrame frame, boolean isMain) throws AbsentInformationException {
         List<LocalVariable> jdiLocals = frame.visibleVariables();
         List<Variable> variables = new ArrayList<>(jdiLocals.size());
