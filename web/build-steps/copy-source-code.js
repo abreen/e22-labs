@@ -7,7 +7,7 @@ import sourceJava from "@wooorm/starry-night/source.java";
 import { toHtml } from "hast-util-to-html";
 import { log, debug, config, isFileInDir, makeConvertAll } from "../utils.cjs";
 import { getSubprojectFromPath } from "./build-traces.js";
-import { gutter2 } from "./hast-util-starry-night-gutter.js";
+import { starryNightGutter } from "./hast-util-starry-night-gutter.js";
 
 const starryNight = await createStarryNight([sourceJava]);
 const starryNightJavaScope = starryNight.flagToScope("java");
@@ -101,7 +101,7 @@ async function renderSourceCodePage(
   sourceCode
 ) {
   const tree = starryNight.highlight(sourceCode, starryNightJavaScope);
-  gutter2(tree);
+  starryNightGutter(tree, 0, null);
   const highlightedCode = toHtml(tree);
 
   const pageHtml = await ejs.renderFile("build-steps/ejs/source-code.ejs", {
