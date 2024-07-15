@@ -112,4 +112,20 @@ tracing the recursive `read()` method, and `readIterative()`.
 
 </section>
 
+<section class="two-columns">
+
+## Lab 6
+
+We covered the practice midterm, which had a few coding problems. The relevant
+code is included here.
+
+* Presentation slides
+  - [HTML slides](<%= prefix %>/slides/lab6.html)
+  - [PDF](<%= prefix %>/slides/lab6.pdf)
+  - [PDF (two slides per page)](<%= prefix %>/slides/lab6-2up.pdf)
+* [`IntNode.java`](<%= prefix %>/code/lab6/main/IntNode.java.html)
+* [`SumReciprocals.java`](<%= prefix %>/code/lab6/main/SumReciprocals.java.html)
+
+</section>
+
 [repo]: https://github.com/abreen/e22-labs
