@@ -71,6 +71,9 @@
       "inputDir": "./static"
     },
     "code": {
+      "github": {
+        "repo": "abreen/e22-labs"
+      },
       "inputDirs": [
         "../common",
         "../lab1-solution",

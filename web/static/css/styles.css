@@ -37,6 +37,7 @@
   --height-range-track: 32px;
   --scrollbar-track: whitesmoke;
   --scrollbar-thumb: seagreen;
+  --selection: #2e8b574a;
 }
 
 .pl-c {
@@ -159,6 +160,14 @@
   color: var(--color-prettylights-syntax-constant-other-reference-link);
 }
 
+::-moz-selection {
+  background: var(--selection);
+}
+
+::selection {
+  background: var(--selection);
+}
+
 html,
 body {
   margin: 0;
@@ -206,7 +215,11 @@ pre {
 }
 
 .source-code {
-  border-radius: 1rem;
+  cursor: default;
+}
+
+.source-code .line:hover {
+  background: white;
 }
 
 .trace .timeline {
@@ -296,7 +309,9 @@ button:active {
 }
 
 .trace {
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
 }
 
 .trace .buttons {
@@ -311,7 +326,6 @@ button:active {
 }
 
 .trace .controls {
-  padding: 1rem 0;
 }
 
 .trace .timeline {
@@ -337,20 +351,28 @@ button:active {
   overflow-y: auto;
 }
 
+.trace .frame summary {
+  cursor: pointer;
+  font-family: monospace;
+}
+
 .trace .code-and-output {
   display: flex;
   flex-direction: column;
 }
 
-.trace .source {
+.trace .source,
+.trace .output {
   margin: 0;
+}
+
+.trace .source {
   overflow: hidden;
   display: block;
 }
 
 .trace .output {
   background: whitesmoke;
-  padding: 0.5em 1rem;
   max-width: fit-content;
   min-width: 300px;
 }
@@ -462,7 +484,6 @@ button:active {
 }
 
 .trace .stack {
-  font-family: monospace;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -474,20 +495,27 @@ button:active {
   max-width: max-content;
 }
 
-.frame:first-child {
+.trace .stack .frame:first-child {
   background: aliceblue;
 }
 
-.frame {
+.trace .stack .frame {
   border-bottom: 1px solid black;
   padding: 5px;
+}
+
+.trace .stack .frame .empty-frame {
+  font-style: italic;
+  font-size: smaller;
+  margin-left: 0.5rem;
 }
 
 .className {
   font-weight: bold;
 }
 
-.vars {
+.trace .stack .frame .vars {
+  font-family: monospace;
   display: table;
   border-spacing: 5px;
   padding: 0;
@@ -495,20 +523,16 @@ button:active {
   list-style-type: none;
 }
 
-.var {
+.trace .stack .frame .var {
   display: table-row;
 }
 
-.var {
-  display: table-row;
-}
-
-.var-type-and-name,
-.var-value {
+.trace .stack .frame .var-type-and-name,
+.trace .stack .frame .var-value {
   display: table-cell;
 }
 
-.var-value {
+.trace .stack .frame .var-value {
   border: 1px solid black;
   background: white;
   padding: 5px;

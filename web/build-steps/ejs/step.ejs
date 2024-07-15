@@ -62,6 +62,10 @@
           <span class="className"><%= className %></span>.<span class="methodName"><%= methodName %></span>:<span class="currentLine"><%= currentLine %></span>
         </summary>
 
+        <% if (visible == null || visible.length == 0) { %>
+        <p class="empty-frame">Empty stack frame</p>
+        <% } %>
+
         <ul class="vars">
           <% visible != null && visible.forEach(({name, type, value}) => { %>
           <li class="var">
@@ -77,11 +81,10 @@
       </details>
     <% }); %>
   </ol>
-  <div class="heap"></div>
 </div>
 
 <div class="code-and-output">
-<pre class="source">
+<pre class="source-code">
 <%- sourceCode %>
 </pre>
 

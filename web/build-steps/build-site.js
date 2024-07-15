@@ -55,7 +55,6 @@ function shouldConvert(relativePath) {
 }
 
 async function convertFile(relativePath) {
-  console.log("prefix", config.urlPrefix);
   // treat the .md file like an EJS template, then render it
   const pageEjs = await limitReadFile(() =>
     readFile(relativePath, { encoding: "utf8" })

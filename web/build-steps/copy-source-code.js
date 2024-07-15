@@ -70,13 +70,10 @@ async function convertFile(relativePath) {
     restOfPath,
   ].join("/");
 
-  // https://github.com/abreen/e22-labs/blob/main/lab2-solution/src/main/java/App.java
-  // https://github.com/abreen/e22-labs/blob/lab3-solution/src/test/java/SortTest.java
   const gitHubUrl = [
-    "https://github.com/abreen/e22-labs/blob/main",
+    `https://github.com/${config.code.github.repo}/blob/main`,
     relativePath.split(path.sep).slice(1).join("/"),
   ].join("/");
-  console.log("githubUrl", gitHubUrl);
 
   const input = await readFile(relativePath, { encoding: "utf8" });
 
