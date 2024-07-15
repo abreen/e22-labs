@@ -208,18 +208,10 @@ a:hover {
   text-decoration: underline;
 }
 
-pre {
+.source-code {
   background: whitesmoke;
   overflow-x: auto;
   padding: 1rem;
-}
-
-.source-code {
-  cursor: default;
-}
-
-.source-code .line:hover {
-  background: white;
 }
 
 .trace .timeline {
@@ -372,6 +364,7 @@ button:active {
 }
 
 .trace .output {
+  padding: 1rem;
   background: whitesmoke;
   max-width: fit-content;
   min-width: 300px;

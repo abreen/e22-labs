@@ -62,7 +62,7 @@ async function convertFile(relativePath) {
   await mkdir(path.parse(rawOutputPath).dir, { recursive: true });
 
   const rawUrl = [
-    config.prefix,
+    config.urlPrefix,
     "code",
     "raw",
     subprojectNoSolution,
@@ -101,7 +101,7 @@ async function renderSourceCodePage(
   sourceCode
 ) {
   const tree = starryNight.highlight(sourceCode, starryNightJavaScope);
-  starryNightGutter(tree, 0, null);
+  starryNightGutter(tree, 1, null);
   const highlightedCode = toHtml(tree);
 
   const pageHtml = await ejs.renderFile("build-steps/ejs/source-code.ejs", {

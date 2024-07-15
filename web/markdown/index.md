@@ -67,7 +67,7 @@ sort, and quicksort.
   - [`MergeSort.java`](<%= prefix %>/traces/lab4/MergeSort/)
 * [`Matrix.java`](<%= prefix %>/code/lab3/main/Matrix.java.html)
 * [`NestedLoops.java`](<%= prefix %>/code/lab3/main/NestedLoops.java.html)
-  - [`NestedLoopsTest.java`](<%= prefix %>/code/lab3/main/NestedLoopsTest.java.html)
+  - [`NestedLoopsTest.java`](<%= prefix %>/code/lab3/test/NestedLoopsTest.java.html)
 * [`Sort.java`](<%= prefix %>/code/common/main/Sort.java.html)
   - [`BubbleSort.java`](<%= prefix %>/code/lab3/main/BubbleSort.java.html)
   - [`SelectionSort.java`](<%= prefix %>/code/lab3/main/SelectionSort.java.html)
